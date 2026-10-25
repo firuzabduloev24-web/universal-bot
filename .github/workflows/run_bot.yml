@@ -3,11 +3,10 @@ name: Universal Bot 24/7 Server
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/30 * * * *'
+    - cron: '30 */5 * * *'
 
-concurrency:
-  group: telegram-bot-runner
-  cancel-in-progress: false
+permissions:
+  contents: write
 
 jobs:
   run-bot:
@@ -17,16 +16,24 @@ jobs:
       - name: Kodni yuklab olish
         uses: actions/checkout@v4
 
-      - name: Python 3.11 va FFmpeg tayyorlash
+      - name: Python 3.11 o'rnatish
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Kutubxonalarni ornatish
+      - name: FFmpeg va kutubxonalarni o'rnatish
         run: |
-          pip install --upgrade pip
-          pip install pyTelegramBotAPI yt-dlp requests Pillow urllib3
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          pip install -U pyTelegramBotAPI yt-dlp requests urllib3 pillow
 
-      - name: Botni 5.5 soat davomida uzluksiz ishlatish (Avto-Restart bilan)
+      - name: Botni 5.5 soat davomida uzluksiz ishlatish
         run: |
-          timeout 19800s python3 universal_save_bot.py || true
+          timeout 19500s python universal_save_bot.py || true
+
+      - name: Bazani va Reklama Outroni avtomatik saqlab qo'yish
+        run: |
+          git config --global user.name "UniversalBot-AutoSave"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add save_bot_database.db promo_assets/ || true
+          git diff --staged --quiet || (git commit -m "Auto-save DB and promo assets" && git push)
