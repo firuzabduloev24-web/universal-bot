@@ -1,0 +1,32 @@
+name: Universal Bot 24/7 Server
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/30 * * * *'
+
+concurrency:
+  group: telegram-bot-runner
+  cancel-in-progress: false
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - name: Kodni yuklab olish
+        uses: actions/checkout@v4
+
+      - name: Python 3.11 va FFmpeg tayyorlash
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Kutubxonalarni ornatish
+        run: |
+          pip install --upgrade pip
+          pip install pyTelegramBotAPI yt-dlp requests Pillow urllib3
+
+      - name: Botni 5.5 soat davomida uzluksiz ishlatish (Avto-Restart bilan)
+        run: |
+          timeout 19800s python3 universal_save_bot.py || true
