@@ -50,6 +50,10 @@ import time
 import json
 import math
 import html
+import uuid
+import zlib
+import struct
+import random
 import shutil
 import sqlite3
 import threading
@@ -1170,7 +1174,504 @@ def trim_video(input_video_path: str, output_path: str, start_sec: float, end_se
         print(f"Trim xatoligi: {e}")
         return False
 
-# ==================== PRO REKLAMA MONTAJ STUDIYASI (HAR QANDAY DAVOMIYLIK: 5s - 60s+ GACHA!) ====================
+# ==================== PRO REKLAMA MONTAJ STUDIYASI + 10-BOSQICHLI ANTI-DUPLIKAT + SUZUVCHI WATERMARK ====================
+WATERMARK_CONFIG_FILE = os.path.join(PROMO_DIR, "watermark_config.json")
+_BOT_USERNAME_CACHE = None
+
+def get_cached_bot_username() -> str:
+    global _BOT_USERNAME_CACHE
+    if _BOT_USERNAME_CACHE:
+        return _BOT_USERNAME_CACHE
+    try:
+        me = bot.get_me()
+        if me and me.username:
+            _BOT_USERNAME_CACHE = me.username
+            return _BOT_USERNAME_CACHE
+    except Exception:
+        pass
+    return ADMIN_USERNAME.lstrip("@") or "usman_khasan"
+
+def get_watermark_settings() -> dict:
+    """
+    Har bir videoda tepadan pastga suzib yuruvchi shaffof (prazrachniy) Telegram ikonka + @handle sozlamalari.
+    Standart holatda: enabled=True, opacity=0.24 (24% ko'rinar-ko'rinmas, videoga xalaqit bermaydi).
+    """
+    default_cfg = {
+        "enabled": True,
+        "text": "",
+        "opacity": 0.24
+    }
+    if os.path.exists(WATERMARK_CONFIG_FILE):
+        try:
+            with open(WATERMARK_CONFIG_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                default_cfg.update(data)
+        except Exception:
+            pass
+    if not default_cfg.get("text"):
+        default_cfg["text"] = f"@{get_cached_bot_username().upper()}"
+    return default_cfg
+
+def save_watermark_settings(enabled: bool = True, text: str = "", opacity: float = 0.24):
+    clean_t = text.strip()
+    if clean_t and not clean_t.startswith("@"):
+        clean_t = "@" + clean_t
+    cfg = {
+        "enabled": bool(enabled),
+        "text": clean_t.upper() if clean_t else f"@{get_cached_bot_username().upper()}",
+        "opacity": max(0.12, min(0.55, float(opacity)))
+    }
+    try:
+        with open(WATERMARK_CONFIG_FILE, "w", encoding="utf-8") as f:
+            json.dump(cfg, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"Watermark config saqlash xatosi: {e}")
+    return cfg
+
+# Pure-Python 5x7 Bitmap Font (agar foydalanuvchi kompyuterida Pillow o'rnatilmagan bo'lsa ham 100% ishlashi uchun!)
+_BITMAP_FONT_5X7 = {
+    '@': ["01110", "10001", "10111", "10101", "10111", "10000", "01110"],
+    'A': ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
+    'B': ["11110", "10001", "10001", "11110", "10001", "10001", "11110"],
+    'C': ["01110", "10001", "10000", "10000", "10000", "10001", "01110"],
+    'D': ["11100", "10010", "10001", "10001", "10001", "10010", "11100"],
+    'E': ["11111", "10000", "10000", "11110", "10000", "10000", "11111"],
+    'F': ["11111", "10000", "10000", "11110", "10000", "10000", "10000"],
+    'G': ["01110", "10001", "10000", "10111", "10001", "10001", "01110"],
+    'H': ["10001", "10001", "10001", "11111", "10001", "10001", "10001"],
+    'I': ["01110", "00100", "00100", "00100", "00100", "00100", "01110"],
+    'J': ["00111", "00010", "00010", "00010", "10010", "10010", "01100"],
+    'K': ["10001", "10010", "10100", "11000", "10100", "10010", "10001"],
+    'L': ["10000", "10000", "10000", "10000", "10000", "10000", "11111"],
+    'M': ["10001", "11011", "10101", "10101", "10001", "10001", "10001"],
+    'N': ["10001", "11001", "10101", "10011", "10001", "10001", "10001"],
+    'O': ["01110", "10001", "10001", "10001", "10001", "10001", "01110"],
+    'P': ["11110", "10001", "10001", "11110", "10000", "10000", "10000"],
+    'Q': ["01110", "10001", "10001", "10001", "10101", "10010", "01101"],
+    'R': ["11110", "10001", "10001", "11110", "10100", "10010", "10001"],
+    'S': ["01111", "10000", "10000", "01110", "00001", "00001", "11110"],
+    'T': ["11111", "00100", "00100", "00100", "00100", "00100", "00100"],
+    'U': ["10001", "10001", "10001", "10001", "10001", "10001", "01110"],
+    'V': ["10001", "10001", "10001", "10001", "10001", "01010", "00100"],
+    'W': ["10001", "10001", "10001", "10101", "10101", "11011", "10001"],
+    'X': ["10001", "10001", "01010", "00100", "01010", "10001", "10001"],
+    'Y': ["10001", "10001", "01010", "00100", "00100", "00100", "00100"],
+    'Z': ["11111", "00001", "00010", "00100", "01000", "10000", "11111"],
+    '_': ["00000", "00000", "00000", "00000", "00000", "00000", "11111"],
+    '-': ["00000", "00000", "00000", "11111", "00000", "00000", "00000"],
+    '.': ["00000", "00000", "00000", "00000", "00000", "01100", "01100"],
+    '0': ["01110", "10001", "10011", "10101", "11001", "10001", "01110"],
+    '1': ["00100", "01100", "00100", "00100", "00100", "00100", "01110"],
+    '2': ["01110", "10001", "00001", "00110", "01000", "10000", "11111"],
+    '3': ["11110", "00001", "00001", "01110", "00001", "00001", "11110"],
+    '4': ["00010", "00110", "01010", "10010", "11111", "00010", "00010"],
+    '5': ["11111", "10000", "10000", "11110", "00001", "00001", "11110"],
+    '6': ["01110", "10000", "10000", "11110", "10001", "10001", "01110"],
+    '7': ["11111", "00001", "00010", "00100", "01000", "01000", "01000"],
+    '8': ["01110", "10001", "10001", "01110", "10001", "10001", "01110"],
+    '9': ["01110", "10001", "10001", "01111", "00001", "00001", "01110"],
+    ' ': ["00000", "00000", "00000", "00000", "00000", "00000", "00000"],
+}
+
+def _point_in_poly(x: float, y: float, poly: list) -> bool:
+    inside = False
+    n = len(poly)
+    p1x, p1y = poly[0]
+    for i in range(1, n + 1):
+        p2x, p2y = poly[i % n]
+        if y > min(p1y, p2y):
+            if y <= max(p1y, p2y):
+                if x <= max(p1x, p2x):
+                    if p1y != p2y:
+                        xinters = (y - p1y) * (p2x - p1x) / (p2y - p1y) + p1x
+                    if p1x == p2x or x <= xinters:
+                        inside = not inside
+        p1x, p1y = p2x, p2y
+    return inside
+
+def _generate_watermark_png_pure_python(text: str, out_png_path: str, opacity: float = 0.24) -> bool:
+    """
+    Agar kompyuterda Pillow (PIL) yo'q bo'lsa ham, standart Python (zlib+struct) yordamida
+    Dumaloq Telegram Samolyot Ikonkasi + @HANDLE yozuvli shaffof (RGBA) PNG yaratish!
+    """
+    try:
+        clean_text = (text or "@USMAN_KHASAN").upper().strip()
+        if not clean_text.startswith("@"):
+            clean_text = "@" + clean_text
+        scale = 4  # 5x7 font -> 20x28 px harf
+        char_w = 6 * scale
+        h = 76
+        w = max(260, 88 + len(clean_text) * char_w + 20)
+
+        alpha_main = max(25, min(160, int(255 * opacity)))
+        alpha_icon_bg = max(20, min(140, int(255 * (opacity * 0.85))))
+
+        # RGBA buffer
+        buf = bytearray(w * h * 4)
+
+        cx, cy, r_outer = 40.0, 38.0, 28.0
+        # Telegram paper plane uchburchaklari (cx, cy atrofida)
+        plane_poly = [
+            (22, 38),  # chap uch
+            (54, 24),  # tepa o'ng uch
+            (46, 53),  # past o'ng uch
+            (36, 44),  # o'rta past
+        ]
+        wing_cut = [
+            (34, 41),
+            (52, 26),
+            (38, 45),
+        ]
+
+        for py in range(h):
+            row_off = py * w * 4
+            for px in range(w):
+                dx = px - cx
+                dy = py - cy
+                dist = math.hypot(dx, dy)
+                if dist <= r_outer:
+                    idx = row_off + px * 4
+                    if _point_in_poly(px, py, plane_poly) and not _point_in_poly(px, py, wing_cut):
+                        # Samolyotcha (oq-oltin tusda)
+                        buf[idx] = 255
+                        buf[idx + 1] = 252
+                        buf[idx + 2] = 235
+                        buf[idx + 3] = min(255, int(alpha_main * 1.15))
+                    elif dist >= r_outer - 3.2:
+                        # Aylana hoshiyasi
+                        buf[idx] = 245
+                        buf[idx + 1] = 225
+                        buf[idx + 2] = 120
+                        buf[idx + 3] = alpha_main
+                    else:
+                        # Aylana ichi (yarim shaffof)
+                        buf[idx] = 40
+                        buf[idx + 1] = 45
+                        buf[idx + 2] = 55
+                        buf[idx + 3] = int(alpha_icon_bg * 0.55)
+
+        # Matnni chizish
+        start_x = 80
+        start_y = (h - 7 * scale) // 2
+        for ch_idx, ch in enumerate(clean_text[:26]):
+            glyph = _BITMAP_FONT_5X7.get(ch, _BITMAP_FONT_5X7[' '])
+            gx0 = start_x + ch_idx * char_w
+            for gy in range(7):
+                line_bits = glyph[gy]
+                for gx in range(5):
+                    if line_bits[gx] == '1':
+                        for sy in range(scale):
+                            for sx in range(scale):
+                                px = gx0 + gx * scale + sx
+                                py = start_y + gy * scale + sy
+                                if 0 <= px < w and 0 <= py < h:
+                                    idx = (py * w + px) * 4
+                                    buf[idx] = 255
+                                    buf[idx + 1] = 255
+                                    buf[idx + 2] = 255
+                                    buf[idx + 3] = alpha_main
+
+        # PNG fayl sifatida yig'ish (standart zlib + struct)
+        raw_rows = bytearray()
+        stride = w * 4
+        for y in range(h):
+            raw_rows.append(0)  # filter type 0
+            raw_rows.extend(buf[y * stride:(y + 1) * stride])
+
+        def _png_chunk(chunk_type: bytes, data: bytes) -> bytes:
+            crc = zlib.crc32(chunk_type + data) & 0xffffffff
+            return struct.pack(">I", len(data)) + chunk_type + data + struct.pack(">I", crc)
+
+        ihdr = struct.pack(">IIBBBBB", w, h, 8, 6, 0, 0, 0)
+        png_bytes = (
+            bytes([137, 80, 78, 71, 13, 10, 26, 10])
+            + _png_chunk(b"IHDR", ihdr)
+            + _png_chunk(b"IDAT", zlib.compress(bytes(raw_rows), 6))
+            + _png_chunk(b"IEND", b"")
+        )
+        with open(out_png_path, "wb") as f:
+            f.write(png_bytes)
+        return os.path.exists(out_png_path) and os.path.getsize(out_png_path) > 200
+    except Exception as e:
+        print(f"Pure-Python PNG watermark xatosi: {e}")
+        return False
+
+def generate_telegram_watermark_png(text: str = "", out_png_path: str = "", opacity: float = 0.24) -> str | None:
+    """
+    Foydalanuvchi yuborgan namuna (`@TELEGRAM_YULDUZLARI`) kabi:
+    Chap tomonda dumaloq Telegram qog'oz samolyot ikonkasi + O'ng tomonda qalin @USERNAME yozuvi!
+    Ko'rinar-ko'rinmas (shaffof ~24% alpha) bo'lib, videoga umuman xalaqit bermaydi.
+    """
+    cfg = get_watermark_settings()
+    wm_text = (text or cfg.get("text") or f"@{get_cached_bot_username()}").upper().strip()
+    if not wm_text.startswith("@"):
+        wm_text = "@" + wm_text
+    use_opacity = opacity if opacity else cfg.get("opacity", 0.24)
+
+    if not out_png_path:
+        safe_tag = re.sub(r"[^A-Z0-9_]", "", wm_text) or "BOT"
+        out_png_path = os.path.join(PROMO_DIR, f"wm_badge_{safe_tag}_{int(use_opacity*100)}.png")
+
+    if os.path.exists(out_png_path) and os.path.getsize(out_png_path) > 300:
+        return out_png_path
+
+    # 1-Usul: Pillow (PIL) orqali yuqori aniqlikda anti-aliased chizish
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+        font_size = 34
+        font = None
+        font_candidates = [
+            r"C:\Windows\Fonts\arialbd.ttf",
+            r"C:\Windows\Fonts\segoeuib.ttf",
+            r"C:\Windows\Fonts\calibrib.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+        ]
+        for fc in font_candidates:
+            if os.path.exists(fc):
+                try:
+                    font = ImageFont.truetype(fc, font_size)
+                    break
+                except Exception:
+                    pass
+        if font is None:
+            font = ImageFont.load_default()
+
+        dummy = Image.new("RGBA", (10, 10), (0, 0, 0, 0))
+        d_dummy = ImageDraw.Draw(dummy)
+        try:
+            bbox = d_dummy.textbbox((0, 0), wm_text, font=font)
+            tw = bbox[2] - bbox[0]
+            th = bbox[3] - bbox[1]
+        except Exception:
+            tw = len(wm_text) * 20
+            th = 30
+
+        h = 84
+        w = max(280, 96 + tw + 28)
+        img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(img)
+
+        alpha_main = max(28, min(165, int(255 * use_opacity)))
+        alpha_shadow = max(16, min(110, int(255 * (use_opacity * 0.55))))
+        alpha_circle_fill = max(18, min(115, int(255 * (use_opacity * 0.65))))
+
+        # 1) Dumaloq Telegram nishoni (chapda)
+        cx, cy, r = 44, 42, 30
+        draw.ellipse(
+            [cx - r, cy - r, cx + r, cy + r],
+            fill=(30, 35, 45, alpha_circle_fill),
+            outline=(250, 225, 115, alpha_main),
+            width=3
+        )
+        # Telegram qog'oz samolyotchasi (vektor koordinatalari)
+        plane_outer = [
+            (25, 42),  # chap tumshuq
+            (58, 27),  # tepa-o'ng qanot uchi
+            (50, 57),  # past-o'ng qanot
+            (39, 48),  # o'rta burilish
+            (33, 53),  # dum qismi
+            (34, 44),  # ichki burchak
+        ]
+        draw.polygon(plane_outer, fill=(255, 252, 235, min(255, int(alpha_main * 1.15))))
+        # Samolyotcha o'rta chizig'i (qanot soyasi)
+        draw.line([(34, 44), (56, 29)], fill=(40, 45, 55, alpha_main), width=2)
+
+        # 2) @HANDLE matni (o'ng tomonda, yumshoq soya bilan)
+        tx = 88
+        ty = (h - th) // 2 - 3
+        draw.text((tx + 2, ty + 2), wm_text, font=font, fill=(0, 0, 0, alpha_shadow))
+        draw.text((tx, ty), wm_text, font=font, fill=(255, 255, 255, alpha_main))
+
+        img.save(out_png_path, "PNG")
+        if os.path.exists(out_png_path) and os.path.getsize(out_png_path) > 300:
+            return out_png_path
+    except Exception as e:
+        print(f"Pillow watermark fallbackga o'tilmoqda: {e}")
+
+    # 2-Usul: Pure-Python RGBA PNG generator (Pillow bo'lmasa ham 100% ishlaydi!)
+    if _generate_watermark_png_pure_python(wm_text, out_png_path, opacity=use_opacity):
+        return out_png_path
+    return None
+
+def apply_floating_watermark_to_video(input_path: str, output_path: str, custom_text: str = "") -> bool:
+    """
+    Har bitta videoda shaffof (prazrachniy, ko'rinar-ko'rinmas) Telegram ikonka + @HANDLE ni
+    tepadan pastga silliq suzib yuradigan qilib tushirish! Videoga xalaqit bermaydi.
+    """
+    ensure_ffmpeg_in_path()
+    cfg = get_watermark_settings()
+    if not cfg.get("enabled", True) and not custom_text:
+        return False
+
+    wm_png = generate_telegram_watermark_png(text=custom_text or cfg.get("text", ""), opacity=cfg.get("opacity", 0.24))
+    if not wm_png or not os.path.exists(wm_png):
+        return False
+
+    vinfo = get_video_stream_info(input_path)
+    vid_w = max(360, vinfo.get("width", 720))
+    # Watermark kengligi video enining ~42% qismiga moslanadi (katta ham emas, juda kichik ham emas)
+    wm_target_w = max(180, min(460, int(vid_w * 0.44)))
+
+    # Tepadan pastga silliq harakat: y = 55 + mod(t*85, H-h-110), x esa o'rtada ohista suzadi
+    filter_complex = (
+        f"[1:v]scale={wm_target_w}:-1[wm];"
+        f"[0:v][wm]overlay="
+        f"x='(W-w)/2+(W*0.14)*sin(t*0.75)':"
+        f"y='55+mod(t*85,max(60,H-h-110))':"
+        f"format=auto,format=yuv420p[vout]"
+    )
+    cmd = [
+        "ffmpeg", "-y",
+        "-i", input_path,
+        "-i", wm_png,
+        "-filter_complex", filter_complex,
+        "-map", "[vout]",
+        "-map", "0:a?",
+        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "22",
+        "-pix_fmt", "yuv420p",
+        "-c:a", "copy",
+        "-movflags", "+faststart",
+        output_path
+    ]
+    try:
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
+        return res.returncode == 0 and os.path.exists(output_path) and os.path.getsize(output_path) > 1000
+    except Exception as e:
+        print(f"Floating watermark xatosi: {e}")
+        return False
+
+def make_video_100_original(
+    input_path: str,
+    output_path: str,
+    custom_watermark: str = "",
+    force_9_16: bool = False
+) -> tuple[bool, dict]:
+    """
+    🛡 10-BOSQICHLI PRO ANTI-DUPLIKAT (100% ORIGINAL VIDEO) ALGORITMI!
+    Instagram Reels, TikTok va YouTube Shorts algoritmlari (pHash, dHash, MD5/SHA256,
+    Audio Chromaprint, Histogram, GOP Keyframe va Metadata) videoni 100% YANGI ORIGINAL
+    deb qabul qilishi va Rekomendatsiya / Topga chiqarishi uchun 10 ta qatlamli ishlov beradi:
+      1) Sub-piksel Dinamik Mikro-Zoom (1.022x - 1.034x) va assimetrik kadr siljishi
+      2) Burchak pHash himoyasi uchun sezilmas mikro-vignette (PI/22)
+      3) Kinematik Rang Matritsasi (Contrast/Saturation/Gamma RGB mikro-siljishi)
+      4) Ultra-HD Detalizatsiya (Unsharp mask — DCT koeffitsientlarini yangilaydi)
+      5) Ko'zga ko'rinmas 1-bit Temporal Mikro-Grain (har bir kadrning pHash imzosini 100% yangilaydi)
+      6) Tepadan-pastga suzib yuruvchi shaffof (ko'rinar-ko'rinmas) Telegram Icon + @Handle
+      7) Mikro-Tezlik & PTS vaqt siljishi (0.988x yoki 1.012x)
+      8) Nostandart Keyframe GOP strukturasi (-g 29 -keyint_min 15)
+      9) Audio Chromaprint / Shazam-Bypass (Spectral Pitch +1.2% mikro-shift + EBU R128 -14 LUFS Loudnorm)
+     10) Eski metama'lumotlarni 100% tozalash (-map_metadata -1) va yangi Apple iPhone 16 Pro Max kamerasi imzosini yozish!
+    """
+    ensure_ffmpeg_in_path()
+    try:
+        vinfo = get_video_stream_info(input_path)
+        orig_w = max(360, vinfo.get("width", 720))
+        orig_h = max(360, vinfo.get("height", 1280))
+        target_w = 1080 if force_9_16 else (orig_w if orig_w % 2 == 0 else orig_w + 1)
+        target_h = 1920 if force_9_16 else (orig_h if orig_h % 2 == 0 else orig_h + 1)
+
+        # Randomizatsiya parametrlari (har safar 100% betakror natija chiqishi uchun!)
+        zoom_factor = round(random.uniform(1.022, 1.034), 4)
+        speed_factor = round(random.choice([random.uniform(0.986, 0.993), random.uniform(1.007, 1.015)]), 4)
+        pts_mult = round(1.0 / speed_factor, 5)
+        contrast_val = round(random.uniform(1.020, 1.032), 3)
+        sat_val = round(random.uniform(1.025, 1.045), 3)
+        bright_val = round(random.uniform(0.004, 0.009), 4)
+        gamma_r = round(random.uniform(1.008, 1.018), 3)
+        gamma_b = round(random.uniform(0.985, 0.994), 3)
+        audio_pitch = round(random.uniform(1.011, 1.016), 4)
+        audio_tempo = round(speed_factor / audio_pitch, 4)
+        audio_tempo = max(0.5, min(2.0, audio_tempo))
+
+        scaled_w = int(target_w * zoom_factor)
+        scaled_h = int(target_h * zoom_factor)
+        scaled_w = scaled_w if scaled_w % 2 == 0 else scaled_w + 1
+        scaled_h = scaled_h if scaled_h % 2 == 0 else scaled_h + 1
+        crop_x = max(1, (scaled_w - target_w) // 2 + random.choice([-2, -1, 1, 2]))
+        crop_y = max(1, (scaled_h - target_h) // 2 + random.choice([-2, -1, 1, 2]))
+
+        cfg = get_watermark_settings()
+        wm_png = generate_telegram_watermark_png(
+            text=custom_watermark or cfg.get("text", ""),
+            opacity=cfg.get("opacity", 0.24)
+        )
+        wm_w = max(180, min(460, int(target_w * 0.44)))
+
+        # Video filter zanjiri:
+        base_v_chain = (
+            f"scale={scaled_w}:{scaled_h}:flags=lanczos,"
+            f"crop={target_w}:{target_h}:{crop_x}:{crop_y},"
+            f"eq=contrast={contrast_val}:brightness={bright_val}:saturation={sat_val}:gamma_r={gamma_r}:gamma_b={gamma_b},"
+            f"unsharp=3:3:0.35:3:3:0.0,"
+            f"vignette=angle=PI/22,"
+            f"noise=alls=1:allf=t,"
+            f"setpts={pts_mult}*PTS,"
+            f"fps=30,setsar=1"
+        )
+
+        now_iso = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+        unique_id = str(uuid.uuid4()).upper()
+        audio_exists = has_audio_stream(input_path)
+
+        cmd = ["ffmpeg", "-y", "-i", input_path]
+        if wm_png and os.path.exists(wm_png):
+            cmd += ["-i", wm_png]
+            filter_complex = (
+                f"[0:v]{base_v_chain}[v_clean];"
+                f"[1:v]scale={wm_w}:-1[wm];"
+                f"[v_clean][wm]overlay="
+                f"x='(W-w)/2+(W*0.15)*sin(t*0.8)':"
+                f"y='60+mod(t*92,max(65,H-h-120))':"
+                f"format=auto,format=yuv420p[vout]"
+            )
+            cmd += ["-filter_complex", filter_complex, "-map", "[vout]"]
+        else:
+            cmd += ["-vf", f"{base_v_chain},format=yuv420p", "-map", "0:v:0"]
+
+        if audio_exists:
+            af_chain = (
+                f"asetrate=44100*{audio_pitch},aresample=44100,"
+                f"atempo={audio_tempo},"
+                f"highpass=f=22,lowpass=f=18600,"
+                f"loudnorm=I=-14:TP=-1.5:LRA=11"
+            )
+            cmd += ["-map", "0:a:0", "-af", af_chain, "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2"]
+        else:
+            cmd += ["-an"]
+
+        # 10-Bosqich: Eski metadatalarni to'liq o'chirib, yangi iPhone 16 Pro Max kamerasi metadatasini yozish
+        cmd += [
+            "-map_metadata", "-1",
+            "-map_chapters", "-1",
+            "-metadata", f"creation_time={now_iso}",
+            "-metadata", "make=Apple",
+            "-metadata", "model=iPhone 16 Pro Max",
+            "-metadata", "software=18.2",
+            "-metadata", "com.apple.quicktime.make=Apple",
+            "-metadata", "com.apple.quicktime.model=iPhone 16 Pro Max",
+            "-metadata", "com.apple.quicktime.software=18.2",
+            "-metadata", f"comment=Original_Capture_{unique_id}",
+            "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+            "-g", "29", "-keyint_min", "15",
+            "-pix_fmt", "yuv420p",
+            "-movflags", "+faststart",
+            output_path
+        ]
+
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
+        ok = res.returncode == 0 and os.path.exists(output_path) and os.path.getsize(output_path) > 1000
+        return ok, {
+            "zoom": f"{zoom_factor*100 - 100:.1f}%",
+            "speed": f"{speed_factor:.3f}x",
+            "pitch": f"+{(audio_pitch-1)*100:.1f}%",
+            "device": "Apple iPhone 16 Pro Max (iOS 18.2)",
+            "uuid": unique_id[:8]
+        }
+    except Exception as e:
+        print(f"Anti-duplikat xatoligi: {e}")
+        return False, {}
+
 def has_audio_stream(file_path: str) -> bool:
     """Videoda audio oqimi bor-yo'qligini ffprobe orqali tekshirish (ovozsiz videolarda xato chiqmasligi uchun)"""
     try:
@@ -1205,11 +1706,17 @@ def normalize_clip_for_montage(
     target_w: int = 1080,
     target_h: int = 1920,
     max_duration: float = 0.0,
-    keep_audio: bool = True
+    keep_audio: bool = True,
+    use_blur_bg: bool = True,
+    fade_out_video: bool = False,
+    fade_in_video: bool = False
 ) -> bool:
     """
     Har qanday o'lcham, FPS va davomiylikdagi (10s, 19s, 45s, 1 daqiqa va h.k.) videoni
     Instagram Reels / TikTok 1080x1920 Full HD (30 fps, yuv420p, 44.1kHz stereo) standartiga keltirish!
+    YANGILIKLAR:
+      - Qora hoshiya o'rniga Xiralashtirilgan Orqa Fon (Blurred Background `boxblur=25:4`)!
+      - Kinematik silliq o'tish (fade-in / fade-out) va EBU R128 (`loudnorm`) ovoz tenglashtirish!
     """
     ensure_ffmpeg_in_path()
     dur = get_media_duration(input_path)
@@ -1217,46 +1724,68 @@ def normalize_clip_for_montage(
         dur = 15.0
     use_dur = min(dur, max_duration) if (max_duration and max_duration > 0.5 and dur > max_duration) else dur
     audio_exists = has_audio_stream(input_path)
+    vinfo = get_video_stream_info(input_path)
+    in_w = max(100, vinfo.get("width", 720))
+    in_h = max(100, vinfo.get("height", 1280))
+    aspect_ratio = in_w / float(in_h)
+    target_aspect = target_w / float(target_h)  # 0.5625 (9:16)
 
-    vf_str = (
-        f"scale={target_w}:{target_h}:force_original_aspect_ratio=decrease,"
-        f"pad={target_w}:{target_h}:(ow-iw)/2:(oh-ih)/2:black,"
-        f"setsar=1,fps=30,format=yuv420p"
-    )
+    fade_filters = []
+    if fade_in_video and use_dur > 0.8:
+        fade_filters.append("fade=t=in:st=0:d=0.35")
+    if fade_out_video and use_dur > 0.8:
+        fade_filters.append(f"fade=t=out:st={max(0.1, use_dur - 0.35):.2f}:d=0.35")
+    fade_suffix = ("," + ",".join(fade_filters)) if fade_filters else ""
 
-    cmd = ["ffmpeg", "-y"]
+    # Agar video 9:16 bo'lmasa (gorizontal yoki kvadrat bo'lsa) -> Qora fon o'rniga Blurred Background!
+    if use_blur_bg and abs(aspect_ratio - target_aspect) > 0.08:
+        v_filter_complex = (
+            f"[0:v]split=2[vbg][vfg];"
+            f"[vbg]scale={target_w}:{target_h}:force_original_aspect_ratio=increase,"
+            f"crop={target_w}:{target_h},boxblur=24:4,eq=brightness=-0.08:saturation=1.15[bg];"
+            f"[vfg]scale={target_w}:{target_h}:force_original_aspect_ratio=decrease[fg];"
+            f"[bg][fg]overlay=(W-w)/2:(H-h)/2,setsar=1,fps=30{fade_suffix},format=yuv420p[vout]"
+        )
+        use_complex = True
+    else:
+        v_filter_simple = (
+            f"scale={target_w}:{target_h}:force_original_aspect_ratio=decrease,"
+            f"pad={target_w}:{target_h}:(ow-iw)/2:(oh-ih)/2:black,"
+            f"setsar=1,fps=30{fade_suffix},format=yuv420p"
+        )
+        use_complex = False
+
+    cmd = ["ffmpeg", "-y", "-i", input_path]
     if keep_audio and not audio_exists:
-        # Agar videoda ovoz bo'lmasa, concat xato bermasligi uchun jim (silent) stereo audio qo'shamiz
+        cmd += ["-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100"]
+
+    cmd += ["-t", f"{use_dur:.3f}"]
+    if use_complex:
+        cmd += ["-filter_complex", v_filter_complex, "-map", "[vout]"]
+    else:
+        cmd += ["-vf", v_filter_simple, "-map", "0:v:0"]
+
+    if keep_audio and not audio_exists:
         cmd += [
-            "-i", input_path,
-            "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
-            "-t", f"{use_dur:.3f}",
-            "-vf", vf_str,
-            "-map", "0:v:0", "-map", "1:a:0",
-            "-c:v", "libx264", "-preset", "fast", "-crf", "21",
+            "-map", "1:a:0",
+            "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
             "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
             "-shortest", "-movflags", "+faststart",
             output_path
         ]
     elif keep_audio and audio_exists:
         cmd += [
-            "-i", input_path,
-            "-t", f"{use_dur:.3f}",
-            "-vf", vf_str,
-            "-af", "aresample=44100,aformat=sample_fmts=fltp:channel_layouts=stereo",
-            "-c:v", "libx264", "-preset", "fast", "-crf", "21",
+            "-map", "0:a:0",
+            "-af", "loudnorm=I=-14:TP=-1.5:LRA=11,aresample=44100,aformat=sample_fmts=fltp:channel_layouts=stereo",
+            "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
             "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
             "-movflags", "+faststart",
             output_path
         ]
     else:
-        # Ovozsiz (Muted)
         cmd += [
-            "-i", input_path,
-            "-t", f"{use_dur:.3f}",
-            "-vf", vf_str,
             "-an",
-            "-c:v", "libx264", "-preset", "fast", "-crf", "21",
+            "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
             "-movflags", "+faststart",
             output_path
         ]
@@ -1268,48 +1797,124 @@ def normalize_clip_for_montage(
         print(f"Normalize clip xatoligi: {e}")
         return False
 
+def _generate_transition_whoosh_sfx(out_wav: str, duration: float = 0.65) -> bool:
+    """1-videodan 2-videoga o'tish nuqtasi uchun kinematik Sub-Bass Whoosh ovoz effekti yaratish"""
+    try:
+        cmd = [
+            "ffmpeg", "-y",
+            "-f", "lavfi",
+            "-i", f"aevalsrc='0.32*sin(2*PI*(150-105*t/{duration:.2f})*t)*exp(-3.5*t)':s=44100:d={duration:.2f}",
+            "-af", "pan=stereo|c0=c0|c1=c0,afade=t=in:st=0:d=0.06,afade=t=out:st=0.25:d=0.40",
+            out_wav
+        ]
+        res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=20)
+        return res.returncode == 0 and os.path.exists(out_wav) and os.path.getsize(out_wav) > 200
+    except Exception:
+        return False
+
 def montage_two_videos(
     video1_path: str,
     video2_path: str,
     output_path: str,
-    mode: str = "audio1_bridge"
+    mode: str = "audio1_bridge",
+    apply_anti_duplicate: bool = True
 ) -> tuple[bool, dict]:
     """
     2 ta har qanday uzunlikdagi (masalan: 10s, 19s, 35s, 60s+ — 1 daqiqa va undan ko'p) videoni
-    professional Reels montaj qilish!
+    7 ta Pro Studiya funksiyasi + 10-Bosqichli Anti-Duplikat + Tepadan-Pastga Suzuvchi Watermark bilan montaj qilish!
 
-    Rejimlar (mode):
-      1. "audio1_bridge" (🔥 Tavsiya — 1-Video Audiosi Uzluksiz 2-Videoga O'tadi, 2-Video Muted):
-         - 1-video to'liq o'ynaydi, tugashi bilan 2-video (ovozsiz/mute) ulanadi.
-         - 1-videoning audiosi to'xtab qolmaydi — 2-videoning ustida ham uzluksiz davom etadi!
-         - Agar 1-video audiosi jami vaqtdan qisqa bo'lsa, FFmpeg `-stream_loop -1` orqali 1-video audiosini
-           uzluksiz aylantirib (loop), oxirgi 1.2 soniyada silliq fade-out qiladi!
-      2. "lcut_split" (🎬 True L-Cut — 1-Video kadri ertaroq almashib, o'zining original audiosi 2-videoda tugaydi):
-         - Agar 1-video uzunroq bo'lsa (masalan 30s-60s), 1-videoning tasviri (visual) 2-video davomiyligicha (yoki 40% qismiga)
-           ertaroq tugab, ekranga 2-video (reklama) chiqadi, lekin 1-videoning original audiosi uzilmasdan 2-video ustida davom etadi!
-      3. "both_original" (🔊 Original Ovozlar — 1-Video o'z ovozi bilan + 2-Video o'z ovozi bilan):
-         - Har ikki video o'zining haqiqiy davomiyligi va o'zining original ovozi bilan ketma-ket ulanadi.
-      4. "audio_ducking" (🔉 Fon Musiqa Mix — 2-Video boshlanganda 1-Video audiosi 25% fonda + 2-Video ovozi 100%):
-         - 1-video 100% o'z ovozida ketadi, 2-video boshlanganda 2-videoning ovozi 100% eshitiladi va
-           1-videoning musiqasi 25% past ovozda orqa fonda davom etadi!
+    5 Xil Smart Rejim (mode):
+      1. "audio1_bridge" (🔥 Tavsiya — 1-Video Audiosi Uzluksiz 2-Videoga O'tadi, 2-Video Muted)
+      2. "lcut_split" (🎬 True L-Cut — 1-Video kadri ertaroq almashib, o'zining original audiosi 2-videoda tugaydi)
+      3. "pip_outro" (🖼 PiP Reklama — 1-video oxirida 2-video burchakda Picture-in-Picture chiqib, so'ng to'liq ekranga o'tadi!)
+      4. "both_original" (🔊 Original Ovozlar — 1-Video o'z ovozi bilan + Whoosh Transition + 2-Video o'z ovozi bilan)
+      5. "audio_ducking" (🔉 Fon Musiqa Mix — 2-Video boshlanganda 1-Video audiosi 25% fonda + 2-Video ovozi 100%)
     """
     ensure_ffmpeg_in_path()
     ts = int(time.time() * 1000) % 1000000
     norm1 = os.path.join(DOWNLOAD_DIR, f"_m_norm1_{ts}.mp4")
     norm2 = os.path.join(DOWNLOAD_DIR, f"_m_norm2_{ts}.mp4")
     concat_vid = os.path.join(DOWNLOAD_DIR, f"_m_concat_v_{ts}.mp4")
+    raw_montaj = os.path.join(DOWNLOAD_DIR, f"_m_raw_out_{ts}.mp4")
     audio1_aac = os.path.join(DOWNLOAD_DIR, f"_m_aud1_{ts}.m4a")
+    whoosh_wav = os.path.join(DOWNLOAD_DIR, f"_m_whoosh_{ts}.wav")
     concat_list = os.path.join(DOWNLOAD_DIR, f"_m_list_{ts}.txt")
 
     try:
         dur1_raw = max(get_media_duration(video1_path), 1.0)
         dur2_raw = max(get_media_duration(video2_path), 1.0)
+        target_stage = raw_montaj if apply_anti_duplicate else output_path
+        mode_label = ""
+        final_d1 = dur1_raw
+        final_d2 = dur2_raw
+        total_d = dur1_raw + dur2_raw
 
-        # ---------------- REJIM 3: ORIGINAL OVOZLAR (1-Video + 2-Video o'z ovozi bilan) ----------------
-        if mode == "both_original":
-            if not normalize_clip_for_montage(video1_path, norm1, keep_audio=True):
+        # ---------------- REJIM 5: PICTURE-IN-PICTURE (PiP Preview + Fullscreen Outro) ----------------
+        if mode == "pip_outro":
+            if not normalize_clip_for_montage(video1_path, norm1, keep_audio=False, fade_out_video=True):
                 return False, {}
-            if not normalize_clip_for_montage(video2_path, norm2, keep_audio=True):
+            if not normalize_clip_for_montage(video2_path, norm2, keep_audio=False, fade_in_video=True):
+                return False, {}
+
+            d1 = get_media_duration(norm1)
+            d2 = get_media_duration(norm2)
+            pip_lead = min(3.0, max(1.5, d1 * 0.25), max(1.5, d2 * 0.5))
+            pip_start = max(0.5, d1 - pip_lead)
+
+            with open(concat_list, "w", encoding="utf-8") as lf:
+                lf.write(f"file '{os.path.abspath(norm1)}'\n")
+                lf.write(f"file '{os.path.abspath(norm2)}'\n")
+
+            subprocess.run([
+                "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", concat_vid
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
+
+            total_d = get_media_duration(concat_vid) or (d1 + d2)
+
+            if has_audio_stream(video1_path):
+                subprocess.run([
+                    "ffmpeg", "-y", "-i", video1_path, "-vn",
+                    "-af", "loudnorm=I=-14:TP=-1.5:LRA=11",
+                    "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2", audio1_aac
+                ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
+            else:
+                subprocess.run([
+                    "ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
+                    "-t", f"{total_d:.3f}", "-c:a", "aac", audio1_aac
+                ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
+
+            fade_start = max(total_d - 1.2, 0.5)
+            # 1-video oxirgi soniyalarida o'ng pastki burchakda 2-videoning PiP preview oynasi chiqadi!
+            pip_filter = (
+                f"[1:v]scale=340:604,drawbox=x=0:y=0:w=iw:h=ih:color=gold@0.9:t=6,"
+                f"setpts=PTS+{pip_start:.2f}/TB[pip];"
+                f"[0:v][pip]overlay=x=W-w-36:y=H-h-190:enable='between(t,{pip_start:.2f},{d1:.2f})'[v_pip]"
+            )
+            cmd_pip = [
+                "ffmpeg", "-y",
+                "-i", concat_vid,
+                "-i", norm2,
+                "-stream_loop", "-1", "-i", audio1_aac,
+                "-filter_complex", pip_filter,
+                "-map", "[v_pip]", "-map", "2:a:0",
+                "-t", f"{total_d:.3f}",
+                "-af", f"afade=t=out:st={fade_start:.2f}:d=1.2",
+                "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+                "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
+                "-movflags", "+faststart",
+                target_stage
+            ]
+            res = subprocess.run(cmd_pip, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
+            if res.returncode != 0 or not os.path.exists(target_stage):
+                return False, {}
+            final_d1, final_d2 = d1, d2
+            mode_label = "🖼 PiP Reklama (Burchakda Preview + To'liq Ekran)"
+
+        # ---------------- REJIM 3: ORIGINAL OVOZLAR (1-Video + Whoosh FX + 2-Video o'z ovozi bilan) ----------------
+        elif mode == "both_original":
+            if not normalize_clip_for_montage(video1_path, norm1, keep_audio=True, fade_out_video=True):
+                return False, {}
+            if not normalize_clip_for_montage(video2_path, norm2, keep_audio=True, fade_in_video=True):
                 return False, {}
 
             with open(concat_list, "w", encoding="utf-8") as lf:
@@ -1319,30 +1924,27 @@ def montage_two_videos(
             cmd = [
                 "ffmpeg", "-y", "-f", "concat", "-safe", "0",
                 "-i", concat_list,
-                "-c:v", "libx264", "-preset", "fast", "-crf", "21",
+                "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
                 "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
                 "-movflags", "+faststart",
-                output_path
+                target_stage
             ]
             res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=300)
-            total_d = get_media_duration(output_path) if os.path.exists(output_path) else (dur1_raw + dur2_raw)
-            return (res.returncode == 0 and os.path.exists(output_path) and os.path.getsize(output_path) > 1000), {
-                "dur1": dur1_raw, "dur2": dur2_raw, "total": total_d, "mode_name": "🔊 Original Ovozlar (1+2)"
-            }
+            if res.returncode != 0 or not os.path.exists(target_stage):
+                return False, {}
+            total_d = get_media_duration(target_stage) or (dur1_raw + dur2_raw)
+            mode_label = "🔊 Original Ovozlar (1+2 + Kinematik O'tish)"
 
         # ---------------- REJIM 2: TRUE L-CUT (1-Video tasviri ertaroq almashib, audiosi 2-video ustida tugaydi) ----------------
-        if mode == "lcut_split":
-            # 1-video audiosi to'liq olinadi (yoki 1-video qisqa bo'lsa loop qilinadi)
-            # 1-video tasviri (visual) esa shunday qirqiladiki, qolgan vaqtda 2-video tasviri aynan 1-video audiosi ustiga tushadi!
+        elif mode == "lcut_split":
             if dur1_raw > dur2_raw + 3.0:
                 v1_visual_dur = dur1_raw - dur2_raw
             else:
-                # Agar 1-video 2-videodan qisqaroq yoki teng bo'lsa, 1-videoning 65% qismini ko'rsatib, keyin 2-videoga o'tamiz
                 v1_visual_dur = max(dur1_raw * 0.65, 2.0)
 
-            if not normalize_clip_for_montage(video1_path, norm1, max_duration=v1_visual_dur, keep_audio=False):
+            if not normalize_clip_for_montage(video1_path, norm1, max_duration=v1_visual_dur, keep_audio=False, fade_out_video=True):
                 return False, {}
-            if not normalize_clip_for_montage(video2_path, norm2, keep_audio=False):
+            if not normalize_clip_for_montage(video2_path, norm2, keep_audio=False, fade_in_video=True):
                 return False, {}
 
             with open(concat_list, "w", encoding="utf-8") as lf:
@@ -1353,70 +1955,67 @@ def montage_two_videos(
                 "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", concat_vid
             ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
 
-            total_visual_dur = get_media_duration(concat_vid)
-            if total_visual_dur <= 0.5:
-                total_visual_dur = v1_visual_dur + dur2_raw
+            total_d = get_media_duration(concat_vid)
+            if total_d <= 0.5:
+                total_d = v1_visual_dur + dur2_raw
 
-            # 1-videodan audio ajratib olish
             if has_audio_stream(video1_path):
                 subprocess.run([
                     "ffmpeg", "-y", "-i", video1_path, "-vn",
+                    "-af", "loudnorm=I=-14:TP=-1.5:LRA=11",
                     "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2", audio1_aac
                 ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
             else:
                 subprocess.run([
                     "ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
-                    "-t", f"{total_visual_dur:.3f}", "-c:a", "aac", audio1_aac
+                    "-t", f"{total_d:.3f}", "-c:a", "aac", audio1_aac
                 ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
 
-            fade_start = max(total_visual_dur - 1.2, 0.5)
+            fade_start = max(total_d - 1.2, 0.5)
             cmd_mux = [
                 "ffmpeg", "-y",
                 "-i", concat_vid,
                 "-stream_loop", "-1", "-i", audio1_aac,
                 "-map", "0:v:0", "-map", "1:a:0",
-                "-t", f"{total_visual_dur:.3f}",
+                "-t", f"{total_d:.3f}",
                 "-af", f"afade=t=out:st={fade_start:.2f}:d=1.2",
                 "-c:v", "copy",
                 "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
                 "-movflags", "+faststart",
-                output_path
+                target_stage
             ]
             res = subprocess.run(cmd_mux, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
-            return (res.returncode == 0 and os.path.exists(output_path) and os.path.getsize(output_path) > 1000), {
-                "dur1": v1_visual_dur, "dur2": dur2_raw, "total": total_visual_dur, "mode_name": "🎬 L-Cut Overlap (Kadr almashib, 1-Audio davom etadi)"
-            }
+            if res.returncode != 0 or not os.path.exists(target_stage):
+                return False, {}
+            final_d1 = v1_visual_dur
+            mode_label = "🎬 L-Cut Overlap (Kadr almashib, 1-Audio davom etadi)"
 
         # ---------------- REJIM 4: FON MUSIQA MIX (Audio Ducking: 1-Video Audiosi 25% + 2-Video Ovozi 100%) ----------------
-        if mode == "audio_ducking":
-            if not normalize_clip_for_montage(video1_path, norm1, keep_audio=True):
+        elif mode == "audio_ducking":
+            if not normalize_clip_for_montage(video1_path, norm1, keep_audio=True, fade_out_video=True):
                 return False, {}
-            if not normalize_clip_for_montage(video2_path, norm2, keep_audio=True):
+            if not normalize_clip_for_montage(video2_path, norm2, keep_audio=True, fade_in_video=True):
                 return False, {}
 
             d1 = get_media_duration(norm1)
             d2 = get_media_duration(norm2)
             total_d = d1 + d2
 
-            # 1-video va 2-video tasvirlarini birlashtiramiz
             with open(concat_list, "w", encoding="utf-8") as lf:
                 lf.write(f"file '{os.path.abspath(norm1)}'\n")
                 lf.write(f"file '{os.path.abspath(norm2)}'\n")
 
             subprocess.run([
                 "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list,
-                "-c:v", "libx264", "-preset", "fast", "-crf", "21",
+                "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
                 "-c:a", "aac", "-b:a", "192k", concat_vid
             ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
 
-            # 1-videoning audiosini alohida olib, 2-video vaqtida 25% fonda davom ettiramiz
             subprocess.run([
                 "ffmpeg", "-y", "-i", norm1, "-vn", "-c:a", "aac", "-b:a", "192k", audio1_aac
             ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
 
             fade_start = max(total_d - 1.2, 0.5)
-            # concat_vid ichida [0:a] da 1-video ovozi + 2-video ovozi bor; [1:a] da 1-videoning looped audiosi bor.
-            # d1 soniyadan keyin [1:a] ni 25% balandlikda [0:a] ustiga qo'shamiz:
             filter_complex = (
                 f"[0:a]volume=1.0[a_main];"
                 f"[1:a]volume=0.25,afade=t=out:st={fade_start:.2f}:d=1.2[a_bg];"
@@ -1432,68 +2031,105 @@ def montage_two_videos(
                 "-c:v", "copy",
                 "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
                 "-movflags", "+faststart",
-                output_path
+                target_stage
             ]
             res = subprocess.run(cmd_mix, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
-            return (res.returncode == 0 and os.path.exists(output_path) and os.path.getsize(output_path) > 1000), {
-                "dur1": d1, "dur2": d2, "total": total_d, "mode_name": "🔉 Fon Mix (1-Audio fonda + 2-Video ovozi)"
-            }
+            if res.returncode != 0 or not os.path.exists(target_stage):
+                return False, {}
+            final_d1, final_d2 = d1, d2
+            mode_label = "🔉 Fon Mix (1-Audio 25% fonda + 2-Video ovozi 100%)"
 
         # ---------------- REJIM 1 (DEFAULT): 1-VIDEO AUDIOSI UZLUKSIZ 2-VIDEOGA ULANADI (2-VIDEO MUTE) ----------------
-        # Foydalanuvchi so'ragan asosiy rejim:
-        # "Birinchi video tugaganda audiosi tugamasligi kerak, ikkinchisiga ulanib ketishi kerak, ikkinchi videoni ovozi mute bo'lishi kerak!"
-        # Va davomiyligi har xil (10s, 19s, 45s, 60s+ — 1 minutgacha va undan ko'p) bo'lsa ham 100% avtomatik ishlaydi!
-        if not normalize_clip_for_montage(video1_path, norm1, keep_audio=False):
-            return False, {}
-        if not normalize_clip_for_montage(video2_path, norm2, keep_audio=False):
-            return False, {}
-
-        with open(concat_list, "w", encoding="utf-8") as lf:
-            lf.write(f"file '{os.path.abspath(norm1)}'\n")
-            lf.write(f"file '{os.path.abspath(norm2)}'\n")
-
-        subprocess.run([
-            "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", concat_vid
-        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
-
-        total_d = get_media_duration(concat_vid)
-        if total_d <= 0.5:
-            total_d = dur1_raw + dur2_raw
-
-        if has_audio_stream(video1_path):
-            subprocess.run([
-                "ffmpeg", "-y", "-i", video1_path, "-vn",
-                "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2", audio1_aac
-            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
         else:
-            subprocess.run([
-                "ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
-                "-t", f"{total_d:.3f}", "-c:a", "aac", audio1_aac
-            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
+            if not normalize_clip_for_montage(video1_path, norm1, keep_audio=False, fade_out_video=True):
+                return False, {}
+            if not normalize_clip_for_montage(video2_path, norm2, keep_audio=False, fade_in_video=True):
+                return False, {}
 
-        fade_start = max(total_d - 1.2, 0.5)
-        cmd_bridge = [
-            "ffmpeg", "-y",
-            "-i", concat_vid,
-            "-stream_loop", "-1", "-i", audio1_aac,
-            "-map", "0:v:0", "-map", "1:a:0",
-            "-t", f"{total_d:.3f}",
-            "-af", f"afade=t=out:st={fade_start:.2f}:d=1.2",
-            "-c:v", "copy",
-            "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
-            "-movflags", "+faststart",
-            output_path
-        ]
-        res = subprocess.run(cmd_bridge, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
-        return (res.returncode == 0 and os.path.exists(output_path) and os.path.getsize(output_path) > 1000), {
-            "dur1": dur1_raw, "dur2": dur2_raw, "total": total_d,
-            "mode_name": "🔥 Audio Uzluksiz (1-Video Audiosi 2-Videoga Ulanadi, 2-Video Mute)"
+            with open(concat_list, "w", encoding="utf-8") as lf:
+                lf.write(f"file '{os.path.abspath(norm1)}'\n")
+                lf.write(f"file '{os.path.abspath(norm2)}'\n")
+
+            subprocess.run([
+                "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", concat_vid
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
+
+            total_d = get_media_duration(concat_vid)
+            if total_d <= 0.5:
+                total_d = dur1_raw + dur2_raw
+
+            if has_audio_stream(video1_path):
+                subprocess.run([
+                    "ffmpeg", "-y", "-i", video1_path, "-vn",
+                    "-af", "loudnorm=I=-14:TP=-1.5:LRA=11",
+                    "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2", audio1_aac
+                ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
+            else:
+                subprocess.run([
+                    "ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
+                    "-t", f"{total_d:.3f}", "-c:a", "aac", audio1_aac
+                ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
+
+            fade_start = max(total_d - 1.2, 0.5)
+            # Kinematik Whoosh Sub-Bass ovozini 1-video tugab 2-video boshlanish nuqtasiga qo'shamiz!
+            delay_ms = max(100, int((dur1_raw - 0.25) * 1000))
+            if _generate_transition_whoosh_sfx(whoosh_wav, 0.65):
+                af_complex = (
+                    f"[1:a]afade=t=out:st={fade_start:.2f}:d=1.2[a_main];"
+                    f"[2:a]adelay={delay_ms}|{delay_ms},volume=0.45[a_sfx];"
+                    f"[a_main][a_sfx]amix=inputs=2:duration=first:dropout_transition=1[a_final]"
+                )
+                cmd_bridge = [
+                    "ffmpeg", "-y",
+                    "-i", concat_vid,
+                    "-stream_loop", "-1", "-i", audio1_aac,
+                    "-i", whoosh_wav,
+                    "-filter_complex", af_complex,
+                    "-map", "0:v:0", "-map", "[a_final]",
+                    "-t", f"{total_d:.3f}",
+                    "-c:v", "copy",
+                    "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
+                    "-movflags", "+faststart",
+                    target_stage
+                ]
+            else:
+                cmd_bridge = [
+                    "ffmpeg", "-y",
+                    "-i", concat_vid,
+                    "-stream_loop", "-1", "-i", audio1_aac,
+                    "-map", "0:v:0", "-map", "1:a:0",
+                    "-t", f"{total_d:.3f}",
+                    "-af", f"afade=t=out:st={fade_start:.2f}:d=1.2",
+                    "-c:v", "copy",
+                    "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
+                    "-movflags", "+faststart",
+                    target_stage
+                ]
+            res = subprocess.run(cmd_bridge, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
+            if res.returncode != 0 or not os.path.exists(target_stage):
+                return False, {}
+            mode_label = "🔥 Audio Uzluksiz (1-Video Audiosi 2-ga Ulanadi + Transition FX)"
+
+        # ---------------- YAKUNIY BOSQICH: 10-QATLAMLI ANTI-DUPLIKAT + TEPADAN PASTGA SUZUVCHI SHAFFOF WATERMARK ----------------
+        anti_dup_info = {}
+        if apply_anti_duplicate:
+            ok_ad, anti_dup_info = make_video_100_original(target_stage, output_path, force_9_16=False)
+            if not ok_ad or not os.path.exists(output_path):
+                shutil.copyfile(target_stage, output_path)
+            total_d = get_media_duration(output_path) or total_d
+
+        return (os.path.exists(output_path) and os.path.getsize(output_path) > 1000), {
+            "dur1": final_d1,
+            "dur2": final_d2,
+            "total": total_d,
+            "mode_name": mode_label,
+            "anti_dup": anti_dup_info
         }
     except Exception as e:
         print(f"Montaj xatoligi ({mode}): {e}")
         return False, {}
     finally:
-        safe_remove(norm1, norm2, concat_vid, audio1_aac, concat_list)
+        safe_remove(norm1, norm2, concat_vid, raw_montaj, audio1_aac, whoosh_wav, concat_list)
 
 
 # ==================== SHAZAM / MUSIQANI ANIQLASH ====================
@@ -2216,12 +2852,25 @@ def get_video_stream_info(file_path: str) -> dict:
         pass
     return info
 
-def ensure_phone_playable_mp4(input_path: str, force_reencode: bool = False) -> tuple[str, dict]:
-    """Telefonda (iPhone va Android) bittada ochiladigan H.264 (yuv420p) + faststart MP4 ga keltirish"""
+def ensure_phone_playable_mp4(input_path: str, force_reencode: bool = False, apply_watermark: bool = True) -> tuple[str, dict]:
+    """
+    Telefonda (iPhone va Android) bittada ochiladigan H.264 (yuv420p) + faststart MP4 ga keltirish
+    HAMDA har bitta videoga tepadan-pastga suzib yuruvchi ko'rinar-ko'rinmas (prazrachniy)
+    Telegram ikonka + @handle watermark tushirish!
+    """
     ensure_ffmpeg_in_path()
     vinfo = get_video_stream_info(input_path)
     ext = os.path.splitext(input_path)[1].lower()
     codec = vinfo.get("codec", "h264")
+    cfg = get_watermark_settings()
+    already_watermarked = os.path.basename(input_path).startswith(("reklama_reel_", "orig_"))
+
+    if apply_watermark and cfg.get("enabled", True) and not already_watermarked:
+        wm_out = os.path.splitext(input_path)[0] + "_wm.mp4"
+        if apply_floating_watermark_to_video(input_path, wm_out):
+            safe_remove(input_path)
+            vinfo = get_video_stream_info(wm_out)
+            return wm_out, vinfo
 
     if force_reencode or codec not in ("h264", "avc1") or ext != ".mp4":
         fixed_path = os.path.splitext(input_path)[0] + "_phone.mp4"
@@ -2441,11 +3090,17 @@ def make_video_action_keyboard(base_fname: str, lang: str = "uz") -> types.Inlin
         types.InlineKeyboardButton(lbl["reverse"], callback_data=f"reverse:{base_fname}"),
         types.InlineKeyboardButton(lbl["gif"], callback_data=f"gif:{base_fname}")
     )
+    antidup_lbl = {
+        "uz": "🛡 Anti-Duplikat (100% Original — Top/Rekomendatsiya)",
+        "ru": "🛡 Анти-Дубликат (100% Оригинал для Reels/TikTok)",
+        "en": "🛡 Anti-Duplicate (100% Original for Reels/TikTok)"
+    }.get(lang, "🛡 Anti-Duplikat (100% Original — Top/Rekomendatsiya)")
     montaj_lbl = {
-        "uz": "🎯 Reklama Montaj (2-Video / Outro Ulash)",
-        "ru": "🎯 Видео Монтаж (Склеить с Outro / 2-м видео)",
-        "en": "🎯 Promo Montage (Merge with Outro / 2nd Video)"
-    }.get(lang, "🎯 Reklama Montaj (2-Video / Outro Ulash)")
+        "uz": "🎯 Pro Reklama Montaj (2-Video / Outro Ulash)",
+        "ru": "🎯 Про Видео Монтаж (Склеить с Outro / 2-м видео)",
+        "en": "🎯 Pro Promo Montage (Merge with Outro / 2nd Video)"
+    }.get(lang, "🎯 Pro Reklama Montaj (2-Video / Outro Ulash)")
+    markup.add(types.InlineKeyboardButton(antidup_lbl, callback_data=f"antidup_vid:{base_fname}"))
     markup.add(types.InlineKeyboardButton(montaj_lbl, callback_data=f"montaj_from_vid:{base_fname}"))
     return markup
 
@@ -2478,11 +3133,11 @@ def get_universal_tools_keyboard() -> types.InlineKeyboardMarkup:
     return markup
 
 def make_montage_mode_keyboard(session_key: str) -> types.InlineKeyboardMarkup:
-    """4 xil professional montaj rejimini tanlash tugmalari"""
+    """5 xil professional montaj rejimini tanlash tugmalari (Blurred BG + Anti-Duplikat + Suzuvchi Watermark bilan!)"""
     markup = types.InlineKeyboardMarkup(row_width=1)
     markup.add(
         types.InlineKeyboardButton(
-            "🔥 1. Audio Uzluksiz (1-Video Audiosi 2-ga o'tadi, 2-Mute) [Tavsiya]",
+            "🔥 1. Audio Uzluksiz + Whoosh FX (1-Audio 2-ga o'tadi, 2-Mute) [Tavsiya]",
             callback_data=f"do_montaj:audio1_bridge:{session_key}"
         ),
         types.InlineKeyboardButton(
@@ -2490,11 +3145,15 @@ def make_montage_mode_keyboard(session_key: str) -> types.InlineKeyboardMarkup:
             callback_data=f"do_montaj:lcut_split:{session_key}"
         ),
         types.InlineKeyboardButton(
-            "🔊 3. Original Ovozlar (1-Video ovozi + 2-Video o'z ovozi)",
+            "🖼 3. PiP Reklama (Burchakda 3s Preview + To'liq Ekran Outro)",
+            callback_data=f"do_montaj:pip_outro:{session_key}"
+        ),
+        types.InlineKeyboardButton(
+            "🔊 4. Original Ovozlar (1-Video ovozi + 2-Video o'z ovozi)",
             callback_data=f"do_montaj:both_original:{session_key}"
         ),
         types.InlineKeyboardButton(
-            "🔉 4. Fon Musiqa Mix (1-Audio 25% fonda + 2-Video ovozi 100%)",
+            "🔉 5. Fon Musiqa Mix (1-Audio 25% fonda + 2-Video ovozi 100%)",
             callback_data=f"do_montaj:audio_ducking:{session_key}"
         ),
         types.InlineKeyboardButton("❌ Bekor qilish", callback_data=f"cancel_montaj:{session_key}")
@@ -2931,26 +3590,35 @@ def handle_montage_menu(message: types.Message):
     if outro_path:
         outro_dur = get_media_duration(outro_path)
         outro_size = os.path.getsize(outro_path) / (1024 * 1024)
-        outro_status = f"✅ <b>Saqlangan (Davomiyligi: {outro_dur:.1f} sek | {outro_size:.1f} MB)</b>"
+        outro_status = f"✅ <b>Saqlangan ({outro_dur:.1f} sek | {outro_size:.1f} MB)</b>"
     else:
-        outro_status = "⚠️ <b>Hali saqlanmagan</b> (<code>/set_outro</code> orqali saqlashingiz mumkin)"
+        outro_status = "⚠️ <b>Hali saqlanmagan</b> (<code>/set_outro</code> orqali saqlang)"
+
+    wm_cfg = get_watermark_settings()
+    wm_state = f"✅ <b>Faol:</b> <code>{wm_cfg.get('text')}</code> ({int(wm_cfg.get('opacity', 0.24)*100)}% shaffof, tepadan-pastga suzuvchi)" if wm_cfg.get("enabled", True) else "🔴 O'chirilgan"
 
     text = (
-        "🎬 <b>PRO REKLAMA MONTAJ STUDIYASI (1080x1920 Full HD Reels)</b>\n\n"
-        "Bu studiya orqali <b>har qanday davomiylikdagi</b> (10 sek, 19 sek, 35 sek, 1 daqiqa va undan uzun) "
-        "2 ta videoni professional darajada birlashtirishingiz mumkin!\n\n"
-        f"📌 <b>Doimiy Reklama Outro holati:</b> {outro_status}\n\n"
-        "🔥 <b>4 xil Smart Audio-Vizual Rejim mavjud:</b>\n"
-        "1️⃣ <b>Audio Uzluksiz (Tavsiya):</b> 1-video tugaganda 2-video (mute/ovozsiz) ulanadi, lekin <b>1-videoning audiosi uzilmasdan 2-videoning ustida davom etadi!</b>\n"
-        "2️⃣ <b>L-Cut Overlap:</b> 1-videoning kadri ertaroq 2-videoga almashadi, 1-videoning original ovozi esa 2-video ustida tabiiy tugaydi.\n"
-        "3️⃣ <b>Original Ovozlar:</b> 1-video o'z ovozi bilan + 2-video o'z ovozi bilan ketma-ket.\n"
-        "4️⃣ <b>Fon Musiqa Mix:</b> 2-video boshlanganda 1-video musiqasi 25% past ovozda fonda davom etadi.\n\n"
-        "👇 <b>Qanday usulda montaj qilamiz?</b>"
+        "🎬 <b>TOP-1 PRO REKLAMA MONTAJ & ANTI-DUPLIKAT STUDIYASI</b>\n\n"
+        "Har qanday davomiylikdagi (10s, 19s, 45s, 1 daqiqa+) videolarni <b>7 ta Pro Studiya funksiyasi</b> "
+        "va <b>10-Bosqichli Anti-Duplikat (100% Original)</b> algoritmi bilan tayyorlaydi!\n\n"
+        f"📌 <b>Doimiy Reklama Outro:</b> {outro_status}\n"
+        f"💧 <b>Shaffof Telegram Watermark:</b> {wm_state}\n\n"
+        "✨ <b>Avtomatik qo'llanadigan 7 ta Pro Imkoniyat:</b>\n"
+        "1️⃣ <b>Blurred 9:16 Fon:</b> Qora hoshiya o'rniga xiralashtirilgan zamonaviy fon\n"
+        "2️⃣ <b>Kinematik O'tish (Smooth Fade):</b> 1-videodan 2-videoga silliq o'tish\n"
+        "3️⃣ <b>Tepadan-Pastga Suzuvchi Shaffof Ikonka:</b> Telegram samolyotcha + @Handle\n"
+        "4️⃣ <b>5 xil Rejim (shu jumladan 🖼 PiP Burchakda Preview!)</b>\n"
+        "5️⃣ <b>Auto-Ovoz Balansi:</b> EBU R128 (-14 LUFS) studiya ovozi\n"
+        "6️⃣ <b>Whoosh Sub-Bass Sound FX:</b> Reklamaga o'tishda kinematik ovoz effekti\n"
+        "7️⃣ <b>10-Qatlamli Anti-Duplikat + iPhone 16 Pro Max Metadata</b> (Reels/TikTok Top uchun!)\n\n"
+        "👇 <b>Kerakli bo'limni tanlang:</b>"
     )
     markup = types.InlineKeyboardMarkup(row_width=1)
     markup.add(
         types.InlineKeyboardButton("🎬 2 ta Videoni Ulash (1-Video + 2-Video)", callback_data="montaj_start_two"),
-        types.InlineKeyboardButton("📌 Doimiy Reklama Outro Videoni Saqlash (/set_outro)", callback_data="montaj_set_outro")
+        types.InlineKeyboardButton("🛡 1 ta Videoni 100% Original Qilish (Anti-Duplikat)", callback_data="antidup_start_single"),
+        types.InlineKeyboardButton("📌 Doimiy Reklama Outro Videoni Saqlash (/set_outro)", callback_data="montaj_set_outro"),
+        types.InlineKeyboardButton("💧 Shaffof Watermark Matnini O'zgartirish (/set_watermark)", callback_data="montaj_set_wm")
     )
     if outro_path:
         markup.add(
@@ -2958,6 +3626,137 @@ def handle_montage_menu(message: types.Message):
             types.InlineKeyboardButton("🗑 Saqlangan Outroni O'chirish (/del_outro)", callback_data="montaj_del_outro")
         )
     bot.send_message(message.chat.id, text, reply_markup=markup)
+
+@bot.message_handler(commands=['set_watermark', 'watermark'])
+def handle_set_watermark_cmd(message: types.Message):
+    args = message.text.split(maxsplit=1) if message.text else []
+    if len(args) > 1:
+        val = args[1].strip()
+        if val.lower() in ("off", "0", "yoq", "ochirish"):
+            save_watermark_settings(enabled=False)
+            bot.reply_to(message, "🔴 <b>Suzuvchi shaffof watermark o'chirildi.</b> Yoqish uchun: <code>/set_watermark @kanal_nomi</code>")
+            return
+        cfg = save_watermark_settings(enabled=True, text=val, opacity=0.24)
+        # Eski kesh PNG larni tozalaymiz
+        for fn in os.listdir(PROMO_DIR):
+            if fn.startswith("wm_badge_") and fn.endswith(".png"):
+                safe_remove(os.path.join(PROMO_DIR, fn))
+        bot.reply_to(
+            message,
+            f"✅ <b>Shaffof Telegram Watermark yangilandi!</b>\n\n"
+            f"💧 <b>Yozuv:</b> <code>{cfg['text']}</code> (Telegram samolyotcha ikonkasi bilan)\n"
+            f"👁 <b>Shaffoflik:</b> 24% (ko'rinar-ko'rinmas, videoga xalaqit bermaydi)\n"
+            f"↕️ <b>Harakat:</b> Tepadan pastga silliq suzib yuradi!"
+        )
+        return
+
+    cfg = get_watermark_settings()
+    msg = bot.reply_to(
+        message,
+        f"💧 <b>Tepadan-Pastga Suzuvchi Shaffof Watermark Sozlamasi</b>\n\n"
+        f"Hozirgi yozuv: <code>{cfg.get('text')}</code>\n\n"
+        f"✍️ <b>Yangi kanal yoki bot nikini yuboring</b> (Masalan: <code>@TELEGRAM_YULDUZLARI</code> yoki <code>@usman_khasan</code>):\n"
+        f"<i>(O'chirib qo'yish uchun <code>off</code> deb yozing, bekor qilish uchun /cancel)</i>"
+    )
+    USER_STATES[message.from_user.id] = {"action": "set_watermark_step"}
+    bot.register_next_step_handler(msg, process_set_watermark_step)
+
+def process_set_watermark_step(message: types.Message):
+    uid = message.from_user.id
+    state = USER_STATES.get(uid)
+    if not state or state.get("action") != "set_watermark_step":
+        return
+    del USER_STATES[uid]
+    if not message.text or message.text.strip().lower() in ("/cancel", "bekor"):
+        bot.reply_to(message, "❌ Bekor qilindi.")
+        return
+    val = message.text.strip()
+    if val.lower() in ("off", "0", "yoq"):
+        save_watermark_settings(enabled=False)
+        bot.reply_to(message, "🔴 <b>Suzuvchi shaffof watermark o'chirildi.</b>")
+        return
+    cfg = save_watermark_settings(enabled=True, text=val, opacity=0.24)
+    for fn in os.listdir(PROMO_DIR):
+        if fn.startswith("wm_badge_") and fn.endswith(".png"):
+            safe_remove(os.path.join(PROMO_DIR, fn))
+    bot.reply_to(
+        message,
+        f"✅ <b>Shaffof Telegram Watermark saqlandi!</b>\n\n"
+        f"💧 <b>Yozuv:</b> <code>{cfg['text']}</code>\n"
+        f"↕️ Endi har bir videoda tepadan pastga ko'rinar-ko'rinmas bo'lib suzib yuradi!"
+    )
+
+@bot.message_handler(commands=['original', 'antiduplikat', 'unique'])
+def handle_original_cmd(message: types.Message):
+    msg = bot.reply_to(
+        message,
+        "🛡 <b>10-BOSQICHLI ANTI-DUPLIKAT (100% ORIGINAL VIDEO) STUDIYASI</b>\n\n"
+        "Videoni Instagram Reels, TikTok va YouTube Shorts algoritmlari uchun <b>100% yangi original</b> qilib "
+        "(Rekomendatsiya / Topga chiqadigan qilib) tayyorlash uchun:\n\n"
+        "📥 <b>Video fayl yuboring yoki Instagram/TikTok/YouTube linkini tashlang:</b>"
+    )
+    USER_STATES[message.from_user.id] = {"action": "antidup_wait_video"}
+    bot.register_next_step_handler(msg, process_antidup_step)
+
+def process_antidup_step(message: types.Message):
+    uid = message.from_user.id
+    state = USER_STATES.get(uid)
+    if not state or state.get("action") != "antidup_wait_video":
+        return
+    del USER_STATES[uid]
+
+    if message.text and message.text.strip().lower() in ("/cancel", "bekor"):
+        bot.reply_to(message, "❌ Bekor qilindi.")
+        return
+
+    prog = bot.reply_to(
+        message,
+        "🛡 <b>10-Bosqichli Anti-Duplikat + Suzuvchi Watermark ishga tushdi...</b>\n"
+        "• pHash, Audio Spektr, GOP va iPhone 16 Pro Max metama'lumotlari yangilanmoqda..."
+    )
+    src_path, label = _extract_or_download_video_from_message(message, "antidup_src")
+    if not src_path:
+        bot.edit_message_text(f"❌ {label}", message.chat.id, prog.message_id)
+        return
+
+    out_orig = os.path.join(DOWNLOAD_DIR, f"orig_{uid}_{int(time.time())}.mp4")
+    try:
+        ok, ad_info = make_video_100_original(src_path, out_orig)
+        if ok and os.path.exists(out_orig):
+            vinfo = get_video_stream_info(out_orig)
+            fsize_mb = os.path.getsize(out_orig) / (1024 * 1024)
+            bot_uname = get_cached_bot_username()
+            cap = (
+                f"🛡 <b>100% ORIGINAL VIDEO TAYYOR (Top / Rekomendatsiya Uchun)!</b>\n\n"
+                f"🔍 <b>Vizual pHash siljishi:</b> +{ad_info.get('zoom', '2.5%')} (Sub-piksel + Micro-Grain)\n"
+                f"🎵 <b>Audio Fingerprint:</b> {ad_info.get('pitch', '+1.3%')} + Loudnorm (-14 LUFS)\n"
+                f"⏱ <b>Kadr & PTS Tezligi:</b> {ad_info.get('speed', '1.01x')} (GOP -g 29)\n"
+                f"📱 <b>Kamera Imzosi:</b> <code>{ad_info.get('device', 'iPhone 16 Pro Max')}</code>\n"
+                f"💧 <b>Watermark:</b> Tepadan-pastga suzuvchi shaffof ikona\n"
+                f"💾 <b>Hajmi:</b> {fsize_mb:.1f} MB\n\n"
+                f"🤖 @{bot_uname}"
+            )
+            with open(out_orig, "rb") as vf:
+                bot.send_video(
+                    message.chat.id,
+                    video=vf,
+                    caption=cap,
+                    width=vinfo.get("width", 720),
+                    height=vinfo.get("height", 1280),
+                    duration=vinfo.get("duration", 15),
+                    supports_streaming=True
+                )
+            increment_download_count(uid, "anti_duplicate", "Anti-Duplicate Studio", "original")
+            try:
+                bot.delete_message(message.chat.id, prog.message_id)
+            except Exception:
+                pass
+        else:
+            bot.edit_message_text("❌ Videoni qayta ishlashda xatolik yuz berdi.", message.chat.id, prog.message_id)
+    except Exception as e:
+        bot.edit_message_text(f"❌ Xatolik: {e}", message.chat.id, prog.message_id)
+    finally:
+        safe_remove(src_path, out_orig)
 
 @bot.message_handler(commands=['set_outro'])
 def handle_set_outro_cmd(message: types.Message):
@@ -3223,6 +4022,12 @@ def handle_incoming_link_or_ai(message: types.Message):
         return
     if cmd_lower == "/del_outro":
         handle_del_outro_cmd(message)
+        return
+    if cmd_lower in ("/set_watermark", "/watermark"):
+        handle_set_watermark_cmd(message)
+        return
+    if cmd_lower in ("/original", "/antiduplikat", "/unique"):
+        handle_original_cmd(message)
         return
 
     url = extract_url(message.text)
@@ -3541,6 +4346,87 @@ def handle_callbacks(call: types.CallbackQuery):
         handle_montage_menu(call.message)
         return
 
+    if call.data == "montaj_set_wm":
+        bot.answer_callback_query(call.id)
+        cfg = get_watermark_settings()
+        msg = bot.send_message(
+            call.message.chat.id,
+            f"💧 <b>Tepadan-Pastga Suzuvchi Shaffof Watermark</b>\n\n"
+            f"Hozirgi yozuv: <code>{cfg.get('text')}</code>\n"
+            f"✍️ <b>Yangi kanal yoki bot nikini yuboring</b> (Masalan: <code>@TELEGRAM_YULDUZLARI</code> yoki <code>@usman_khasan</code>):\n"
+            f"<i>(O'chirish uchun <code>off</code> deb yozing)</i>"
+        )
+        USER_STATES[user_id] = {"action": "set_watermark_step"}
+        bot.register_next_step_handler(msg, process_set_watermark_step)
+        return
+
+    if call.data == "antidup_start_single":
+        bot.answer_callback_query(call.id)
+        msg = bot.send_message(
+            call.message.chat.id,
+            "🛡 <b>100% Original Qilinadigan Videoni Yuboring:</b>\n\n"
+            "• Instagram / TikTok / YouTube linkini tashlang yoki video fayl yuboring.\n"
+            "• 10-Bosqichli Anti-Duplikat + Tepadan-pastga suzuvchi shaffof watermark + iPhone 16 Pro Max metama'lumotlari qo'llanadi!"
+        )
+        USER_STATES[user_id] = {"action": "antidup_wait_video"}
+        bot.register_next_step_handler(msg, process_antidup_step)
+        return
+
+    if call.data.startswith("antidup_vid:"):
+        base_fname = call.data.split("antidup_vid:")[1]
+        src_temp = os.path.join(DOWNLOAD_DIR, f"ad_src_{int(time.time())}_{base_fname}")
+        out_orig = os.path.join(DOWNLOAD_DIR, f"orig_{user_id}_{int(time.time())}.mp4")
+        bot.answer_callback_query(call.id, "🛡 10-Bosqichli Anti-Duplikat boshlandi...")
+        prog = bot.send_message(
+            call.message.chat.id,
+            "🛡 <b>10-Bosqichli Anti-Duplikat (100% Original) bajarilmoqda...</b>\n\n"
+            "• 🔍 Vizual pHash, Sub-piksel Zoom & Micro-Grain...\n"
+            "• 🎵 Audio Spektr & EBU R128 (-14 LUFS) Mastering...\n"
+            "• 💧 Tepadan-pastga suzuvchi shaffof Telegram Watermark...\n"
+            "• 📱 Apple iPhone 16 Pro Max (iOS 18.2) Metadata yozilmoqda..."
+        )
+        try:
+            if not ensure_video_from_telegram(call.message, src_temp):
+                bot.edit_message_text("⚠️ Asosiy videoni o'qib bo'lmadi. Videoni qayta yuklang.", call.message.chat.id, prog.message_id)
+                return
+            ok, ad_info = make_video_100_original(src_temp, out_orig)
+            if ok and os.path.exists(out_orig):
+                vinfo = get_video_stream_info(out_orig)
+                fsize_mb = os.path.getsize(out_orig) / (1024 * 1024)
+                bot_uname = get_cached_bot_username()
+                cap = (
+                    f"🛡 <b>100% ORIGINAL VIDEO (Reels / TikTok Top Uchun)!</b>\n\n"
+                    f"🔍 <b>Vizual pHash siljishi:</b> +{ad_info.get('zoom', '2.5%')} (Sub-piksel + Micro-Grain)\n"
+                    f"🎵 <b>Audio Fingerprint:</b> {ad_info.get('pitch', '+1.3%')} + Loudnorm (-14 LUFS)\n"
+                    f"⏱ <b>Kadr & PTS Tezligi:</b> {ad_info.get('speed', '1.01x')} (GOP -g 29)\n"
+                    f"📱 <b>Kamera Imzosi:</b> <code>{ad_info.get('device', 'iPhone 16 Pro Max')}</code>\n"
+                    f"💧 <b>Watermark:</b> Tepadan-pastga suzuvchi shaffof ikona\n"
+                    f"💾 <b>Hajmi:</b> {fsize_mb:.1f} MB\n\n"
+                    f"🤖 @{bot_uname}"
+                )
+                with open(out_orig, "rb") as vf:
+                    bot.send_video(
+                        call.message.chat.id,
+                        video=vf,
+                        caption=cap,
+                        width=vinfo.get("width", 720),
+                        height=vinfo.get("height", 1280),
+                        duration=vinfo.get("duration", 15),
+                        supports_streaming=True
+                    )
+                increment_download_count(user_id, "anti_duplicate", "Anti-Duplicate Studio", "original")
+                try:
+                    bot.delete_message(call.message.chat.id, prog.message_id)
+                except Exception:
+                    pass
+            else:
+                bot.edit_message_text("❌ Anti-Duplikat ishlov berishda xatolik yuz berdi.", call.message.chat.id, prog.message_id)
+        except Exception as e:
+            bot.edit_message_text(f"❌ Xatolik: {e}", call.message.chat.id, prog.message_id)
+        finally:
+            safe_remove(src_temp, out_orig)
+        return
+
     # Yuklangan har qanday videoning ostidagi «🎯 Reklama Montaj» tugmasi bosilganda:
     if call.data.startswith("montaj_from_vid:"):
         base_fname = call.data.split("montaj_from_vid:")[1]
@@ -3643,27 +4529,32 @@ def handle_callbacks(call: types.CallbackQuery):
         v2_path = session["v2"]
         out_montaj = os.path.join(DOWNLOAD_DIR, f"reklama_reel_{session_key}.mp4")
 
-        bot.answer_callback_query(call.id, "🎬 Professional Reels montaj boshlandi...")
+        bot.answer_callback_query(call.id, "🎬 Top-1 Pro Reels montaj boshlandi...")
         prog = bot.edit_message_text(
-            "⏳ <b>Professional Reels Montaj bajarilmoqda...</b>\n\n"
-            "• 📐 Format: <b>1080x1920 Full HD (30 FPS)</b>\n"
-            "• 🎵 Audio va video oqimlari sinxronlanmoqda...\n"
-            "<i>Iltimos, 10–25 soniya kuting...</i>",
+            "⏳ <b>Top-1 Pro Reels Montaj & 10-Bosqichli Anti-Duplikat bajarilmoqda...</b>\n\n"
+            "• 📐 <b>Format:</b> 1080x1920 Full HD (Blurred 9:16 Fon + Smooth Fade)\n"
+            "• 🎵 <b>Audio:</b> EBU R128 (-14 LUFS) + Transition Whoosh FX\n"
+            "• 💧 <b>Watermark:</b> Tepadan-pastga suzuvchi shaffof Telegram ikona\n"
+            "• 🛡 <b>Anti-Duplikat:</b> 10-Qatlamli 100% Original + iPhone 16 Pro Max Metadata\n"
+            "<i>Iltimos, 15–30 soniya kuting...</i>",
             call.message.chat.id,
             call.message.message_id
         )
 
         try:
-            ok, m_info = montage_two_videos(v1_path, v2_path, out_montaj, mode=mode)
+            ok, m_info = montage_two_videos(v1_path, v2_path, out_montaj, mode=mode, apply_anti_duplicate=True)
             if ok and os.path.exists(out_montaj):
-                out_montaj, vinfo = ensure_phone_playable_mp4(out_montaj)
+                out_montaj, vinfo = ensure_phone_playable_mp4(out_montaj, apply_watermark=False)
                 fsize_mb = os.path.getsize(out_montaj) / (1024 * 1024)
-                bot_uname = (bot.get_me()).username
+                bot_uname = get_cached_bot_username()
+                ad = m_info.get("anti_dup", {})
                 caption = (
-                    f"🎬 <b>Tayyor Reklama Reels Montaj!</b>\n\n"
+                    f"🎬 <b>Tayyor Pro Reklama Reels (100% Original)!</b>\n\n"
                     f"🎛 <b>Rejim:</b> {m_info.get('mode_name', mode)}\n"
                     f"⏱ <b>1-Video:</b> {m_info.get('dur1', 0):.1f}s | <b>2-Video:</b> {m_info.get('dur2', 0):.1f}s\n"
                     f"⏳ <b>Jami davomiylik:</b> <b>{m_info.get('total', 0):.1f} soniya</b>\n"
+                    f"🛡 <b>Anti-Duplikat:</b> 10-Bosqichli Original (Zoom +{ad.get('zoom', '2.5%')}, iPhone 16 Pro Max)\n"
+                    f"💧 <b>Watermark:</b> Tepadan-pastga suzuvchi shaffof ikona\n"
                     f"📐 <b>Sifat:</b> 1080x1920 Full HD | 💾 <b>Hajmi:</b> {fsize_mb:.1f} MB\n\n"
                     f"🤖 @{bot_uname}"
                 )
@@ -4161,7 +5052,9 @@ if __name__ == '__main__':
     print(f"🎬 FFmpeg holati: {ffmpeg_loc}")
     print(f"👑 Admin Telegram ID: {ADMIN_ID} (@usman_khasan)")
     print("📱 12-Bosqichli VIDEO-FIRST Link Yuklagich: FAOL (Videoni rasm qilib yubormaydi!)")
-    print("🎬 Pro Reklama Montaj Studiyasi (/montaj, /set_outro — 5s dan 60s+ gacha 4 xil rejim): FAOL")
+    print("🎬 Top-1 Pro Reklama Montaj Studiyasi (/montaj, /set_outro — 5 xil rejim + Blurred BG + PiP + Transition FX): FAOL")
+    print("🛡 10-Bosqichli Anti-Duplikat (100% Original Video — /original): FAOL")
+    print("💧 Tepadan-Pastga Suzuvchi Shaffof Telegram Ikonka + @Handle Watermark (/set_watermark): FAOL")
     print("💱 4-Manbali Markaziy Bank Valyuta Kurslari (/kurs): FAOL")
     print("🧹 Avto-Xotira Tozalagich & Eski jarayonlarni yopish: FAOL")
     print("=" * 75)
@@ -4169,8 +5062,10 @@ if __name__ == '__main__':
     try:
         bot.set_my_commands([
             types.BotCommand("start", "🚀 Botni ishga tushirish"),
-            types.BotCommand("montaj", "🎬 Pro Reklama Montaj Studiyasi (2 video ulash)"),
+            types.BotCommand("montaj", "🎬 Pro Reklama Montaj Studiyasi (5 rejim + Anti-Duplikat)"),
+            types.BotCommand("original", "🛡 Videoni 100% Original qilish (Anti-Duplikat)"),
             types.BotCommand("set_outro", "📌 Doimiy reklama (Outro) videoni saqlash"),
+            types.BotCommand("set_watermark", "💧 Tepadan-pastga suzuvchi shaffof watermarkni sozlash"),
             types.BotCommand("stat", "📊 Bot va shaxsiy statistika"),
             types.BotCommand("kurs", "💱 Markaziy bank valyuta kurslari"),
             types.BotCommand("profile", "👤 Profilim va ma'lumotlar"),
