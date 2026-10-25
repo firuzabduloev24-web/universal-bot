@@ -8,8 +8,8 @@ Muallif & Bosh Administrator: @usman_khasan (Telegram ID: 1021089367)
 Arxitektura: pyTelegramBotAPI (telebot) + yt-dlp + Multi-Engine Mobile API + FFmpeg + SQLite3
 
 Noyob imkoniyatlar (100% Sof Universal Media & AI Bot):
- 1. 🎬 10-Bosqichli Xatosiz Mobil & Desktop Video Yuklagich:
-    - Instagram (Reels, Post, Karusel albomlar, Stories — ?obrf=, ?igsh=, /share/reel/ mobil linklar bilan 100% ishlaydi!)
+ 1. 🎬 12-Bosqichli Xatosiz Mobil & Desktop Video Yuklagich (VIDEO-FIRST):
+    - Instagram (Reels, Post video, Karusel albomlar, Stories — ?cplk=, ?obrf=, ?igsh=, /p/, /reel/ mobil linklar bilan 100% VIDEO yuklaydi, videoni rasm qilib yubormaydi!)
     - TikTok (Suv belgisiz, toza HD video — vt.tiktok.com, vm.tiktok.com mobil linklar bilan)
     - YouTube & Shorts (Video va MP3 audio — Android/iOS client bypass bilan)
     - Pinterest (pin.it mobil linklar), Twitter/X (vxTwitter API bilan), Facebook, Likee, Threads, Reddit.
@@ -37,7 +37,7 @@ Noyob imkoniyatlar (100% Sof Universal Media & AI Bot):
 14. 🎤 Karaoke / Minusovka Ajratgich (Vocal Remover).
 15. ⏪ Videoni Teskari Aylantirish (Reverse Video).
 16. 🖼 Video Oblojkasini (HD Thumbnail) Yuklash.
-17. 🌍 AI Professional Tarjimon (/tr), 💱 Valyuta Kurslari (/kurs) va 📱 QR-Kod (/qr).
+17. 🌍 AI Professional Tarjimon (/tr), 💱 4-Manbali Markaziy Bank Valyuta Kurslari (/kurs) va 📱 QR-Kod (/qr).
 18. 🧹 Avtomatik Xotira Tozalagich + Eski python.exe jarayonlarini avto-yopish!
 =============================================================================
 """
@@ -199,7 +199,7 @@ TEXTS = {
             "👋 <b>Assalomu alaykum, {name}!</b>\n\n"
             "⚡ <b>Universal Super Saver & Multimedia AI Bot (#1 Edition)</b>ga xush kelibsiz!\n\n"
             "📥 <b>Universal Media Yuklovchi (Telefon va Kompyuterdan 100% Xatosiz):</b>\n"
-            "• 📸 <b>Instagram:</b> Reels, Post, Karusel albomlar, Stories\n"
+            "• 📸 <b>Instagram:</b> Reels, Post video, Karusel albomlar, Stories\n"
             "• 🎵 <b>TikTok:</b> Toza, suv belgisiz HD video\n"
             "• ▶️ <b>YouTube & Shorts:</b> Video, MP3 musiqa va HD Oblojka\n"
             "• 📌 <b>Pinterest, Twitter / X, Facebook, Likee, Reddit</b>\n\n"
@@ -221,6 +221,7 @@ TEXTS = {
         ),
         "btn_profile": "👤 Profilim",
         "btn_stat": "📊 Statistika",
+        "btn_kurs": "💱 Valyuta Kurslari",
         "btn_ref": "👥 VIP & Do'stlar",
         "btn_ai": "🧠 AI Savol-Javob",
         "btn_image": "🖼 AI Rasm Chizish",
@@ -292,6 +293,7 @@ TEXTS = {
         ),
         "btn_profile": "👤 Мой профиль",
         "btn_stat": "📊 Статистика",
+        "btn_kurs": "💱 Курсы валют",
         "btn_ref": "👥 VIP & Рефералы",
         "btn_ai": "🧠 Задать вопрос AI",
         "btn_image": "🖼 Создать картинку AI",
@@ -351,6 +353,7 @@ TEXTS = {
         ),
         "btn_profile": "👤 Profile",
         "btn_stat": "📊 Statistics",
+        "btn_kurs": "💱 Exchange Rates",
         "btn_ref": "👥 VIP & Referral",
         "btn_ai": "🧠 Ask AI",
         "btn_image": "🖼 AI Image",
@@ -656,6 +659,10 @@ def build_stats_message(user: types.User) -> tuple[str, types.InlineKeyboardMark
         types.InlineKeyboardButton("🧹 Xotirani tozalash", callback_data="clean_storage_cb")
     )
     markup.add(
+        types.InlineKeyboardButton("💱 Markaziy Bank Kurslari", callback_data="tool_cmd:kurs"),
+        types.InlineKeyboardButton("📱 QR-Kod Yasash", callback_data="tool_cmd:qr")
+    )
+    markup.add(
         types.InlineKeyboardButton("🧠 Free AI → DeepSeek & ChatGPT", callback_data="tool_cmd:ai"),
         types.InlineKeyboardButton("🖼 Make Image → NanoBanana", callback_data="tool_cmd:image")
     )
@@ -688,6 +695,7 @@ def get_main_reply_keyboard(lang: str = "uz") -> types.ReplyKeyboardMarkup:
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     b1 = types.KeyboardButton(get_text("btn_profile", lang))
     b_stat = types.KeyboardButton(get_text("btn_stat", lang))
+    b_kurs = types.KeyboardButton(get_text("btn_kurs", lang))
     b2 = types.KeyboardButton(get_text("btn_ref", lang))
     b3 = types.KeyboardButton(get_text("btn_ai", lang))
     b4 = types.KeyboardButton(get_text("btn_image", lang))
@@ -696,8 +704,9 @@ def get_main_reply_keyboard(lang: str = "uz") -> types.ReplyKeyboardMarkup:
     b7 = types.KeyboardButton(get_text("btn_lang", lang))
     markup.add(b1, b_stat)
     markup.add(b3, b4)
-    markup.add(b5, b2)
-    markup.add(b6, b7)
+    markup.add(b_kurs, b5)
+    markup.add(b2, b6)
+    markup.add(b7)
     return markup
 
 def get_language_inline_keyboard() -> types.InlineKeyboardMarkup:
@@ -713,7 +722,7 @@ def query_free_ai(prompt: str, model_type: str = "deepseek") -> str:
     try:
         encoded_prompt = urllib.parse.quote(prompt)
         url = f"https://text.pollinations.ai/{encoded_prompt}?model={model_type}&system=You+are+an+intelligent+helpful+AI+assistant.+Answer+politely+in+the+user's+language."
-        resp = requests.get(url, timeout=30)
+        resp = requests.get(url, timeout=30, verify=False)
         if resp.status_code == 200 and resp.text.strip():
             return resp.text.strip()
     except Exception as e:
@@ -721,7 +730,7 @@ def query_free_ai(prompt: str, model_type: str = "deepseek") -> str:
 
     try:
         url2 = f"https://text.pollinations.ai/{urllib.parse.quote(prompt)}"
-        resp2 = requests.get(url2, timeout=20)
+        resp2 = requests.get(url2, timeout=20, verify=False)
         if resp2.status_code == 200 and resp2.text.strip():
             return resp2.text.strip()
     except Exception:
@@ -733,7 +742,7 @@ def generate_ai_image_bytes(prompt: str) -> bytes | None:
     try:
         encoded_prompt = urllib.parse.quote(prompt)
         image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=1024&nologo=true"
-        resp = requests.get(image_url, timeout=45)
+        resp = requests.get(image_url, timeout=45, verify=False)
         if resp.status_code == 200 and len(resp.content) > 5000:
             return resp.content
     except Exception as e:
@@ -744,32 +753,124 @@ def generate_qr_code_bytes(data_text: str) -> bytes | None:
     try:
         encoded = urllib.parse.quote(data_text)
         url = f"https://api.qrserver.com/v1/create-qr-code/?size=600x600&margin=15&data={encoded}"
-        resp = requests.get(url, timeout=15)
+        resp = requests.get(url, timeout=15, verify=False)
         if resp.status_code == 200 and len(resp.content) > 500:
             return resp.content
     except Exception as e:
         print(f"QR xatoligi: {e}")
     return None
 
-def fetch_cbu_exchange_rates() -> str:
+# ==================== 4-MANBALI MARKAZIY BANK VALYUTA KURSLARI (/kurs) ====================
+def fetch_cbu_exchange_rates(amount: float = 1.0) -> str:
+    """
+    O'zbekiston Respublikasi Markaziy Banki valyuta kurslarini 4 ta mustaqil manbadan
+    SSL va WAF bloklarisiz (verify=False + Browser User-Agent) 100% xatosiz olib kelish!
+    """
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+        "Accept": "application/json,text/plain,*/*",
+    }
+    wanted = [
+        ("USD", "🇺🇸 AQSH Dollari"),
+        ("EUR", "🇪🇺 Yevro"),
+        ("RUB", "🇷🇺 Rossiya Rubli"),
+        ("GBP", "🇬🇧 Angliya Funti"),
+        ("CNY", "🇨🇳 Xitoy Yuani"),
+        ("KZT", "🇰🇿 Qozog'iston Tengesi"),
+        ("TRY", "🇹🇷 Turkiya Lirasi"),
+    ]
+
+    # 1-MANBA: O'zbekiston Markaziy Banki rasmiy JSON API (3 xil til endpointi, SSL verify=False bilan)
+    cbu_urls = [
+        "https://cbu.uz/oz/arkhiv-kursov-valyut/json/",
+        "https://cbu.uz/uz/arkhiv-kursov-valyut/json/",
+        "https://cbu.uz/ru/arkhiv-kursov-valyut/json/",
+        "http://cbu.uz/oz/arkhiv-kursov-valyut/json/",
+    ]
+    for cbu_url in cbu_urls:
+        try:
+            resp = requests.get(cbu_url, headers=headers, timeout=10, verify=False)
+            if resp.status_code == 200 and resp.text.strip():
+                data = resp.json()
+                if isinstance(data, list) and len(data) > 0:
+                    by_ccy = {item.get("Ccy"): item for item in data if isinstance(item, dict)}
+                    lines = ["🏦 <b>O'zbekiston Markaziy Banki Valyuta Kurslari:</b>\n"]
+                    for code, label in wanted:
+                        item = by_ccy.get(code)
+                        if not item:
+                            continue
+                        rate_val = float(str(item.get("Rate", "0")).replace(",", "."))
+                        nominal = float(str(item.get("Nominal", "1")).replace(",", ".")) or 1.0
+                        unit_rate = rate_val / nominal
+                        diff_str = str(item.get("Diff", "0"))
+                        try:
+                            diff_val = float(diff_str.replace(",", "."))
+                        except ValueError:
+                            diff_val = 0.0
+                        sign = f"📈 +{diff_str}" if diff_val > 0 else (f"📉 {diff_str}" if diff_val < 0 else "➖ 0")
+                        if amount != 1.0:
+                            calc_sum = unit_rate * amount
+                            lines.append(f"{label} (<b>{amount:g} {code}</b>): <b>{calc_sum:,.2f} so'm</b> <i>(1 {code} = {unit_rate:,.2f})</i>")
+                        else:
+                            lines.append(f"{label} (<b>1 {code}</b>): <b>{unit_rate:,.2f} so'm</b> ({sign})")
+
+                    date_str = data[0].get("Date") or datetime.now().strftime("%d.%m.%Y")
+                    lines.append(f"\n📅 <i>Sana: {date_str} | Manba: cbu.uz</i>")
+                    lines.append("💡 <i>Hisoblash uchun:</i> <code>/kurs 100</code>")
+                    return "\n".join(lines)
+        except Exception as e:
+            print(f"CBU API urinish xatosi ({cbu_url}): {e}")
+
+    # 2-MANBA va 3-MANBA: Xalqaro Zaxira Bank API (open.er-api.com & exchangerate-api.com)
+    backup_apis = [
+        "https://open.er-api.com/v6/latest/USD",
+        "https://api.exchangerate-api.com/v4/latest/USD",
+    ]
+    for b_url in backup_apis:
+        try:
+            r = requests.get(b_url, headers=headers, timeout=10, verify=False)
+            if r.status_code == 200:
+                j = r.json()
+                rates = j.get("rates", {})
+                uzs_per_usd = float(rates.get("UZS", 0))
+                if uzs_per_usd > 1000:
+                    lines = ["🏦 <b>Markaziy Bank & Xalqaro Valyuta Kurslari:</b>\n"]
+                    for code, label in wanted:
+                        c_rate = float(rates.get(code, 0))
+                        if c_rate > 0:
+                            uzs_val = (uzs_per_usd / c_rate) * amount
+                            unit_val = uzs_per_usd / c_rate
+                            if amount != 1.0:
+                                lines.append(f"{label} (<b>{amount:g} {code}</b>): <b>{uzs_val:,.2f} so'm</b> <i>(1 {code} = {unit_val:,.2f})</i>")
+                            else:
+                                lines.append(f"{label} (<b>1 {code}</b>): <b>{unit_val:,.2f} so'm</b>")
+                    lines.append(f"\n📅 <i>Sana: {datetime.now().strftime('%d.%m.%Y %H:%M')}</i>")
+                    lines.append("💡 <i>Hisoblash uchun:</i> <code>/kurs 100</code>")
+                    return "\n".join(lines)
+        except Exception as e:
+            print(f"Backup Currency API xatosi ({b_url}): {e}")
+
+    # 4-MANBA: JsDelivr Global Currency CDN
     try:
-        resp = requests.get("https://cbu.uz/oz/arkhiv-kursov-valyut/json/", timeout=10)
-        if resp.status_code == 200:
-            data = resp.json()
-            wanted = {"USD": "🇺🇸 AQSH Dollari", "EUR": "🇪🇺 Yevro", "RUB": "🇷🇺 Rossiya Rubli", "GBP": "🇬🇧 Angliya Funti", "CNY": "🇨🇳 Xitoy Yuani", "KZT": "🇰🇿 Qozog'iston Tengesi"}
-            lines = ["💱 <b>O'zbekiston Markaziy Banki Valyuta Kurslari:</b>\n"]
-            for item in data:
-                ccy = item.get("Ccy")
-                if ccy in wanted:
-                    rate = item.get("Rate")
-                    diff = item.get("Diff", "0")
-                    sign = "📈 +" if not str(diff).startswith("-") and float(diff) > 0 else ("📉 " if str(diff).startswith("-") else "• ")
-                    lines.append(f"{wanted[ccy]} (<b>1 {ccy}</b>): <b>{rate} so'm</b> ({sign}{diff})")
-            lines.append(f"\n📅 <i>Sana: {datetime.now().strftime('%d.%m.%Y')}</i>")
-            return "\n".join(lines)
-    except Exception as e:
-        print(f"Valyuta xatosi: {e}")
-    return "❌ Markaziy bank serveridan ma'lumot olishda xatolik yuz berdi."
+        cdn_url = "https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json"
+        r = requests.get(cdn_url, headers=headers, timeout=10, verify=False)
+        if r.status_code == 200:
+            usd_map = r.json().get("usd", {})
+            uzs_per_usd = float(usd_map.get("uzs", 0))
+            if uzs_per_usd > 1000:
+                lines = ["🏦 <b>Joriy Valyuta Kurslari:</b>\n"]
+                for code, label in wanted:
+                    c_rate = float(usd_map.get(code.lower(), 0))
+                    if c_rate > 0:
+                        unit_val = uzs_per_usd / c_rate
+                        uzs_val = unit_val * amount
+                        lines.append(f"{label} (<b>{amount:g} {code}</b>): <b>{uzs_val:,.2f} so'm</b>")
+                lines.append(f"\n📅 <i>Sana: {datetime.now().strftime('%d.%m.%Y')}</i>")
+                return "\n".join(lines)
+    except Exception:
+        pass
+
+    return "❌ Valyuta serveri bilan bog'lanishda xatolik. Internet aloqasini tekshirib qayta urinib ko'ring."
 
 # ==================== PLATFORMA ANIQLAGICH VA LINK AJRATGICH ====================
 def detect_platform(url: str) -> str:
@@ -797,12 +898,10 @@ def detect_platform(url: str) -> str:
 def extract_url(text: str) -> str | None:
     if not text:
         return None
-    # Zero-width belgilarini tozalash
     cleaned = re.sub(r'[\u200b\u200c\u200d\u200e\u200f\ufeff]', '', text)
     match = re.search(r'(https?://[^\s<>"\']+)', cleaned)
     if match:
         return match.group(1).rstrip(".,;!?)'\">]")
-    # Agar http(s):// siz yuborilgan bo'lsa (masalan: instagram.com/reel/...)
     match2 = re.search(
         r'((?:www\.|m\.|vt\.|vm\.)?(?:instagram\.com|instagr\.am|tiktok\.com|youtube\.com|youtu\.be|pin\.it|pinterest\.com|x\.com|twitter\.com|facebook\.com|fb\.watch)/[^\s<>"\']+)',
         cleaned, re.IGNORECASE
@@ -1257,7 +1356,7 @@ def burn_subtitles_to_video(input_video_path: str, srt_path: str, output_video_p
     finally:
         safe_remove(local_temp_srt)
 
-# ==================== 10-BOSQICHLI XATOSIZ MOBIL & DESKTOP LINK YUKLAGICH ====================
+# ==================== 12-BOSQICHLI XATOSIZ VIDEO-FIRST YUKLAGICH ====================
 def extract_ig_shortcode(url: str) -> str | None:
     """Instagram URL dan shortcode ni aniq ajratib olish (reel, reels, p, tv, stories)"""
     m = re.search(r"instagram\.com/(?:[A-Za-z0-9_.-]+/)?(?:reel|reels|p|tv)/([A-Za-z0-9_-]+)", url, re.IGNORECASE)
@@ -1270,7 +1369,7 @@ def extract_ig_shortcode(url: str) -> str | None:
 
 def clean_and_resolve_url(raw_url: str) -> str:
     """
-    Telefondan yuborilgan har qanday ssilkani (?obrf=..., ?igsh=..., /share/reel/..., vt.tiktok.com, pin.it)
+    Telefondan yuborilgan har qanday ssilkani (?cplk=..., ?obrf=..., ?igsh=..., /share/reel/..., vt.tiktok.com, pin.it)
     tozalash va asl manzilga yechish!
     """
     url = raw_url.strip().rstrip(".,;!?)'\">]")
@@ -1293,7 +1392,6 @@ def clean_and_resolve_url(raw_url: str) -> str:
                 resolved = resp.url
                 resp.close()
                 if resolved and resolved.startswith("http"):
-                    # Agar Instagram login sahifasiga yo'naltirgan bo'lsa, ?next= ichidan haqiqiy linkni sug'urib olamiz!
                     if "accounts/login" in resolved.lower():
                         parsed_q = urllib.parse.parse_qs(urllib.parse.urlparse(resolved).query)
                         if "next" in parsed_q and parsed_q["next"]:
@@ -1308,7 +1406,7 @@ def clean_and_resolve_url(raw_url: str) -> str:
             except Exception:
                 pass
 
-    # 2. Instagram linkidan ?obrf=..., ?igsh=..., ?utm_source=... kabi kuzatuv parametrlarini olib tashlash
+    # 2. Instagram linkidan ?cplk=..., ?obrf=..., ?igsh=..., ?utm_source=... kabi kuzatuv parametrlarini olib tashlash
     if "instagram.com" in url.lower() or "instagr.am" in url.lower():
         shortcode = extract_ig_shortcode(url)
         if shortcode:
@@ -1348,158 +1446,210 @@ def _download_binary_stream(file_url: str, target_path: str, referer: str = "") 
     safe_remove(target_path)
     return False
 
-def _unescape_ig_url(raw_str: str) -> str:
-    """Instagram JSON ichidagi escaped URL ni toza URL ga aylantirish"""
-    s = raw_str.strip()
-    s = s.replace("\\\\/", "/").replace("\\/", "/")
-    s = s.replace("\\u0026", "&").replace("\\\\u0026", "&")
-    s = s.replace("\\u0025", "%").replace("\\\\u0025", "%")
-    s = html.unescape(s)
-    return s
+def _unescape_ig_text(raw_str: str) -> str:
+    """Instagram HTML va contextJSON ichidagi ko'p qavatli escaped belgilarni toza holatga keltirish"""
+    s = raw_str
+    for _ in range(3):
+        s = s.replace('\\\\"', '"').replace('\\"', '"')
+        s = s.replace("\\\\/", "/").replace("\\/", "/")
+        s = s.replace("\\\\u0026", "&").replace("\\u0026", "&")
+        s = s.replace("\\\\u0025", "%").replace("\\u0025", "%")
+        s = s.replace("\\\\u003C", "<").replace("\\u003C", "<")
+    return html.unescape(s)
 
-def _download_instagram_multi_engine(url: str, user_id: int, timestamp: int) -> tuple[list, str]:
+def _download_instagram_video_engines(url: str, user_id: int, timestamp: int) -> tuple[list, str, bool]:
     """
-    Instagram Reels / Post / Karusel uchun 6-Bosqichli Maxsus Yuklagich!
-    Telefondan tashlangan har qanday Instagram linkni (?obrf=, ?igsh=, /reel/, /p/) 100% ochadi.
+    Instagram VIDEO-FIRST 6-Bosqichli Maxsus Yuklagich!
+    Qaytaradi: (fayllar_royxati, sarlavha, is_definitely_video)
+    MUHIM: Agar post video bo'lsa, HECH QACHON oblojka rasmni (.jpg) video o'rniga yubormaydi!
     """
     shortcode = extract_ig_shortcode(url)
     target_mp4 = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_00001.mp4")
-    target_jpg = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_00001.jpg")
 
     if not shortcode:
-        return [], ""
+        return [], "", False
 
-    # ---------------- 1-MOTOR: Instagram Embed Captioned (Escaped + Unescaped JSON & HTML) ----------------
+    is_definitely_video = ("/reel/" in url.lower() or "/reels/" in url.lower() or "/tv/" in url.lower())
+    embed_bodies = []
+
+    # ---------------- 1-MOTOR: Deep Unescaped Embed Captioned Video Extractor ----------------
     embed_urls = [
-        f"https://www.instagram.com/p/{shortcode}/embed/captioned/",
         f"https://www.instagram.com/reel/{shortcode}/embed/captioned/",
+        f"https://www.instagram.com/p/{shortcode}/embed/captioned/",
         f"https://www.instagram.com/p/{shortcode}/embed/",
     ]
     embed_headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Accept-Language": "en-US,en;q=0.9",
-        "Sec-Fetch-Mode": "navigate",
     }
     for emb_url in embed_urls:
         try:
-            er = requests.get(emb_url, headers=embed_headers, timeout=15, verify=False)
+            er = requests.get(emb_url, headers=embed_headers, timeout=14, verify=False)
             if er.status_code == 200 and er.text:
-                body = er.text
-                # A) Escaped va unescaped video_url qidirish (contextJSON ichida \"video_url\":\"...\")
-                patterns = [
-                    r'\\?"video_url\\?"\s*:\s*\\?"(https?:[^"\\]+(?:\\.[^"\\]*)*)\\?"',
-                    r'<video[^>]+src="([^"]+)"',
-                    r'property="og:video(?::secure_url)?"\s+content="([^"]+)"',
+                raw_body = er.text
+                embed_bodies.append(raw_body)
+                clean_body = _unescape_ig_text(raw_body)
+
+                # Post video ekanligini bildiruvchi belgilar (hatto video_url yashirilgan bo'lsa ham!):
+                if any(ind in clean_body for ind in [
+                    '"is_video":true', '"is_video": true',
+                    'EmbeddedMediaVideo', 'WatchOnInstagram', 'Watch on Instagram',
+                    'glyphsSpritePlay', 'video_versions', '"media_type":2'
+                ]):
+                    is_definitely_video = True
+
+                # Tozalangan HTML/JSON ichidan barcha video URL larni qidirish
+                vid_patterns = [
+                    r'"video_url"\s*:\s*"(https?://[^"]+)"',
+                    r'"contentUrl"\s*:\s*"(https?://[^"]+)"',
+                    r'"video_versions"\s*:\s*\[\s*\{[^}]*"url"\s*:\s*"(https?://[^"]+)"',
+                    r'<video[^>]+src="(https?://[^"]+)"',
+                    r'property="og:video(?::secure_url)?"\s+content="(https?://[^"]+)"',
                 ]
-                for pat in patterns:
-                    matches = re.findall(pat, body)
-                    for raw_match in matches:
-                        vurl = _unescape_ig_url(raw_match)
-                        if vurl.startswith("http") and (".mp4" in vurl or "cdninstagram" in vurl or "fbcdn.net" in vurl):
-                            if _download_binary_stream(vurl, target_mp4, referer="https://www.instagram.com/"):
-                                print(f"[OK] Instagram 1-Motor (Embed Captioned) orqali yuklandi: {shortcode}")
-                                return [target_mp4], f"Instagram Reel ({shortcode})"
+                for pat in vid_patterns:
+                    for vurl in re.findall(pat, clean_body):
+                        vurl_clean = _unescape_ig_text(vurl)
+                        if vurl_clean.startswith("http") and any(k in vurl_clean for k in [".mp4", "cdninstagram", "fbcdn.net"]):
+                            if _download_binary_stream(vurl_clean, target_mp4, referer="https://www.instagram.com/"):
+                                print(f"[OK] Instagram 1-Motor (Unescaped Embed Video) orqali yuklandi: {shortcode}")
+                                return [target_mp4], f"Instagram Video ({shortcode})", True
         except Exception as e:
             print(f"IG 1-Motor xatosi ({emb_url}): {e}")
 
-    # ---------------- 2-MOTOR: Instagram Public GraphQL API (xdt_shortcode_media) ----------------
-    graphql_doc_ids = ["8845758582119845", "10015901848480474", "7153035638091937"]
-    gql_headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "X-IG-App-ID": "936619743392459",
-        "X-ASBD-ID": "129477",
-        "X-IG-WWW-Claim": "0",
-        "X-Requested-With": "XMLHttpRequest",
-        "Origin": "https://www.instagram.com",
-        "Referer": f"https://www.instagram.com/reel/{shortcode}/",
-    }
-    for doc_id in graphql_doc_ids:
+    # ---------------- 2-MOTOR: Live-Session GraphQL API (Avto-LSD + CSRF token bilan) ----------------
+    try:
+        sess = requests.Session()
+        ua = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+        lsd_token = "AVqbxe3J_YA"
+        csrf_token = "missing"
+
+        # Jonli LSD va cookie olish
         try:
-            payload = {
-                "av": "0",
-                "__d": "www",
-                "__user": "0",
-                "__a": "1",
-                "__req": "1",
-                "dpr": "1",
-                "__ccg": "EXCELLENT",
-                "lsd": "AVqbxe3J_YA",
-                "fb_api_caller_class": "RelayModern",
-                "fb_api_req_friendly_name": "PolarisPostActionLoadPostQueryQuery",
-                "variables": json.dumps({
-                    "shortcode": shortcode,
-                    "fetch_comment_count": 0,
-                    "fetch_related_profile_media_count": 0,
-                    "parent_comment_count": 0,
-                    "child_comment_count": 0,
-                    "fetch_like_count": 10,
-                    "fetch_tagged_user_count": None,
-                    "fetch_preview_comment_count": 2,
-                    "has_threaded_comments": True,
-                    "hoisted_comment_id": None,
-                    "hoisted_reply_id": None,
-                }),
-                "server_timestamps": "true",
-                "doc_id": doc_id,
-            }
-            gr = requests.post(
-                "https://www.instagram.com/api/graphql",
-                headers=gql_headers,
-                data=payload,
-                timeout=15,
-                verify=False
-            )
-            if gr.status_code == 200 and gr.text:
-                clean_json_str = gr.text.lstrip("for (;;);").strip()
-                gdata = json.loads(clean_json_str)
-                media = (
-                    gdata.get("data", {}).get("xdt_shortcode_media")
-                    or gdata.get("data", {}).get("shortcode_media")
-                    or gdata.get("graphql", {}).get("shortcode_media")
-                )
-                if media:
-                    caption_edges = media.get("edge_media_to_caption", {}).get("edges", [])
-                    title = caption_edges[0]["node"]["text"][:80] if caption_edges else f"Instagram ({shortcode})"
-                    # Karusel (Sidecar) bo'lsa
-                    sidecar = media.get("edge_sidecar_to_children", {}).get("edges", [])
-                    if sidecar:
-                        collected = []
-                        for idx, edge in enumerate(sidecar[:10], 1):
-                            node = edge.get("node", {})
-                            if node.get("is_video") and node.get("video_url"):
-                                fp = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_{idx:05d}.mp4")
-                                if _download_binary_stream(node["video_url"], fp, referer="https://www.instagram.com/"):
-                                    collected.append(fp)
-                            elif node.get("display_url"):
-                                fp = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_{idx:05d}.jpg")
-                                if _download_binary_stream(node["display_url"], fp, referer="https://www.instagram.com/"):
-                                    collected.append(fp)
-                        if collected:
-                            print(f"[OK] Instagram 2-Motor (GraphQL Karusel) orqali yuklandi: {shortcode}")
-                            return collected, title
+            init_r = sess.get(f"https://www.instagram.com/reel/{shortcode}/", headers={"User-Agent": ua}, timeout=12, verify=False)
+            if init_r.status_code == 200 and init_r.text:
+                m_lsd = re.search(r'"LSD",\s*\[\],\s*\{\s*"token"\s*:\s*"([^"]+)"', init_r.text) or re.search(r'"lsd"\s*:\s*"([^"]+)"', init_r.text)
+                if m_lsd:
+                    lsd_token = m_lsd.group(1)
+                # Shu sahifaning o'zida video_versions bor-yo'qligini ham tekshiramiz!
+                clean_init = _unescape_ig_text(init_r.text)
+                if '"is_video":true' in clean_init or '"media_type":2' in clean_init:
+                    is_definitely_video = True
+                for vurl in re.findall(r'"video_versions"\s*:\s*\[\s*\{[^}]*"url"\s*:\s*"(https?://[^"]+)"', clean_init) + re.findall(r'"video_url"\s*:\s*"(https?://[^"]+)"', clean_init):
+                    if _download_binary_stream(_unescape_ig_text(vurl), target_mp4, referer="https://www.instagram.com/"):
+                        print(f"[OK] Instagram 2A-Motor (Direct Page JSON) orqali yuklandi: {shortcode}")
+                        return [target_mp4], f"Instagram Video ({shortcode})", True
+            csrf_token = sess.cookies.get("csrftoken") or "missing"
+        except Exception:
+            pass
 
-                    # Bitta video bo'lsa
-                    vurl = media.get("video_url")
-                    if vurl and _download_binary_stream(vurl, target_mp4, referer="https://www.instagram.com/"):
-                        print(f"[OK] Instagram 2-Motor (GraphQL Video) orqali yuklandi: {shortcode}")
-                        return [target_mp4], title
+        gql_headers = {
+            "User-Agent": ua,
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-IG-App-ID": "936619743392459",
+            "X-FB-LSD": lsd_token,
+            "X-CSRFToken": csrf_token,
+            "X-ASBD-ID": "129477",
+            "X-IG-WWW-Claim": "0",
+            "X-Requested-With": "XMLHttpRequest",
+            "Origin": "https://www.instagram.com",
+            "Referer": f"https://www.instagram.com/reel/{shortcode}/",
+            "Sec-Fetch-Site": "same-origin",
+        }
+        graphql_doc_ids = ["8845758582119845", "7341532402634560", "10015901848480474", "25811509981800768", "7153035638091937"]
+        for doc_id in graphql_doc_ids:
+            try:
+                payload = {
+                    "av": "0",
+                    "__d": "www",
+                    "__user": "0",
+                    "__a": "1",
+                    "__req": "1",
+                    "dpr": "1",
+                    "__ccg": "EXCELLENT",
+                    "lsd": lsd_token,
+                    "fb_api_caller_class": "RelayModern",
+                    "fb_api_req_friendly_name": "PolarisPostActionLoadPostQueryQuery",
+                    "variables": json.dumps({
+                        "shortcode": shortcode,
+                        "fetch_comment_count": 0,
+                        "fetch_related_profile_media_count": 0,
+                        "parent_comment_count": 0,
+                        "child_comment_count": 0,
+                        "fetch_like_count": 10,
+                        "fetch_tagged_user_count": None,
+                        "fetch_preview_comment_count": 2,
+                        "has_threaded_comments": True,
+                        "hoisted_comment_id": None,
+                        "hoisted_reply_id": None,
+                    }),
+                    "server_timestamps": "true",
+                    "doc_id": doc_id,
+                }
+                for gql_endpoint in ["https://www.instagram.com/api/graphql", "https://www.instagram.com/graphql/query"]:
+                    gr = sess.post(gql_endpoint, headers=gql_headers, data=payload, timeout=12, verify=False)
+                    if gr.status_code == 200 and gr.text:
+                        clean_json_str = gr.text.lstrip("for (;;);").strip()
+                        gdata = json.loads(clean_json_str)
+                        media = (
+                            gdata.get("data", {}).get("xdt_shortcode_media")
+                            or gdata.get("data", {}).get("shortcode_media")
+                            or gdata.get("graphql", {}).get("shortcode_media")
+                        )
+                        if not media:
+                            continue
 
-                    # Bitta rasm bo'lsa
-                    durl = media.get("display_url")
-                    if durl and not media.get("is_video") and _download_binary_stream(durl, target_jpg, referer="https://www.instagram.com/"):
-                        print(f"[OK] Instagram 2-Motor (GraphQL Photo) orqali yuklandi: {shortcode}")
-                        return [target_jpg], title
-        except Exception as e:
-            print(f"IG 2-Motor GraphQL ({doc_id}) xatosi: {e}")
+                        if media.get("is_video") or media.get("video_url") or media.get("video_versions"):
+                            is_definitely_video = True
 
-    # ---------------- 3-MOTOR: Multi-Proxy OpenGraph Scrapers (ddinstagram, kkinstagram, vxinstagram, eeinstagram) ----------------
+                        caption_edges = media.get("edge_media_to_caption", {}).get("edges", [])
+                        title = caption_edges[0]["node"]["text"][:80] if caption_edges else f"Instagram ({shortcode})"
+
+                        # Karusel (Sidecar) bo'lsa
+                        sidecar = media.get("edge_sidecar_to_children", {}).get("edges", []) or media.get("carousel_media", [])
+                        if sidecar:
+                            collected = []
+                            for idx, item in enumerate(sidecar[:10], 1):
+                                node = item.get("node", item) if isinstance(item, dict) else {}
+                                vurl_node = node.get("video_url") or (node.get("video_versions", [{}])[0].get("url") if node.get("video_versions") else None)
+                                if node.get("is_video") or vurl_node:
+                                    fp = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_{idx:05d}.mp4")
+                                    if vurl_node and _download_binary_stream(vurl_node, fp, referer="https://www.instagram.com/"):
+                                        collected.append(fp)
+                                else:
+                                    durl_node = node.get("display_url") or (node.get("image_versions2", {}).get("candidates", [{}])[0].get("url"))
+                                    fp = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_{idx:05d}.jpg")
+                                    if durl_node and _download_binary_stream(durl_node, fp, referer="https://www.instagram.com/"):
+                                        collected.append(fp)
+                            if collected:
+                                print(f"[OK] Instagram 2-Motor (GraphQL Karusel) orqali yuklandi: {shortcode}")
+                                return collected, title, is_definitely_video
+
+                        # Bitta video bo'lsa
+                        vurl = media.get("video_url") or (media.get("video_versions", [{}])[0].get("url") if media.get("video_versions") else None)
+                        if vurl and _download_binary_stream(vurl, target_mp4, referer="https://www.instagram.com/"):
+                            print(f"[OK] Instagram 2-Motor (GraphQL Video) orqali yuklandi: {shortcode}")
+                            return [target_mp4], title, True
+
+                        # Agar GraphQL aniq is_video == False desa (haqiqiy bitta rasm post bo'lsa):
+                        if media.get("is_video") is False and not sidecar:
+                            durl = media.get("display_url")
+                            target_jpg = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_00001.jpg")
+                            if durl and _download_binary_stream(durl, target_jpg, referer="https://www.instagram.com/"):
+                                print(f"[OK] Instagram 2-Motor (Confirmed Photo Post) orqali yuklandi: {shortcode}")
+                                return [target_jpg], title, False
+            except Exception:
+                pass
+    except Exception as e:
+        print(f"IG 2-Motor session xatosi: {e}")
+
+    # ---------------- 3-MOTOR: Multi-Proxy OpenGraph Video Scrapers ----------------
     proxy_domains = [
-        "https://www.ddinstagram.com",
         "https://kkinstagram.com",
         "https://www.vxinstagram.com",
         "https://eeinstagram.com",
+        "https://www.ddinstagram.com",
+        "https://instagramez.com",
     ]
     bot_uas = [
         "TelegramBot (like TwitterBot)",
@@ -1510,66 +1660,85 @@ def _download_instagram_multi_engine(url: str, user_id: int, timestamp: int) -> 
         for bua in bot_uas:
             try:
                 purl = f"{domain}/reel/{shortcode}"
-                pr = requests.get(purl, headers={"User-Agent": bua}, timeout=15, allow_redirects=True, verify=False)
+                pr = requests.get(purl, headers={"User-Agent": bua}, timeout=12, allow_redirects=True, verify=False)
                 if pr.status_code == 200:
                     ctype = (pr.headers.get("Content-Type") or "").lower()
                     if "video/" in ctype and len(pr.content) > 10000:
                         with open(target_mp4, "wb") as f:
                             f.write(pr.content)
-                        print(f"[OK] Instagram 3-Motor ({domain} direct) orqali yuklandi: {shortcode}")
-                        return [target_mp4], f"Instagram Reel ({shortcode})"
+                        print(f"[OK] Instagram 3-Motor ({domain} direct stream) orqali yuklandi: {shortcode}")
+                        return [target_mp4], f"Instagram Video ({shortcode})", True
 
-                    html_text = pr.text
-                    og_matches = re.findall(
-                        r'(?:property="og:video(?::secure_url)?"|name="twitter:player:stream")\s+content="([^"]+)"',
-                        html_text
-                    ) + re.findall(
-                        r'content="([^"]+)"\s+(?:property="og:video(?::secure_url)?"|name="twitter:player:stream")',
-                        html_text
+                    html_text = _unescape_ig_text(pr.text)
+                    og_matches = (
+                        re.findall(r'(?:property="og:video(?::secure_url|:url)?"|name="twitter:player:stream")\s+content="([^"]+)"', html_text)
+                        + re.findall(r'content="([^"]+)"\s+(?:property="og:video(?::secure_url|:url)?"|name="twitter:player:stream")', html_text)
                     )
                     for og_url in og_matches:
-                        clean_og = _unescape_ig_url(og_url)
+                        clean_og = _unescape_ig_text(og_url)
                         if clean_og.startswith("/"):
                             clean_og = domain + clean_og
                         if _download_binary_stream(clean_og, target_mp4, referer=domain):
                             print(f"[OK] Instagram 3-Motor ({domain} og:video) orqali yuklandi: {shortcode}")
-                            return [target_mp4], f"Instagram Reel ({shortcode})"
+                            return [target_mp4], f"Instagram Video ({shortcode})", True
             except Exception:
                 pass
 
-    # ---------------- 4-MOTOR: Instagram Mobile Web Page Regex Extraction ----------------
-    try:
-        mob_headers = {
-            "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-            "Accept-Language": "en-US,en;q=0.9",
-        }
-        mr = requests.get(f"https://www.instagram.com/reel/{shortcode}/", headers=mob_headers, timeout=15, verify=False)
-        if mr.status_code == 200 and mr.text:
-            v_matches = re.findall(r'\\?"video_versions\\?"\s*:\s*\[\s*\{[^}]*\\?"url\\?"\s*:\s*\\?"(https?:[^"\\]+(?:\\.[^"\\]*)*)\\?"', mr.text)
-            if not v_matches:
-                v_matches = re.findall(r'\\?"video_url\\?"\s*:\s*\\?"(https?:[^"\\]+(?:\\.[^"\\]*)*)\\?"', mr.text)
-            for vm in v_matches:
-                vurl = _unescape_ig_url(vm)
-                if _download_binary_stream(vurl, target_mp4, referer="https://www.instagram.com/"):
-                    print(f"[OK] Instagram 4-Motor (Mobile Page JSON) orqali yuklandi: {shortcode}")
-                    return [target_mp4], f"Instagram Reel ({shortcode})"
-    except Exception as e:
-        print(f"IG 4-Motor xatosi: {e}")
+    # ---------------- 4-MOTOR: External IG Video Downloader APIs (RyzenDesu / VKR / SaveIG) ----------------
+    ig_page_url = f"https://www.instagram.com/reel/{shortcode}/"
+    external_apis = [
+        f"https://api.ryzendesu.vip/api/downloader/igdl?url={urllib.parse.quote(ig_page_url)}",
+        f"https://vkrdownloader.xyz/server?vkr={urllib.parse.quote(ig_page_url)}",
+    ]
+    for api_u in external_apis:
+        try:
+            ar = requests.get(api_u, headers={"User-Agent": "Mozilla/5.0"}, timeout=15, verify=False)
+            if ar.status_code == 200 and ar.text:
+                clean_api = _unescape_ig_text(ar.text)
+                mp4_urls = re.findall(r'(https?://[^\s"\'<>\\]+(?:\.mp4|cdninstagram\.com|fbcdn\.net)[^\s"\'<>\\]*)', clean_api)
+                for m_url in mp4_urls:
+                    if any(bad in m_url.lower() for bad in [".jpg", ".png", ".webp", "t51.2885-15"]):
+                        continue
+                    if _download_binary_stream(m_url, target_mp4, referer="https://www.instagram.com/"):
+                        print(f"[OK] Instagram 4-Motor (External API) orqali yuklandi: {shortcode}")
+                        return [target_mp4], f"Instagram Video ({shortcode})", True
+        except Exception:
+            pass
 
-    # ---------------- 5-MOTOR: Embed Captioned Rasm (Agar post rasm bo'lsa) ----------------
+    return [], "", is_definitely_video
+
+def _download_instagram_photo_if_not_video(shortcode: str, user_id: int, timestamp: int, is_definitely_video: bool) -> tuple[list, str]:
+    """
+    FAQAT barcha video motorlar va yt-dlp tekshirilgandan keyin,
+    agar post VIDEO EMASLIGI aniq bo'lsa (haqiqiy rasm post bo'lsa), rasmni yuklaydi!
+    """
+    if is_definitely_video or not shortcode:
+        return [], ""
+
+    target_jpg = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_00001.jpg")
+    embed_headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+    }
     try:
         er = requests.get(f"https://www.instagram.com/p/{shortcode}/embed/captioned/", headers=embed_headers, timeout=12, verify=False)
-        if er.status_code == 200 and er.text and "EmbeddedMediaVideo" not in er.text:
-            img_m = re.findall(r'class="EmbeddedMediaImage"[^>]+src="([^"]+)"', er.text) or re.findall(r'\\?"display_url\\?"\s*:\s*\\?"(https?:[^"\\]+(?:\\.[^"\\]*)*)\\?"', er.text)
+        if er.status_code == 200 and er.text:
+            clean_body = _unescape_ig_text(er.text)
+            # Agar sahifada video belgisi bo'lsa, rasm yuklamaymiz!
+            if any(ind in clean_body for ind in [
+                '"is_video":true', '"is_video": true',
+                'EmbeddedMediaVideo', 'WatchOnInstagram', 'Watch on Instagram',
+                'glyphsSpritePlay', 'video_versions', '"media_type":2'
+            ]):
+                return [], ""
+
+            img_m = re.findall(r'class="EmbeddedMediaImage"[^>]+src="([^"]+)"', clean_body) or re.findall(r'"display_url"\s*:\s*"(https?://[^"]+)"', clean_body)
             for im in img_m:
-                iurl = _unescape_ig_url(im)
+                iurl = _unescape_ig_text(im)
                 if _download_binary_stream(iurl, target_jpg, referer="https://www.instagram.com/"):
-                    print(f"[OK] Instagram 5-Motor (Embed Photo) orqali yuklandi: {shortcode}")
+                    print(f"[OK] Instagram Haqiqiy Rasm Post yuklandi: {shortcode}")
                     return [target_jpg], f"Instagram Post ({shortcode})"
     except Exception:
         pass
-
     return [], ""
 
 def _download_tiktok_multi_engine(url: str, user_id: int, timestamp: int) -> tuple[list, str]:
@@ -1590,7 +1759,6 @@ def _download_tiktok_multi_engine(url: str, user_id: int, timestamp: int) -> tup
             if j.get("code") == 0 and j.get("data"):
                 d = j["data"]
                 title = d.get("title") or "TikTok Video"
-                # Agar TikTok rasm karuseli (slideshow) bo'lsa:
                 images = d.get("images")
                 if images and isinstance(images, list):
                     collected = []
@@ -1621,7 +1789,7 @@ def _download_tiktok_multi_engine(url: str, user_id: int, timestamp: int) -> tup
             if r.status_code == 200:
                 m = re.search(r'property="og:video(?::secure_url)?"\s+content="([^"]+)"', r.text)
                 if m:
-                    vurl = _unescape_ig_url(m.group(1))
+                    vurl = _unescape_ig_text(m.group(1))
                     if _download_binary_stream(vurl, target_mp4):
                         print(f"[OK] TikTok {tk_domain} orqali yuklandi")
                         return [target_mp4], "TikTok Video"
@@ -1670,13 +1838,13 @@ def _download_pinterest_fallback(url: str, user_id: int, timestamp: int) -> tupl
         if r.status_code == 200 and r.text:
             mp4_matches = re.findall(r'(https://v\d*\.pinimg\.com/videos/[^\s"\\]+\.mp4)', r.text)
             for vurl in mp4_matches:
-                clean_v = _unescape_ig_url(vurl)
+                clean_v = _unescape_ig_text(vurl)
                 if _download_binary_stream(clean_v, target_mp4):
                     print("[OK] Pinterest direct MP4 yuklandi")
                     return [target_mp4], "Pinterest Video"
             img_matches = re.findall(r'(https://i\.pinimg\.com/originals/[^\s"\\]+\.(?:jpg|png|webp))', r.text)
             for iurl in img_matches:
-                clean_i = _unescape_ig_url(iurl)
+                clean_i = _unescape_ig_text(iurl)
                 if _download_binary_stream(clean_i, target_jpg):
                     print("[OK] Pinterest direct Image yuklandi")
                     return [target_jpg], "Pinterest Image"
@@ -1713,7 +1881,7 @@ def get_video_stream_info(file_path: str) -> dict:
     return info
 
 def ensure_phone_playable_mp4(input_path: str, force_reencode: bool = False) -> tuple[str, dict]:
-    """Telefonda (iPhone va Android) bittada ochilishi uchun H.264 (yuv420p) + faststart MP4 ga keltirish"""
+    """Telefonda (iPhone va Android) bittada ochiladigan H.264 (yuv420p) + faststart MP4 ga keltirish"""
     ensure_ffmpeg_in_path()
     vinfo = get_video_stream_info(input_path)
     ext = os.path.splitext(input_path)[1].lower()
@@ -1742,11 +1910,11 @@ def ensure_phone_playable_mp4(input_path: str, force_reencode: bool = False) -> 
 
 def download_media_bulletproof(raw_url: str, user_id: int, timestamp: int) -> tuple[list, str]:
     """
-    10-Bosqichli Xatosiz Media Yuklagich:
-    1) Mobil qisqa link va tracking parametrlarni (?obrf=, ?igsh=, vt.tiktok, pin.it) tozalaydi.
-    2) Instagram uchun avval tezkor Multi-Engine (Embed Captioned + GraphQL + ddinstagram/kkinstagram) va yt-dlp ni ishlatadi.
-    3) TikTok uchun TikWM HD API + yt-dlp + vxTikTok ni ishlatadi.
-    4) YouTube, Pinterest, Twitter/X, Facebook uchun yt-dlp + maxsus API zaxiralarini ishlatadi.
+    12-Bosqichli VIDEO-FIRST Media Yuklagich:
+    1) Mobil qisqa link va tracking parametrlarni (?cplk=, ?obrf=, ?igsh=, vt.tiktok, pin.it) tozalaydi.
+    2) Instagram uchun avval VIDEO motorlarini (Unescaped Embed Video + Live-LSD GraphQL + Proxy Video + API) ishga tushiradi.
+    3) Agar ular topolmasa, yt-dlp ni (/reel/ va /p/ variantlarda) ishlatadi.
+    4) FAQAT video emasligi 100% tasdiqlangandagina rasm post (.jpg) sifatida yuklaydi!
     """
     ensure_ffmpeg_in_path()
     url = clean_and_resolve_url(raw_url)
@@ -1763,19 +1931,22 @@ def download_media_bulletproof(raw_url: str, user_id: int, timestamp: int) -> tu
             and os.path.getsize(os.path.join(DOWNLOAD_DIR, fname)) > 1000
         ])
 
-    # A) INSTAGRAM MAXSUS TEZKOR MOTORLARI (Telefondan tashlangan linklarni 1.5 soniyada login so'ramasdan ochadi!)
-    if "instagram.com" in lower_url or "instagr.am" in lower_url:
-        ig_files, ig_title = _download_instagram_multi_engine(url, user_id, timestamp)
+    ig_shortcode = extract_ig_shortcode(url) if ("instagram.com" in lower_url or "instagr.am" in lower_url) else None
+    is_definitely_video = False
+
+    # A) INSTAGRAM MAXSUS VIDEO MOTORLARI (Video-First!)
+    if ig_shortcode:
+        ig_files, ig_title, is_definitely_video = _download_instagram_video_engines(url, user_id, timestamp)
         if ig_files:
             return ig_files, ig_title
 
-    # B) TIKTOK MAXSUS HD MOTORI (Suv belgisiz HD formatda darhol yuklaydi)
+    # B) TIKTOK MAXSUS HD MOTORI
     if "tiktok.com" in lower_url:
         tk_files, tk_title = _download_tiktok_multi_engine(url, user_id, timestamp)
         if tk_files:
             return tk_files, tk_title
 
-    # C) YT-DLP UNIVERSAL YUKLAGICH (2 xil format va Android/iOS client bypass bilan)
+    # C) YT-DLP UNIVERSAL VIDEO YUKLAGICH (Instagram uchun ham /reel/, ham /p/ URL ni sinaydi!)
     format_candidates = [
         "best[ext=mp4][vcodec^=avc1]/bestvideo[ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]/best[ext=mp4]/best",
         "bestvideo+bestaudio/best"
@@ -1785,46 +1956,53 @@ def download_media_bulletproof(raw_url: str, user_id: int, timestamp: int) -> tu
         "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1"
     ]
 
+    urls_to_try = [url]
+    if ig_shortcode:
+        reel_variant = f"https://www.instagram.com/reel/{ig_shortcode}/"
+        post_variant = f"https://www.instagram.com/p/{ig_shortcode}/"
+        urls_to_try = [reel_variant, post_variant]
+
     title = "Video"
-    for attempt_idx in range(2):
-        ydl_opts = {
-            "outtmpl": out_template,
-            "format": format_candidates[attempt_idx],
-            "merge_output_format": "mp4",
-            "quiet": True,
-            "no_warnings": True,
-            "nocheckcertificate": True,
-            "geo_bypass": True,
-            "retries": 5,
-            "fragment_retries": 5,
-            "extractor_retries": 3,
-            "socket_timeout": 35,
-            "extractor_args": {
-                "youtube": {"player_client": ["android", "ios", "web"]}
-            },
-            "http_headers": {
-                "User-Agent": user_agents[attempt_idx],
-                "Accept-Language": "en-US,en;q=0.9,ru;q=0.8,uz;q=0.7"
+    for candidate_u in urls_to_try:
+        for attempt_idx in range(2):
+            ydl_opts = {
+                "outtmpl": out_template,
+                "format": format_candidates[attempt_idx],
+                "merge_output_format": "mp4",
+                "quiet": True,
+                "no_warnings": True,
+                "nocheckcertificate": True,
+                "geo_bypass": True,
+                "retries": 4,
+                "fragment_retries": 4,
+                "extractor_retries": 3,
+                "socket_timeout": 30,
+                "extractor_args": {
+                    "youtube": {"player_client": ["android", "ios", "web"]}
+                },
+                "http_headers": {
+                    "User-Agent": user_agents[attempt_idx],
+                    "Accept-Language": "en-US,en;q=0.9,ru;q=0.8,uz;q=0.7"
+                }
             }
-        }
-        if FFMPEG_DIR:
-            ydl_opts["ffmpeg_location"] = FFMPEG_DIR
-        if os.path.exists("cookies.txt"):
-            ydl_opts["cookiefile"] = "cookies.txt"
+            if FFMPEG_DIR:
+                ydl_opts["ffmpeg_location"] = FFMPEG_DIR
+            if os.path.exists("cookies.txt"):
+                ydl_opts["cookiefile"] = "cookies.txt"
 
-        try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                info = ydl.extract_info(url, download=True)
-                if info:
-                    title = info.get("title") or info.get("description") or "Video"
-            files = _collect_files()
-            if files:
-                print(f"[OK] yt-dlp ({attempt_idx+1}-urinish) orqali yuklandi: {url}")
-                return files, str(title).strip() or "Video"
-        except Exception as e:
-            print(f"yt-dlp {attempt_idx+1}-urinish xatosi ({url}): {e}")
+            try:
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    info = ydl.extract_info(candidate_u, download=True)
+                    if info:
+                        title = info.get("title") or info.get("description") or "Video"
+                files = _collect_files()
+                if files:
+                    print(f"[OK] yt-dlp orqali yuklandi: {candidate_u}")
+                    return files, str(title).strip() or "Video"
+            except Exception as e:
+                print(f"yt-dlp urinish xatosi ({candidate_u}): {e}")
 
-    # D) QO'SHIMCHA PLATFORM ZAXIRALARI (Twitter/X, Pinterest, va original URL bilan qayta urinish)
+    # D) QO'SHIMCHA PLATFORM ZAXIRALARI (Twitter/X, Pinterest, va Instagram Haqiqiy Rasm Post)
     if "twitter.com" in lower_url or "x.com" in lower_url:
         tw_files, tw_title = _download_twitter_fallback(url, user_id, timestamp)
         if tw_files:
@@ -1835,10 +2013,11 @@ def download_media_bulletproof(raw_url: str, user_id: int, timestamp: int) -> tu
         if pin_files:
             return pin_files, pin_title
 
-    if "instagram.com" in raw_url.lower() and raw_url != url:
-        ig_files2, ig_title2 = _download_instagram_multi_engine(raw_url, user_id, timestamp)
-        if ig_files2:
-            return ig_files2, ig_title2
+    # E) AGAR INSTAGRAM POST HAQIQATDAN RASM BO'LSA (video emasligi tasdiqlangan bo'lsa):
+    if ig_shortcode:
+        photo_files, photo_title = _download_instagram_photo_if_not_video(ig_shortcode, user_id, timestamp, is_definitely_video)
+        if photo_files:
+            return photo_files, photo_title
 
     return _collect_files(), title
 
@@ -1904,7 +2083,7 @@ def make_video_action_keyboard(base_fname: str, lang: str = "uz") -> types.Inlin
     )
     markup.add(
         types.InlineKeyboardButton(lbl["circle"], callback_data=f"circle:{base_fname}"),
-        types.InlineKeyboardButton(lbl["audio"], callback_data=f"audio:{base_fname}")
+        types.InlineKeyboardButton(lbl["audio"], callback_data=f"audio:{base_fname}"),
     )
     markup.add(
         types.InlineKeyboardButton(lbl["bass"], callback_data=f"bass:{base_fname}"),
@@ -1947,8 +2126,8 @@ def get_universal_tools_keyboard() -> types.InlineKeyboardMarkup:
     b_kurs = types.InlineKeyboardButton("💱 Valyuta Kursi (/kurs)", callback_data="tool_cmd:kurs")
     b_ai = types.InlineKeyboardButton("🧠 DeepSeek AI (/ai)", callback_data="tool_cmd:ai")
     b_img = types.InlineKeyboardButton("🖼 Rasm Chizish (/image)", callback_data="tool_cmd:image")
-    markup.add(b_tr, b_qr)
-    markup.add(b_kurs, b_ai)
+    markup.add(b_kurs, b_qr)
+    markup.add(b_tr, b_ai)
     markup.add(b_img)
     return markup
 
@@ -2007,7 +2186,7 @@ def handle_help(message: types.Message):
         "4️⃣ <b>AI Rasm chizish (NanoBanana):</b> <code>/image rasm tavsifi</code> deb yozing.\n"
         "5️⃣ <b>AI Tarjimon:</b> <code>/tr matn</code> — har qanday matnni tarjima qilish.\n"
         "6️⃣ <b>QR-Kod yasash:</b> <code>/qr ssilka yoki matn</code>.\n"
-        "7️⃣ <b>Valyuta kurslari:</b> <code>/kurs</code> — Markaziy bank real kurslari."
+        "7️⃣ <b>Valyuta kurslari:</b> <code>/kurs</code> yoki <code>/kurs 100</code> — Markaziy bank real kurslari."
     )
     bot.send_message(message.chat.id, help_text)
 
@@ -2016,9 +2195,9 @@ def handle_help(message: types.Message):
 def handle_tools_menu(message: types.Message):
     text = (
         "🛠 <b>Universal Foydali Vositalar Markazi:</b>\n\n"
+        "• 💱 <b>Valyuta Kurslari:</b> <code>/kurs</code> yoki <code>/kurs 100</code>\n"
         "• 🌍 <b>AI Tarjimon:</b> <code>/tr Hello world</code>\n"
         "• 📱 <b>QR-Kod Generator:</b> <code>/qr https://t.me/usman_khasan</code>\n"
-        "• 💱 <b>Valyuta Kurslari:</b> <code>/kurs</code>\n"
         "• 🧠 <b>DeepSeek AI:</b> <code>/ai savolingiz</code>\n"
         "• 🖼 <b>AI Rasm Chizish:</b> <code>/image manzara</code>\n\n"
         "Quyidagi tugmalardan birini bosing:"
@@ -2026,8 +2205,27 @@ def handle_tools_menu(message: types.Message):
     bot.send_message(message.chat.id, text, reply_markup=get_universal_tools_keyboard())
 
 @bot.message_handler(commands=['kurs', 'valyuta'])
+@bot.message_handler(func=lambda msg: msg.text and msg.text.strip() in [
+    "💱 Valyuta Kurslari", "💱 Курсы валют", "💱 Exchange Rates",
+    "kurs", "Kurs", "valyuta", "Valyuta"
+])
 def handle_kurs_cmd(message: types.Message):
-    bot.reply_to(message, fetch_cbu_exchange_rates())
+    amount = 1.0
+    if message.text:
+        parts = message.text.strip().split()
+        if len(parts) > 1:
+            try:
+                amount = float(parts[1].replace(",", "."))
+            except ValueError:
+                amount = 1.0
+    markup = types.InlineKeyboardMarkup(row_width=3)
+    markup.add(
+        types.InlineKeyboardButton("💵 100$", callback_data="kurs_amt:100"),
+        types.InlineKeyboardButton("💵 500$", callback_data="kurs_amt:500"),
+        types.InlineKeyboardButton("💵 1000$", callback_data="kurs_amt:1000"),
+    )
+    markup.add(types.InlineKeyboardButton("🔄 Kursni yangilash", callback_data="kurs_amt:1"))
+    bot.reply_to(message, fetch_cbu_exchange_rates(amount), reply_markup=markup)
 
 @bot.message_handler(commands=['qr'])
 def handle_qr_cmd(message: types.Message):
@@ -2140,9 +2338,12 @@ def handle_profile(message: types.Message):
         f"🖼 <b>Visualize your ideas</b>\n"
         f"Make Image → <b>NanoBanana</b>"
     )
-    markup = types.InlineKeyboardMarkup(row_width=1)
+    markup = types.InlineKeyboardMarkup(row_width=2)
     markup.add(
         types.InlineKeyboardButton("📊 Bot Statistikasi (/stat)", callback_data="open_stats"),
+        types.InlineKeyboardButton("💱 Valyuta Kurslari (/kurs)", callback_data="tool_cmd:kurs")
+    )
+    markup.add(
         types.InlineKeyboardButton("🧠 Free AI → DeepSeek & ChatGPT", callback_data="tool_cmd:ai"),
         types.InlineKeyboardButton("🖼 Make Image → NanoBanana", callback_data="tool_cmd:image")
     )
@@ -2363,11 +2564,11 @@ def handle_incoming_link_or_ai(message: types.Message):
     if cmd_lower in ("/stat", "/stats", "/statistika", "/admin") or txt_clean in ("📊 Statistika", "📊 Статистика", "📊 Statistics", "statistika", "Statistika", "stat", "Stat"):
         handle_stats(message)
         return
+    if cmd_lower in ("/kurs", "/valyuta", "kurs", "valyuta") or txt_clean in ("💱 Valyuta Kurslari", "💱 Курсы валют", "💱 Exchange Rates"):
+        handle_kurs_cmd(message)
+        return
     if cmd_lower == "/qr":
         handle_qr_cmd(message)
-        return
-    if cmd_lower in ("/kurs", "/valyuta"):
-        handle_kurs_cmd(message)
         return
     if cmd_lower in ("/tr", "/translate"):
         handle_translate_cmd(message)
@@ -2386,7 +2587,7 @@ def handle_incoming_link_or_ai(message: types.Message):
         process_ai_query(message, message.text, lang)
         return
 
-    # HAVOLA BO'LSA -> 10-BOSQICHLI TIZIM ORQALI XATOSIZ YUKLAB BERISH!
+    # HAVOLA BO'LSA -> 12-BOSQICHLI VIDEO-FIRST TIZIM ORQALI XATOSIZ YUKLAB BERISH!
     platform = detect_platform(url)
     status_msg = bot.reply_to(message, get_text("analyzing", lang, platform=platform))
     timestamp = int(time.time() * 1000)
@@ -2436,7 +2637,7 @@ def handle_incoming_link_or_ai(message: types.Message):
         downloaded_file = downloaded_files[0]
         ext = os.path.splitext(downloaded_file)[1].lower()
 
-        # Rasm bo'lsa — Yuboriboq xotiradan o'chiriladi!
+        # Rasm bo'lsa (faqat haqiqiy rasm postlar uchun) — Yuboriboq xotiradan o'chiriladi!
         if ext in [".jpg", ".jpeg", ".png", ".webp"]:
             try:
                 with open(downloaded_file, "rb") as pf:
@@ -2570,7 +2771,7 @@ def handle_callbacks(call: types.CallbackQuery):
             bot.answer_callback_query(call.id, get_text("sub_failed", lang), show_alert=True)
         return
 
-    # 3. Referal va Statistika callbacklari
+    # 3. Referal, Statistika va Valyuta callbacklari
     if call.data == "open_referral":
         handle_referral(call.message)
         bot.answer_callback_query(call.id)
@@ -2583,6 +2784,22 @@ def handle_callbacks(call: types.CallbackQuery):
             bot.edit_message_text(text, call.message.chat.id, call.message.message_id, reply_markup=markup)
         except Exception:
             bot.send_message(call.message.chat.id, text, reply_markup=markup)
+        return
+
+    if call.data.startswith("kurs_amt:"):
+        amt = float(call.data.split(":")[1])
+        bot.answer_callback_query(call.id, f"💱 {amt:g} birlik bo'yicha hisoblandi!")
+        markup = types.InlineKeyboardMarkup(row_width=3)
+        markup.add(
+            types.InlineKeyboardButton("💵 100$", callback_data="kurs_amt:100"),
+            types.InlineKeyboardButton("💵 500$", callback_data="kurs_amt:500"),
+            types.InlineKeyboardButton("💵 1000$", callback_data="kurs_amt:1000"),
+        )
+        markup.add(types.InlineKeyboardButton("🔄 1 birlik (Asosiy kurs)", callback_data="kurs_amt:1"))
+        try:
+            bot.edit_message_text(fetch_cbu_exchange_rates(amt), call.message.chat.id, call.message.message_id, reply_markup=markup)
+        except Exception:
+            bot.send_message(call.message.chat.id, fetch_cbu_exchange_rates(amt), reply_markup=markup)
         return
 
     if call.data == "clean_storage_cb":
@@ -2608,7 +2825,14 @@ def handle_callbacks(call: types.CallbackQuery):
         subcmd = call.data.split(":")[1]
         bot.answer_callback_query(call.id)
         if subcmd == "kurs":
-            bot.send_message(call.message.chat.id, fetch_cbu_exchange_rates())
+            markup = types.InlineKeyboardMarkup(row_width=3)
+            markup.add(
+                types.InlineKeyboardButton("💵 100$", callback_data="kurs_amt:100"),
+                types.InlineKeyboardButton("💵 500$", callback_data="kurs_amt:500"),
+                types.InlineKeyboardButton("💵 1000$", callback_data="kurs_amt:1000"),
+            )
+            markup.add(types.InlineKeyboardButton("🔄 Kursni yangilash", callback_data="kurs_amt:1"))
+            bot.send_message(call.message.chat.id, fetch_cbu_exchange_rates(1.0), reply_markup=markup)
         elif subcmd == "qr":
             msg = bot.send_message(call.message.chat.id, "📱 <b>QR-Kod yasash uchun matn yoki ssilka yuboring:</b>")
             USER_STATES[user_id] = {"action": "qr_make"}
@@ -3097,7 +3321,8 @@ if __name__ == '__main__':
     print("🚀 UNIVERSAL SUPER SAVER & MULTIMEDIA AI TELEGRAM BOT (#1 EDITION)")
     print(f"🎬 FFmpeg holati: {ffmpeg_loc}")
     print(f"👑 Admin Telegram ID: {ADMIN_ID} (@usman_khasan)")
-    print("📱 10-Bosqichli Mobil & Desktop Link Yuklagich: FAOL (Instagram/TikTok/YouTube/X/Pin)")
+    print("📱 12-Bosqichli VIDEO-FIRST Link Yuklagich: FAOL (Videoni rasm qilib yubormaydi!)")
+    print("💱 4-Manbali Markaziy Bank Valyuta Kurslari (/kurs): FAOL")
     print("🧹 Avto-Xotira Tozalagich & Eski jarayonlarni yopish: FAOL")
     print("=" * 75)
 
@@ -3105,12 +3330,12 @@ if __name__ == '__main__':
         bot.set_my_commands([
             types.BotCommand("start", "🚀 Botni ishga tushirish"),
             types.BotCommand("stat", "📊 Bot va shaxsiy statistika"),
+            types.BotCommand("kurs", "💱 Markaziy bank valyuta kurslari"),
             types.BotCommand("profile", "👤 Profilim va ma'lumotlar"),
             types.BotCommand("ai", "🧠 DeepSeek & ChatGPT savol-javob"),
             types.BotCommand("image", "🖼 NanoBanana AI rasm chizish"),
             types.BotCommand("tr", "🌍 AI professional tarjimon"),
             types.BotCommand("qr", "📱 QR-Kod yasash"),
-            types.BotCommand("kurs", "💱 Markaziy bank valyuta kurslari"),
             types.BotCommand("clean", "🧹 Xotirani tozalash")
         ])
     except Exception as e:
