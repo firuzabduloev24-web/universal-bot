@@ -5042,10 +5042,62 @@ def handle_inline_query(query: types.InlineQuery):
 
     bot.answer_inline_query(query.id, results, cache_time=5)
 
+# ==================== SERVER KEEP-ALIVE (RENDER / RAILWAY / HUGGINGFACE / KOYEB) VA PROKSI SOZLAMASI ====================
+def start_cloud_keepalive_server():
+    """
+    Agar bot Render.com, Railway, Koyeb yoki HuggingFace Spaces kabi cloud serverga qo'yilsa,
+    server uxlab qolmasligi va Port Health-Check dan o'tishi uchun fonda yengil HTTP server yoqadi.
+    """
+    port_str = os.environ.get("PORT", "")
+    if not port_str:
+        return
+    try:
+        from http.server import BaseHTTPRequestHandler, HTTPServer
+        port = int(port_str)
+
+        class HealthHandler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                self.send_response(200)
+                self.send_header("Content-type", "text/plain; charset=utf-8")
+                self.end_headers()
+                self.wfile.write(b"Universal Super Saver Bot 24/7 Faol!")
+            def log_message(self, format, *args):
+                return
+
+        srv = HTTPServer(("0.0.0.0", port), HealthHandler)
+        t = threading.Thread(target=srv.serve_forever, daemon=True)
+        t.start()
+        print(f"🌐 Cloud Keep-Alive Web Server {port}-portda ishga tushdi!")
+    except Exception as e:
+        print(f"Keep-Alive server xatosi: {e}")
+
+def configure_server_network():
+    """Server va Proxy (masalan PythonAnywhere yoki Cloud VPS) uchun TeleBot tarmoq sozlamalari"""
+    try:
+        from telebot import apihelper
+        apihelper.CONNECT_TIMEOUT = 25
+        apihelper.READ_TIMEOUT = 45
+        apihelper.RETRY_ON_ERROR = True
+        apihelper.RETRY_TIMEOUT = 3
+        apihelper.MAX_RETRIES = 5
+        # PythonAnywhere proksisini tekshirish
+        pa_proxy = os.environ.get("https_proxy") or os.environ.get("HTTPS_PROXY") or os.environ.get("http_proxy")
+        if pa_proxy:
+            apihelper.proxy = {"http": pa_proxy, "https": pa_proxy}
+            print(f"🔌 Tizim proksisi aniqlandi: {pa_proxy}")
+            if "proxy.server:3128" in pa_proxy or "PYTHONANYWHERE" in " ".join(os.environ.keys()):
+                print("⚠️ DIQQAT (PythonAnywhere Free): PythonAnywhere bepul tarifida proxy.server:3128 ko'pincha")
+                print("   503 Service Unavailable beradi va Instagram/TikTok/YouTube dan video yuklashni bloklaydi!")
+                print("   Bot 100% cheklovsiz ishlashi uchun GitHub Actions, HuggingFace Spaces, Railway yoki VPS ishlating.")
+    except Exception as e:
+        print(f"Tarmoq sozlash xatosi: {e}")
+
 # ==================== BOTNI ISHGA TUSHIRISH ====================
 if __name__ == '__main__':
     kill_other_bot_instances()
     ensure_ffmpeg_in_path()
+    configure_server_network()
+    start_cloud_keepalive_server()
     ffmpeg_loc = shutil.which("ffmpeg") or "Topilmadi (winget install Gyan.FFmpeg)"
     print("=" * 75)
     print("🚀 UNIVERSAL SUPER SAVER & MULTIMEDIA AI TELEGRAM BOT (#1 EDITION)")
@@ -5078,7 +5130,12 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"Menyu komandalarini o'rnatish: {e}")
 
-    try:
-        bot.infinity_polling(timeout=35, long_polling_timeout=20)
-    except Exception as e:
-        print(f"Bot to'xtadi: {e}")
+    while True:
+        try:
+            bot.infinity_polling(timeout=35, long_polling_timeout=20, skip_pending=True)
+        except KeyboardInterrupt:
+            print("Bot foydalanuvchi tomonidan to'xtatildi.")
+            break
+        except Exception as e:
+            print(f"Polling uzilishi (5 soniyada qayta ulanadi): {e}")
+            time.sleep(5)
