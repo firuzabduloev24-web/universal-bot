@@ -97,12 +97,12 @@ def _ensure_pillow_installed():
 _ensure_pillow_installed()
 
 def _ensure_youtube_engines_updated():
-    """GitHub Actions va Cloud serverlarda YouTube va Shorts 100% ishlashi uchun yt-dlp va pytubefix ni yangilash"""
+    """GitHub Actions va Cloud serverlarda YouTube, Shorts va Instagram 100% tezkor ishlashi uchun kutubxonalarni oldindan tayyorlash"""
     def _bg_pip():
         try:
             subprocess.run(
-                [sys.executable, "-m", "pip", "install", "--quiet", "--upgrade", "yt-dlp", "pytubefix"],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120
+                [sys.executable, "-m", "pip", "install", "--quiet", "--upgrade", "yt-dlp", "pytubefix", "instagrapi", "pycryptodomex"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=150
             )
         except Exception:
             pass
@@ -2806,6 +2806,7 @@ def verify_video_content_is_halal_and_safe(video_path: str, metadata_text: str =
 # ==================== INSTAGRAM AVTORIZATSIYA VA REELS YUKLASH MOTORI ====================
 IG_AUTO_RETRY_STATE = {}
 IG_AUTO_RETRY_LOCK = threading.Lock()
+IG_CHALLENGE_BRIDGE = {}  # user_id -> {"event": Event, "code": str, "result_event": Event, "result": (bool, str), "choice": str}
 
 def _deterministic_uuid(seed_str: str) -> str:
     import uuid as _uuid_mod
@@ -2817,6 +2818,8 @@ def _build_deterministic_ig_client(username: str, profile_index: int = 0):
     Har safar tasodifiy qurilma (Random UUID) yaratib Instagramning 'Please wait a few minutes'
     blokiga tushmaslik uchun foydalanuvchi loginiga bog'langan DOIMIY (Deterministic) Toshkent (UTC+5)
     flagman Android qurilma profilini yaratadi!
+    MUHIM: instagrapi standart `input()` funksiyasini chaqirib serverda qotib qolmasligi uchun
+    `challenge_code_handler` va `change_password_handler` ni avtomatik Telegram ko'prigiga ulaydi!
     """
     from instagrapi import Client
     clean_u = (username or "universal_savebot").strip().lower().lstrip("@")
@@ -2896,7 +2899,10 @@ def _build_deterministic_ig_client(username: str, profile_index: int = 0):
         "timezone_offset": 18000,  # Toshkent UTC+5
     }
     cl = Client(settings=settings)
-    cl.delay_range = [1, 2]
+    cl.delay_range = [0.5, 1.2]
+    cl.request_timeout = 12
+    # HECH QACHON terminalda `input()` chaqirib qotib qolmasligi uchun default handler:
+    cl.change_password_handler = lambda *a, **kw: ""
     try:
         cl.private.cookies.set("csrftoken", csrf_tok, domain=".instagram.com")
     except Exception:
@@ -3014,7 +3020,8 @@ def _synthesize_instagrapi_session_from_cookie(clean_sid: str, username_hint: st
         try:
             from instagrapi import Client
             cl_check = Client(settings=settings)
-            cl_check.delay_range = [1, 2]
+            cl_check.delay_range = [0.5, 1.0]
+            cl_check.request_timeout = 8
             info = cl_check.account_info()
             detected_u = getattr(info, "username", "")
             if detected_u:
@@ -3057,7 +3064,7 @@ def _try_instagram_web_ajax_login(username: str, password: str) -> dict:
     })
     csrf_token = hashlib.sha256(f"web_csrf_{clean_u}_{int(time.time()//600)}".encode()).hexdigest()[:32]
     try:
-        r_init = sess.get("https://www.instagram.com/accounts/login/", timeout=12, verify=False)
+        r_init = sess.get("https://www.instagram.com/accounts/login/", timeout=8, verify=False)
         if sess.cookies.get("csrftoken"):
             csrf_token = sess.cookies.get("csrftoken")
         else:
@@ -3081,7 +3088,7 @@ def _try_instagram_web_ajax_login(username: str, password: str) -> dict:
         resp = sess.post(
             "https://www.instagram.com/api/v1/web/accounts/login/ajax/",
             data=payload,
-            timeout=15,
+            timeout=10,
             verify=False
         )
         all_cookies = sess.cookies.get_dict()
@@ -3155,15 +3162,29 @@ def login_instagram_with_sessionid(session_id: str, username_hint: str = "") -> 
         )
     return False, f"❌ SessionID orqali ulanishda xatolik: {uname_or_err}"
 
-def _attempt_core_multi_engine_ig_login(user_id: int, clean_user: str, password: str) -> tuple[str, str]:
+def _update_prog_safe(chat_id: int, msg_id: int, text: str, reply_markup=None):
+    if not chat_id or not msg_id:
+        return
+    try:
+        bot.edit_message_text(text, chat_id, msg_id, reply_markup=reply_markup)
+    except Exception:
+        pass
+
+def _attempt_core_multi_engine_ig_login(
+    user_id: int,
+    clean_user: str,
+    password: str,
+    chat_id: int = None,
+    prog_msg_id: int = None,
+    interactive_challenge: bool = True
+) -> tuple[str, str]:
     """
-    🔥 4-BOSQICHLI ANTI-BLOCK INSTAGRAM LOGIN MOTORI:
-    1-Bosqich: Agar parol o'rniga SessionID yuborilgan bo'lsa -> 1 soniyada ulaydi.
-    2-Bosqich: Instagram Web Ajax Login ('/api/v1/web/accounts/login/ajax/') -> Mobil API rate-limitini 100% chetlab o'tadi!
-    3-Bosqich: instagrapi Direct Login (pre_login_flow O'CHIRILGAN holatda + Doimiy Toshkent S24 Ultra qurilmasi bilan) ->
-               '/api/v1/launcher/sync/' va '/api/v1/qe/expose/' dagi 'Please wait a few minutes' xatosini chetlab o'tadi!
-    4-Bosqich: instagrapi Zaxira Qurilma (Xiaomi 14 Toshkent) bilan to'liq oqim.
+    🔥 4-BOSQICHLI ANTI-BLOCK INSTAGRAM LOGIN MOTORI (QOTIB QOLMASLIK KAFOLATI BILAN!):
+    - MUHIM FIX: `instagrapi` standart holatda Challenge (SMS/Email kod) chiqqanda server konsolida
+      `input("Enter code...")` ni chaqirib, botni abadiy kutish (qotib qolish) holatiga tushirib qo'yar edi!
+      Endi maxsus `telegram_challenge_code_handler` orqali kod so'rovi 2 soniyada Telegramga chiqadi!
     """
+    # 1-BOSQICH: Foydalanuvchi login/parol o'rniga sessionid yuborgan bo'lsa
     possible_sid = _extract_clean_sessionid(password) or _extract_clean_sessionid(clean_user)
     if possible_sid:
         u_hint = clean_user if not _extract_clean_sessionid(clean_user) else "universal_savebot"
@@ -3171,6 +3192,8 @@ def _attempt_core_multi_engine_ig_login(user_id: int, clean_user: str, password:
         if ok_s:
             return "ok", msg_s
 
+    # 2-BOSQICH: Instagram Web Ajax Login (Mobil rate-limitdan mustaqil, 3-5 soniyada javob beradi!)
+    _update_prog_safe(chat_id, prog_msg_id, f"⏳ <b>@{clean_user}</b>: [1/3] Web-Ajax Anti-Blok protokoli orqali tekshirilmoqda...")
     web_res = _try_instagram_web_ajax_login(clean_user, password)
     if web_res.get("status") == "ok" and web_res.get("sessionid"):
         ok_syn, uname_syn = _synthesize_instagrapi_session_from_cookie(
@@ -3189,17 +3212,66 @@ def _attempt_core_multi_engine_ig_login(user_id: int, clean_user: str, password:
         IG_AUTO_RETRY_STATE.pop(user_id, None)
         return "error", web_res.get("message", "❌ Parol noto'g'ri!")
 
+    # 3-BOSQICH: instagrapi kutubxonasini tekshirish
+    _update_prog_safe(chat_id, prog_msg_id, f"⏳ <b>@{clean_user}</b>: [2/3] Mobil shifrlash moduli tayyorlanmoqda...")
     if not _ensure_instagrapi_installed():
         return "error", "instagrapi kutubxonasini o'rnatib bo'lmadi."
 
     from instagrapi.exceptions import TwoFactorRequired, ChallengeRequired, BadPassword
     last_err_str = web_res.get("message", "")
 
-    for prof_idx, skip_preflow in [(0, True), (1, True), (0, False)]:
+    for attempt_num, (prof_idx, skip_preflow) in enumerate([(0, True), (1, True)], 1):
         try:
+            _update_prog_safe(
+                chat_id, prog_msg_id,
+                f"⏳ <b>@{clean_user}</b>: [3/3] Toshkent Samsung S24 Ultra qurilmasi orqali ulanmoqda ({attempt_num}-urinish)..."
+            )
             cl = _build_deterministic_ig_client(clean_user, profile_index=prof_idx)
             if skip_preflow:
                 cl.pre_login_flow = lambda *a, **kw: True
+
+            # 🔥 ENG MUHIM QISM: instagrapi terminalda `input()` chaqirib qotib qolmasligi uchun
+            # Challenge kod so'rovini to'g'ridan-to'g'ri Telegram chatga bog'laymiz!
+            challenge_triggered_state = {"asked": False, "choice": "SMS/Email"}
+
+            def _nonblocking_challenge_handler(uname_arg, choice_arg=None):
+                challenge_triggered_state["asked"] = True
+                challenge_triggered_state["choice"] = str(choice_arg or "SMS yoki Email")
+                if not interactive_challenge or not chat_id:
+                    raise ChallengeRequired("Challenge tasdiqlash talab etildi")
+
+                ev = threading.Event()
+                res_ev = threading.Event()
+                IG_CHALLENGE_BRIDGE[user_id] = {
+                    "event": ev,
+                    "code": "",
+                    "result_event": res_ev,
+                    "result": (False, ""),
+                    "choice": str(choice_arg or "SMS/Email"),
+                }
+                USER_STATES[user_id] = {"action": "ig_wait_code"}
+
+                prompt_txt = (
+                    f"📲 <b>Instagram Xavfsizlik Kodini Yubordi!</b> (<code>{choice_arg or 'Email / SMS'}</code>)\n\n"
+                    f"1️⃣ <b>Email yoki SMS</b> orqali kelgan <b>6 xonali tasdiqlash kodini</b> hoziroq shu yerga yozib yuboring!\n"
+                    f"2️⃣ Yoki telefoningizdan Instagram ilovasiga kirib <b>«Bu men edim» (This was me / Это был я)</b> tugmasini bosing va quyidagi <b>«✅ Ilovadan Tasdiqladim»</b> tugmasini bosing:"
+                )
+                mk = types.InlineKeyboardMarkup(row_width=1)
+                mk.add(
+                    types.InlineKeyboardButton("✅ Ilovadan Tasdiqladim (Qayta urinish)", callback_data="ig_retry_challenge"),
+                    types.InlineKeyboardButton("🍪 SessionID Bilan 1-Soniyada Ulash", callback_data="ig_start_session")
+                )
+                _update_prog_safe(chat_id, prog_msg_id, prompt_txt, reply_markup=mk)
+
+                # Foydalanuvchi Telegramda 6 xonali kodni yozishini kutamiz (maks 180 soniya)
+                got_code = ev.wait(timeout=180)
+                bridge_data = IG_CHALLENGE_BRIDGE.get(user_id) or {}
+                code_entered = str(bridge_data.get("code") or "").strip()
+                if not got_code or not code_entered or code_entered.lower() == "retry":
+                    raise ChallengeRequired("Challenge kodi kiritilmadi yoki ilovadan tasdiqlandi")
+                return code_entered
+
+            cl.challenge_code_handler = _nonblocking_challenge_handler
 
             IG_PENDING_LOGIN[user_id] = {
                 "client": cl,
@@ -3217,10 +3289,16 @@ def _attempt_core_multi_engine_ig_login(user_id: int, clean_user: str, password:
             save_ig_autopost_config(cfg, sync_cloud=True)
             IG_PENDING_LOGIN.pop(user_id, None)
             IG_AUTO_RETRY_STATE.pop(user_id, None)
-            return "ok", (
+            ok_final_msg = (
                 f"✅ <b>@{clean_user} Instagram profiliga muvaffaqiyatli kirildi va sessiya saqlandi!</b>\n"
                 f"☁️ Sessiya <b>Telegram Bulutli Xotiraga</b> ham muhrlandi — GitHub yangilanganda ham o'chib ketmaydi!"
             )
+            if user_id in IG_CHALLENGE_BRIDGE:
+                IG_CHALLENGE_BRIDGE[user_id]["result"] = (True, ok_final_msg)
+                IG_CHALLENGE_BRIDGE[user_id]["result_event"].set()
+                IG_CHALLENGE_BRIDGE.pop(user_id, None)
+            return "ok", ok_final_msg
+
         except TwoFactorRequired:
             IG_PENDING_LOGIN[user_id]["mode"] = "2fa"
             IG_AUTO_RETRY_STATE.pop(user_id, None)
@@ -3229,13 +3307,21 @@ def _attempt_core_multi_engine_ig_login(user_id: int, clean_user: str, password:
                 "📱 Telefoningizga (SMS, WhatsApp yoki Authenticator ilovasiga) kelgan 6 xonali kodni hoziroq shu yerga yozib yuboring "
                 "(yoki <code>/ig_code 123456</code> deb yozing):"
             )
-        except ChallengeRequired:
+        except ChallengeRequired as ch_e:
             IG_PENDING_LOGIN[user_id]["mode"] = "challenge"
             IG_AUTO_RETRY_STATE.pop(user_id, None)
+            if user_id in IG_CHALLENGE_BRIDGE:
+                IG_CHALLENGE_BRIDGE[user_id]["result"] = (
+                    False,
+                    "📲 <b>Instagram xavfsizlik tasdiqlovi talab qildi.</b> Ilovadan «Bu men edim» deb tasdiqlab qayta urinib ko'ring yoki SessionID orqali 1 soniyada ulang!"
+                )
+                IG_CHALLENGE_BRIDGE[user_id]["result_event"].set()
+                IG_CHALLENGE_BRIDGE.pop(user_id, None)
             return "challenge_required", (
                 "📲 <b>Instagram xavfsizlik tasdiqlovi (Challenge) so'radi!</b>\n\n"
                 "1️⃣ Telefoningizdan Instagram ilovasiga kirib <b>«Bu men edim» (This was me / Это был я)</b> tugmasini bosing va quyidagi <b>«✅ Ilovadan Tasdiqladim»</b> tugmasini bosing;\n"
-                "2️⃣ Yoki SMS/Emailga kelgan 6 xonali tasdiqlash kodini shu yerga yozib yuboring!"
+                "2️⃣ Yoki SMS/Emailga kelgan 6 xonali tasdiqlash kodini shu yerga yozib yuboring!\n"
+                "3️⃣ Yoki eng osoni — <b>«🍪 SessionID Bilan 1-Soniyada Ulash»</b> tugmasini bosing."
             )
         except BadPassword:
             IG_PENDING_LOGIN.pop(user_id, None)
@@ -3245,16 +3331,20 @@ def _attempt_core_multi_engine_ig_login(user_id: int, clean_user: str, password:
             err_s = str(e)
             last_err_str = err_s
             low_e = err_s.lower()
+            if user_id in IG_CHALLENGE_BRIDGE:
+                IG_CHALLENGE_BRIDGE[user_id]["result"] = (False, f"❌ Tasdiqlashda xatolik: {err_s[:160]}")
+                IG_CHALLENGE_BRIDGE[user_id]["result_event"].set()
+                IG_CHALLENGE_BRIDGE.pop(user_id, None)
             if "two_factor" in low_e or "2fa" in low_e:
                 IG_PENDING_LOGIN[user_id]["mode"] = "2fa"
                 return "2fa_required", "🔐 <b>SMS/2FA 6 xonali kodni shu yerga yuboring:</b>"
-            if "challenge" in low_e or "checkpoint" in low_e:
+            if "challenge" in low_e or "checkpoint" in low_e or challenge_triggered_state["asked"]:
                 IG_PENDING_LOGIN[user_id]["mode"] = "challenge"
                 return "challenge_required", (
                     "📲 <b>Instagram ilovasidan «Bu men edim» (This was me) deb tasdiqlang</b> "
-                    "yoki Email/SMS ga kelgan kodni shu yerga yuboring!"
+                    "yoki Email/SMS ga kelgan 6 xonali kodni shu yerga yuboring!"
                 )
-            time.sleep(1.5)
+            time.sleep(1.0)
 
     if web_res.get("status") == "2fa_required":
         IG_PENDING_LOGIN[user_id] = {
@@ -3306,7 +3396,7 @@ def _start_ig_auto_login_retry_daemon(user_id: int, clean_user: str, password: s
             uname = st["username"]
             pwd = st["password"]
             print(f"🔄 [IG Auto-Retry #{attempt}/15] @{uname} profiliga ulanish tekshirilmoqda...")
-            status, msg = _attempt_core_multi_engine_ig_login(user_id, uname, pwd)
+            status, msg = _attempt_core_multi_engine_ig_login(user_id, uname, pwd, interactive_challenge=False)
             if status == "ok":
                 IG_AUTO_RETRY_STATE.pop(user_id, None)
                 try:
@@ -3330,7 +3420,10 @@ def _start_ig_auto_login_retry_daemon(user_id: int, clean_user: str, password: s
                 USER_STATES[user_id] = {"action": "ig_wait_code"}
                 try:
                     mk = types.InlineKeyboardMarkup(row_width=1)
-                    mk.add(types.InlineKeyboardButton("✅ Ilovadan Tasdiqladim (Qayta urinish)", callback_data="ig_retry_challenge"))
+                    mk.add(
+                        types.InlineKeyboardButton("✅ Ilovadan Tasdiqladim (Qayta urinish)", callback_data="ig_retry_challenge"),
+                        types.InlineKeyboardButton("🍪 SessionID Bilan 1-Soniyada Ulash", callback_data="ig_start_session")
+                    )
                     bot.send_message(st["chat_id"], msg, reply_markup=mk)
                 except Exception:
                     pass
@@ -3343,13 +3436,21 @@ def _start_ig_auto_login_retry_daemon(user_id: int, clean_user: str, password: s
 
     threading.Thread(target=_retry_worker, daemon=True).start()
 
-def login_instagram_username_password(user_id: int, username: str, password: str, chat_id: int = ADMIN_ID) -> tuple[str, str]:
+def login_instagram_username_password(
+    user_id: int,
+    username: str,
+    password: str,
+    chat_id: int = ADMIN_ID,
+    prog_msg_id: int = None
+) -> tuple[str, str]:
     """
     Login va parol orqali Instagramga 5-Motorli kirish:
     Qaytaradi: (status, message) -> status in ('ok', '2fa_required', 'challenge_required', 'rate_limited', 'error')
     """
     clean_user = username.strip().lstrip("@")
-    status, msg = _attempt_core_multi_engine_ig_login(user_id, clean_user, password)
+    status, msg = _attempt_core_multi_engine_ig_login(
+        user_id, clean_user, password, chat_id=chat_id, prog_msg_id=prog_msg_id, interactive_challenge=True
+    )
     if status == "rate_limited":
         _start_ig_auto_login_retry_daemon(user_id, clean_user, password, chat_id or ADMIN_ID)
         wait_msg = (
@@ -3369,6 +3470,21 @@ def complete_instagram_verification_code(user_id: int, verification_code: str) -
     if possible_sid:
         return login_instagram_with_sessionid(possible_sid)
 
+    clean_code = re.sub(r"\s+", "", verification_code.strip())
+
+    # 1. Agar jonli Challenge Bridge (`_nonblocking_challenge_handler`) kod kutib turgan bo'lsa:
+    bridge = IG_CHALLENGE_BRIDGE.get(user_id)
+    if bridge and bridge.get("event") and not bridge["event"].is_set():
+        bridge["code"] = clean_code
+        bridge["event"].set()
+        # Jonli oqim natijasini 20 soniyagacha kutamiz
+        bridge["result_event"].wait(timeout=20)
+        res_ok, res_msg = bridge.get("result") or (False, "")
+        if res_ok:
+            return True, res_msg
+        if res_msg:
+            return False, res_msg
+
     pending = IG_PENDING_LOGIN.get(user_id)
     retry_st = IG_AUTO_RETRY_STATE.get(user_id)
     if not pending and retry_st:
@@ -3381,7 +3497,6 @@ def complete_instagram_verification_code(user_id: int, verification_code: str) -
     cl = pending["client"]
     uname = pending["username"]
     pwd = pending["password"]
-    clean_code = re.sub(r"\s+", "", verification_code.strip())
 
     web_2fa = pending.get("web_2fa")
     if web_2fa and clean_code.isdigit() and web_2fa.get("two_factor_identifier"):
@@ -3395,7 +3510,7 @@ def complete_instagram_verification_code(user_id: int, verification_code: str) -
                     "identifier": web_2fa["two_factor_identifier"],
                     "queryParams": "{}",
                 },
-                timeout=15,
+                timeout=12,
                 verify=False
             )
             w_cookies = w_sess.cookies.get_dict()
@@ -3412,9 +3527,10 @@ def complete_instagram_verification_code(user_id: int, verification_code: str) -
     try:
         cl.pre_login_flow = lambda *a, **kw: True
         if clean_code.lower() == "retry":
-            status, msg = _attempt_core_multi_engine_ig_login(user_id, uname, pwd)
+            status, msg = _attempt_core_multi_engine_ig_login(user_id, uname, pwd, interactive_challenge=False)
             return (status == "ok"), msg
         else:
+            cl.challenge_code_handler = lambda *a, **kw: clean_code
             cl.login(uname, pwd, verification_code=clean_code)
         cl.dump_settings(IG_SESSION_FILE)
         cfg = get_ig_autopost_config()
@@ -6595,10 +6711,12 @@ def handle_ig_login_cmd(message: types.Message):
             bot.delete_message(message.chat.id, message.message_id)
         except Exception:
             pass
-        prog = bot.send_message(message.chat.id, f"⏳ <b>@{uname.lstrip('@')}</b> profiliga 5-Motorli Anti-Blok tizimi orqali kirilmoqda...")
-        status, resp_msg = login_instagram_username_password(uid, uname, pwd, chat_id=message.chat.id)
-        mk = _build_ig_login_status_markup(uid, status)
-        bot.edit_message_text(resp_msg, message.chat.id, prog.message_id, reply_markup=mk)
+        prog = bot.send_message(message.chat.id, f"⏳ <b>@{uname.lstrip('@')}</b> profiliga 5-Motorli Anti-Blok tizimi orqali kirilmoqda (3–8 soniya)...")
+        def _bg_cmd_login():
+            status, resp_msg = login_instagram_username_password(uid, uname, pwd, chat_id=message.chat.id, prog_msg_id=prog.message_id)
+            mk = _build_ig_login_status_markup(uid, status)
+            _update_prog_safe(message.chat.id, prog.message_id, resp_msg, reply_markup=mk)
+        threading.Thread(target=_bg_cmd_login, daemon=True).start()
         return
 
     USER_STATES[uid] = {"action": "ig_wait_credentials"}
@@ -6716,10 +6834,12 @@ def process_ig_state_step(message: types.Message) -> bool:
             bot.delete_message(message.chat.id, message.message_id)
         except Exception:
             pass
-        prog = bot.send_message(message.chat.id, f"⏳ <b>@{parts[0].lstrip('@')}</b> profiliga 5-Motorli Anti-Blok tizimi orqali kirilmoqda...")
-        status, resp_msg = login_instagram_username_password(uid, parts[0], parts[1], chat_id=message.chat.id)
-        mk = _build_ig_login_status_markup(uid, status)
-        bot.edit_message_text(resp_msg, message.chat.id, prog.message_id, reply_markup=mk)
+        prog = bot.send_message(message.chat.id, f"⏳ <b>@{parts[0].lstrip('@')}</b> profiliga 5-Motorli Anti-Blok tizimi orqali kirilmoqda (3–8 soniya)...")
+        def _bg_step_login():
+            status, resp_msg = login_instagram_username_password(uid, parts[0], parts[1], chat_id=message.chat.id, prog_msg_id=prog.message_id)
+            mk = _build_ig_login_status_markup(uid, status)
+            _update_prog_safe(message.chat.id, prog.message_id, resp_msg, reply_markup=mk)
+        threading.Thread(target=_bg_step_login, daemon=True).start()
         return True
 
     if action == "ig_wait_code":
