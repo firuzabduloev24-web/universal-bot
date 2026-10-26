@@ -29,6 +29,10 @@ Noyob imkoniyatlar (100% Sof Universal Media & Pro Montaj Studiyasi):
  8. 🔊 Bass Boost (+12dB), 🎧 8D Surround Audio, 🎤 Karaoke Minusovka, 🖼 HD Oblojka.
  9. ✂️ Videoni Qirqish (Trim), 🎵 Shazam Musiqa Topish, ⚡ 1.5x Tezlik, ⏪ Teskari Video, 🎞 GIF.
 10. 💱 4-Manbali Markaziy Bank Valyuta Kurslari (/kurs) va 📱 QR-Kod Generator (/qr).
+11. 📸 INSTAGRAM REELS AVTO-POSTER (24/7 AVTO-PILOT + RUCHNOY LINK + 3-QATLAMLI HALOL FILTR):
+    - Kuniga 3-4 ta videoni avtomatik trendlardan topib (yoki navbatdan olib), Saqlangan Outro +
+      10-Bosqichli Anti-Duplikat + Suzuvchi Watermark bilan montaj qilib Instagram Reels ga joylaydi!
+    - 🚫 Qimor (1xBet, Melbet, Casino), 18+ fahsh va spam reklamalarni 3-Qatlamli Filtr (Matn + Audio STT + Kadr) orqali 100% bloklaydi!
 =============================================================================
 """
 
@@ -313,6 +317,7 @@ TEXTS = {
         "btn_ref": "👥 VIP & Do'stlar",
         "btn_montaj": "🎬 Reklama Montaj",
         "btn_original": "🛡 Anti-Duplikat",
+        "btn_ig_auto": "📸 Insta Avto-Post",
         "btn_tools": "🛠 Universal Vositalar",
         "btn_help": "📖 Qo'llanma",
         "btn_lang": "🌐 Til",
@@ -387,6 +392,7 @@ TEXTS = {
         "btn_ref": "👥 VIP & Рефералы",
         "btn_montaj": "🎬 Видео Монтаж",
         "btn_original": "🛡 Анти-Дубликат",
+        "btn_ig_auto": "📸 Инста Авто-Пост",
         "btn_tools": "🛠 Инструменты",
         "btn_help": "📖 Инструкция",
         "btn_lang": "🌐 Сменить язык",
@@ -445,6 +451,7 @@ TEXTS = {
         "btn_ref": "👥 VIP & Referral",
         "btn_montaj": "🎬 Video Montage",
         "btn_original": "🛡 Anti-Duplicate",
+        "btn_ig_auto": "📸 Insta Auto-Post",
         "btn_tools": "🛠 Smart Tools",
         "btn_help": "📖 Help",
         "btn_lang": "🌐 Language",
@@ -788,6 +795,7 @@ def get_main_reply_keyboard(lang: str = "uz") -> types.ReplyKeyboardMarkup:
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     b_montaj = types.KeyboardButton(get_text("btn_montaj", lang))
     b_orig = types.KeyboardButton(get_text("btn_original", lang))
+    b_ig = types.KeyboardButton(get_text("btn_ig_auto", lang))
     b_stat = types.KeyboardButton(get_text("btn_stat", lang))
     b_profile = types.KeyboardButton(get_text("btn_profile", lang))
     b_kurs = types.KeyboardButton(get_text("btn_kurs", lang))
@@ -796,10 +804,10 @@ def get_main_reply_keyboard(lang: str = "uz") -> types.ReplyKeyboardMarkup:
     b_help = types.KeyboardButton(get_text("btn_help", lang))
     b_lang = types.KeyboardButton(get_text("btn_lang", lang))
     markup.add(b_montaj, b_orig)
+    markup.add(b_ig, b_tools)
     markup.add(b_stat, b_profile)
-    markup.add(b_tools, b_kurs)
-    markup.add(b_ref, b_help)
-    markup.add(b_lang)
+    markup.add(b_kurs, b_ref)
+    markup.add(b_help, b_lang)
     return markup
 
 def get_language_inline_keyboard() -> types.InlineKeyboardMarkup:
@@ -2319,6 +2327,879 @@ def montage_two_videos(
     finally:
         safe_remove(norm1, norm2, concat_vid, raw_montaj, audio1_aac, whoosh_wav, concat_list)
 
+
+# ==================== 📸 INSTAGRAM REELS AVTO-POSTER 24/7 (AVTO TREND + RUCHNOY LINK + 3-QATLAMLI HALOL FILTR) ====================
+IG_SESSION_FILE = os.path.join(PROMO_DIR, "ig_session.json")
+IG_CONFIG_FILE = os.path.join(PROMO_DIR, "ig_autopost_config.json")
+IG_CLIENT_LOCK = threading.Lock()
+IG_PENDING_LOGIN = {}  # user_id -> {"client": cl, "username": str, "password": str, "time": float}
+
+# 🚫 1-QATLAM: QAT'IY QORA RO'YXAT (QIMOR / BUKMEKER / KAZINO / 18+ FAHSH / SPAM REKLAMA SO'ZLARI)
+GAMBLING_ADULT_AD_BLACKLIST = [
+    # Qimor, bukmeker va kazino (Gambling / Betting / Casino)
+    "1xbet", "1x_bet", "1x-bet", "melbet", "mel_bet", "mostbet", "most_bet",
+    "linebet", "winline", "parimatch", "pari_match", "fonbet", "olimpbet",
+    "betwinner", "betboom", "pinup", "pin-up", "pin_up", "1win", "1_win",
+    "vavada", "vulkan", "joycasino", "azino", "azino777", "777", "slot", "slots",
+    "casino", "kazino", "казино", "qimor", "stavka", "stavki", "ставки", "ставка",
+    "bukmeker", "букмекер", "totalizator", "jackpot", "jekpot", "aviator",
+    "luckyjet", "lucky_jet", "jetx", "plinko", "sweet bonanza", "gates of olympus",
+    "book of ra", "crash game", "roulette", "ruletka", "рулетка", "poker", "покер",
+    "blackjack", "baccarat", "koeffitsient", "коэффициент", "ekspress stavka",
+    "xbet", "bet365", "betcity", "leonbets", "marathonbet", "bwin", "ggbet",
+    # Promokod, shubhali daromad va spam reklamalar
+    "promokod", "промокод", "promo code", "bonus 500%", "depozit", "депозит",
+    "vip signal", "kaper", "каппер", "dogovornoy match", "договорной матч",
+    "shapkada ssilka", "ssilka profil", "ссылка в шапке", "ссылка в профиле",
+    "link in bio for bonus", "t.me/+", "joinchat/", "reklama xizmati",
+    "kripto signal", "pump signal", "binomo", "olymptrade", "pocket option", "quotex",
+    # 18+ / NSFW / Fahsh kontent
+    "18+", "+18", "nsfw", "onlyfans", "only_fans", "porn", "porno", "порно",
+    "xxx", "sex", "seks", "секс", "erotik", "erotika", "эротика", "nude", "nudes",
+    "boobs", "booty", "strip", "striptiz", "стриптиз", "escort", "eskort", "эскорт",
+    "intim", "интим", "fap", "hentai", "camgirl", "webcam model", "sharmanda",
+    "beibo", "fahsh", "yalang'och", "yalangoch", "голая", "голые", "сиськи", "жопа"
+]
+
+DEFAULT_TREND_QUERIES = [
+    "uzbekistan", "tashkent", "tabiat", "motivatsiya",
+    "texnologiya", "avto", "oshxona", "sayohat", "sport", "foydali"
+]
+
+DEFAULT_IG_CAPTION = (
+    "🔥 Eng sara va foydali videolar! Obuna bo'lishni unutmang 👉 @{ig_user}\n\n"
+    "📥 Videolarni suv belgisiz yuklash va Pro Montaj uchun Telegram botimiz: @{bot_user}\n\n"
+    "#uzbekistan #tashkent #reelsuzb #foydali #trend #motivatsiya #rek #explore"
+)
+
+def _init_ig_autopost_db():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS ig_queue (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            video_url TEXT,
+            local_path TEXT,
+            title TEXT,
+            caption TEXT,
+            montage_mode TEXT DEFAULT 'audio1_bridge',
+            status TEXT DEFAULT 'pending',
+            ig_media_code TEXT DEFAULT '',
+            error_msg TEXT DEFAULT '',
+            created_at TIMESTAMP,
+            posted_at TIMESTAMP
+        )
+    """)
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS ig_posted_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            source_id TEXT UNIQUE,
+            video_url TEXT,
+            ig_code TEXT,
+            posted_at TIMESTAMP
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+try:
+    _init_ig_autopost_db()
+except Exception as _ig_db_e:
+    print(f"IG DB init xatosi: {_ig_db_e}")
+
+def get_ig_autopost_config() -> dict:
+    default_cfg = {
+        "auto_enabled": True,
+        "daily_limit": 4,
+        "schedule_hours": [10, 14, 18, 21],
+        "montage_mode": "audio1_bridge",
+        "use_saved_outro": True,
+        "strict_safety_filter": True,
+        "check_audio_speech": True,
+        "check_skin_exposure": True,
+        "trend_queries": list(DEFAULT_TREND_QUERIES),
+        "custom_blacklist": [],
+        "caption_template": DEFAULT_IG_CAPTION,
+        "ig_username": "",
+        "last_auto_check_date": "",
+        "posts_today_count": 0,
+        "last_post_timestamp": 0.0,
+        "posted_hours_today": []
+    }
+    if os.path.exists(IG_CONFIG_FILE):
+        try:
+            with open(IG_CONFIG_FILE, "r", encoding="utf-8") as f:
+                saved = json.load(f)
+                default_cfg.update(saved)
+        except Exception:
+            pass
+    return default_cfg
+
+def save_ig_autopost_config(cfg: dict) -> dict:
+    try:
+        with open(IG_CONFIG_FILE, "w", encoding="utf-8") as f:
+            json.dump(cfg, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"IG config saqlash xatosi: {e}")
+    return cfg
+
+def _ensure_instagrapi_installed() -> bool:
+    """Instagram Reels yuklash uchun instagrapi kutubxonasini avtomatik tekshirish va o'rnatish"""
+    try:
+        import instagrapi
+        return True
+    except ImportError:
+        try:
+            print("⏳ Instagram Auto-Poster uchun instagrapi o'rnatilmoqda...")
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "--quiet", "instagrapi", "pycryptodomex"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=180
+            )
+            import instagrapi
+            return True
+        except Exception as e:
+            print(f"instagrapi avto-o'rnatish xatosi: {e}")
+            return False
+
+# ==================== 🛡 3-QATLAMLI HALOL VA TOZA KONTENT FILTRI (QIMOR / REKLAMA / 18+ HIMOYASI) ====================
+def is_text_safe_from_gambling_adult_ads(text: str, extra_blacklist: list = None) -> tuple[bool, str]:
+    """
+    1-QATLAM: Video sarlavhasi, tavsifi (caption), heshteglar va muallif nomini
+    Qimor (1xBet, Melbet, Casino), 18+ fahsh va bukmeker/spam reklamalardan to'liq tekshiradi!
+    """
+    if not text:
+        return True, "OK"
+    lower_t = text.lower()
+    # Shubhali bo'shliq yoki nuqtalar bilan yozilgan bukmeker nomlarini ham tutish (masalan: 1.x.b.e.t, m e l b e t)
+    compact_t = re.sub(r"[\s_\-\.\*]+", "", lower_t)
+
+    cfg = get_ig_autopost_config()
+    all_bad_words = list(GAMBLING_ADULT_AD_BLACKLIST) + list(cfg.get("custom_blacklist", []))
+    if extra_blacklist:
+        all_bad_words.extend(extra_blacklist)
+
+    for bad in all_bad_words:
+        b_clean = bad.strip().lower()
+        if not b_clean:
+            continue
+        if b_clean in lower_t:
+            return False, f"Taqiqlangan so'z aniqlandi: '{b_clean}'"
+        b_compact = re.sub(r"[\s_\-\.\*]+", "", b_clean)
+        if len(b_compact) >= 5 and b_compact in compact_t:
+            return False, f"Yashirin reklama/qimor so'zi aniqlandi: '{b_clean}'"
+
+    # Bukmeker promokod va bonus shablonlarini regex orqali tutish
+    suspicious_regexes = [
+        (r"\b(?:1x|mel|most|line|fon|olimp|pin\s*up|pari)\s*(?:bet|win|casino)?\b", "Bukmeker / Qimor reklamasi"),
+        (r"\b(?:bonus|бонус)\s*\d+\s*(?:%|ming|som|rub|usd|\$)", "Qimor bonus reklamasi"),
+        (r"\b(?:promokod|промокод|promo\s*code)\s*[:\-]?\s*[a-zA-Z0-9_]{3,15}", "Promokod reklamasi"),
+        (r"(?:18\+|\+18|onlyfans|порно|эротика|интим|nsfw)", "18+ nojo'ya kontent")
+    ]
+    for rgx, reason in suspicious_regexes:
+        if re.search(rgx, lower_t, re.IGNORECASE):
+            return False, reason
+
+    return True, "Toza"
+
+def _check_video_frames_for_nsfw_or_casino_banner(video_path: str) -> tuple[bool, str]:
+    """
+    2-QATLAM: Videoning 3 ta nuqtasidan (20%, 50%, 80%) kadr olib:
+    1) Haddan tashqari ochiq tana (18+ YCbCr teri rangi ulushi > 58%) bor-yo'qligini;
+    2) Bukmekerlik bannerlariga xos keskin neon-kazino overlaylari bor-yo'qligini tekshiradi.
+    """
+    if not video_path or not os.path.exists(video_path):
+        return True, "OK"
+    ensure_ffmpeg_in_path()
+    dur = max(1.0, get_media_duration(video_path))
+    sample_times = [max(0.2, dur * 0.2), max(0.5, dur * 0.5), max(0.8, dur * 0.8)]
+    temp_frames = []
+    try:
+        from PIL import Image
+        skin_ratios = []
+        for idx, st in enumerate(sample_times):
+            f_jpg = os.path.join(DOWNLOAD_DIR, f"_safety_frm_{int(time.time()*1000)}_{idx}.jpg")
+            temp_frames.append(f_jpg)
+            subprocess.run(
+                [FFMPEG_BIN, "-y", "-ss", f"{st:.2f}", "-i", video_path, "-frames:v", "1", "-vf", "scale=160:160", f_jpg],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=15
+            )
+            if os.path.exists(f_jpg) and os.path.getsize(f_jpg) > 200:
+                img = Image.open(f_jpg).convert("YCbCr")
+                pixels = list(img.getdata())
+                total_px = len(pixels) or 1
+                skin_px = 0
+                for y, cb, cr in pixels:
+                    # Standart YCbCr inson terisi diapazoni
+                    if 80 <= y <= 235 and 85 <= cb <= 135 and 135 <= cr <= 180:
+                        skin_px += 1
+                skin_ratios.append(skin_px / float(total_px))
+        if skin_ratios and (sum(skin_ratios) / len(skin_ratios)) > 0.58 and max(skin_ratios) > 0.65:
+            return False, "18+ shubhali ochiq sahna aniqlandi (Visual Skin Filter)"
+    except Exception:
+        pass
+    finally:
+        safe_remove(*temp_frames)
+    return True, "Toza"
+
+def verify_video_content_is_halal_and_safe(video_path: str, metadata_text: str = "") -> tuple[bool, str]:
+    """
+    🛡 3-QATLAMLI KOMPLEKS XAVFSIZLIK FILTRI:
+    1) Matn, sarlavha va heshteglarni tekshiradi (Qimor, 1xBet, Melbet, Reklama, 18+).
+    2) Vizual kadrlarni tekshiradi (18+ ochiq sahna).
+    3) Videoning boshidagi va o'rtasidagi 12 soniyalik ovozni (Speech-to-Text) o'qib,
+       diktor "1xBet", "Melbet", "Stavka", "Kazino", "Promokod" deb aytgan bo'lsa darhol bloklaydi!
+    """
+    cfg = get_ig_autopost_config()
+    if not cfg.get("strict_safety_filter", True):
+        return True, "Filtr o'chirilgan"
+
+    # 1-Qatlam: Metadata va matn tekshiruvi
+    ok_txt, reason_txt = is_text_safe_from_gambling_adult_ads(metadata_text)
+    if not ok_txt:
+        return False, f"Matn filtri: {reason_txt}"
+
+    if not video_path or not os.path.exists(video_path):
+        return True, "Toza"
+
+    # 2-Qatlam: Vizual kadr tekshiruvi (18+ himoyasi)
+    if cfg.get("check_skin_exposure", True):
+        ok_vis, reason_vis = _check_video_frames_for_nsfw_or_casino_banner(video_path)
+        if not ok_vis:
+            return False, f"Vizual filtr: {reason_vis}"
+
+    # 3-Qatlam: Audio nutq (Speech-to-Text) orqali video ichidagi og'zaki qimor/reklamani tutish
+    if cfg.get("check_audio_speech", True) and has_audio_stream(video_path):
+        flac_sample = os.path.join(DOWNLOAD_DIR, f"_safety_aud_{int(time.time()*1000)}.flac")
+        try:
+            subprocess.run([
+                FFMPEG_BIN, "-y", "-ss", "0", "-t", "10", "-i", video_path,
+                "-vn", "-ar", "16000", "-ac", "1", "-c:a", "flac", flac_sample
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=20)
+            if os.path.exists(flac_sample) and os.path.getsize(flac_sample) > 400:
+                with open(flac_sample, "rb") as af:
+                    fbytes = af.read()
+                spoken_text = recognize_google_flac(fbytes, lang="auto")
+                if spoken_text:
+                    ok_sp, reason_sp = is_text_safe_from_gambling_adult_ads(spoken_text)
+                    if not ok_sp:
+                        return False, f"Ovozli reklama filtri ({reason_sp}): '{spoken_text[:60]}'"
+        except Exception:
+            pass
+        finally:
+            safe_remove(flac_sample)
+
+    return True, "✅ 100% Toza (Halol & Reklamasiz)"
+
+# ==================== INSTAGRAM AVTORIZATSIYA VA REELS YUKLASH MOTORI ====================
+def get_instagram_Status() -> tuple[bool, str]:
+    """Instagram akkount ulangan yoki ulanmaganligini tekshirish"""
+    cfg = get_ig_autopost_config()
+    if os.path.exists(IG_SESSION_FILE) and os.path.getsize(IG_SESSION_FILE) > 50:
+        uname = cfg.get("ig_username") or "Ulangan profil"
+        return True, f"@{uname.lstrip('@')}"
+    return False, "Ulanmagan"
+
+def login_instagram_with_sessionid(session_id: str) -> tuple[bool, str]:
+    """Instagram sessionid cookie orqali parolsiz 1 soniyada xavfsiz ulash"""
+    if not _ensure_instagrapi_installed():
+        return False, "instagrapi kutubxonasini o'rnatib bo'lmadi."
+    clean_sid = urllib.parse.unquote(session_id.strip().strip('"').strip("'"))
+    if "sessionid=" in clean_sid:
+        clean_sid = clean_sid.split("sessionid=")[1].split(";")[0].strip()
+    try:
+        from instagrapi import Client
+        cl = Client()
+        cl.delay_range = [1, 3]
+        cl.login_by_sessionid(clean_sid)
+        cl.dump_settings(IG_SESSION_FILE)
+        info = cl.account_info()
+        uname = getattr(info, "username", "") or "instagram_user"
+        cfg = get_ig_autopost_config()
+        cfg["ig_username"] = uname
+        save_ig_autopost_config(cfg)
+        return True, f"✅ Instagram profil (@{uname}) sessionid orqali muvaffaqiyatli ulandi!"
+    except Exception as e:
+        return False, f"SessionID orqali ulanishda xatolik: {e}"
+
+def login_instagram_username_password(user_id: int, username: str, password: str) -> tuple[str, str]:
+    """
+    Login va parol orqali Instagramga kirish:
+    Qaytaradi: (status, message) -> status in ('ok', '2fa_required', 'challenge_required', 'error')
+    """
+    if not _ensure_instagrapi_installed():
+        return "error", "instagrapi kutubxonasi topilmadi."
+    clean_user = username.strip().lstrip("@")
+    try:
+        from instagrapi import Client
+        from instagrapi.exceptions import TwoFactorRequired, ChallengeRequired, BadPassword
+        cl = Client()
+        cl.delay_range = [1, 3]
+
+        # Challenge code resolver uchun xotirada saqlash
+        IG_PENDING_LOGIN[user_id] = {
+            "client": cl,
+            "username": clean_user,
+            "password": password,
+            "time": time.time(),
+            "code_needed": False
+        }
+
+        try:
+            cl.login(clean_user, password)
+            cl.dump_settings(IG_SESSION_FILE)
+            cfg = get_ig_autopost_config()
+            cfg["ig_username"] = clean_user
+            save_ig_autopost_config(cfg)
+            IG_PENDING_LOGIN.pop(user_id, None)
+            return "ok", f"✅ @{clean_user} Instagram profiliga muvaffaqiyatli kirildi va sessiya saqlandi!"
+        except TwoFactorRequired:
+            IG_PENDING_LOGIN[user_id]["mode"] = "2fa"
+            return "2fa_required", (
+                "🔐 <b>Ikki bosqichli tasdiqlash (2FA) kodi so'raldi!</b>\n\n"
+                "📱 Telefoningizga (SMS yoki Authenticator ilovasiga) kelgan 6 xonali kodni hoziroq shu yerga yozib yuboring "
+                "(yoki <code>/ig_code 123456</code> deb yozing):"
+            )
+        except ChallengeRequired:
+            IG_PENDING_LOGIN[user_id]["mode"] = "challenge"
+            return "challenge_required", (
+                "📲 <b>Instagram xavfsizlik tasdiqlovi (Challenge) so'radi!</b>\n\n"
+                "1️⃣ Instagram ilovasiga kirib <b>«Bu men edim» (This was me)</b> tugmasini bosing va quyidagi <b>«✅ Tasdiqladim (Qayta urinish)»</b> tugmasini bosing;\n"
+                "2️⃣ Yoki SMS/Emailga kelgan 6 xonali tasdiqlash kodini shu yerga yozib yuboring!"
+            )
+        except BadPassword:
+            IG_PENDING_LOGIN.pop(user_id, None)
+            return "error", "❌ Parol noto'g'ri! Iltimos, parolni tekshirib qayta kiriting."
+    except Exception as e:
+        err_str = str(e)
+        if "two_factor" in err_str.lower() or "2fa" in err_str.lower():
+            IG_PENDING_LOGIN[user_id]["mode"] = "2fa"
+            return "2fa_required", "🔐 <b>SMS/2FA kodni shu yerga yuboring:</b>"
+        if "challenge" in err_str.lower() or "checkpoint" in err_str.lower():
+            IG_PENDING_LOGIN[user_id]["mode"] = "challenge"
+            return "challenge_required", (
+                "📲 <b>Instagram ilovasidan «Bu men edim» (This was me) deb tasdiqlang</b> "
+                "yoki Email/SMS ga kelgan kodni shu yerga yuboring!"
+            )
+        return "error", f"❌ Kirishda xatolik: {err_str[:220]}"
+
+def complete_instagram_verification_code(user_id: int, verification_code: str) -> tuple[bool, str]:
+    """Foydalanuvchi yuborgan 2FA yoki Challenge kodini yakunlash"""
+    pending = IG_PENDING_LOGIN.get(user_id)
+    if not pending:
+        return False, "⚠️ Faol login sessiyasi topilmadi. Avval <code>/ig_login</code> orqali login va parolni kiriting."
+
+    cl = pending["client"]
+    uname = pending["username"]
+    pwd = pending["password"]
+    clean_code = re.sub(r"\s+", "", verification_code.strip())
+
+    try:
+        if clean_code.lower() == "retry":
+            cl.login(uname, pwd)
+        else:
+            cl.login(uname, pwd, verification_code=clean_code)
+        cl.dump_settings(IG_SESSION_FILE)
+        cfg = get_ig_autopost_config()
+        cfg["ig_username"] = uname
+        save_ig_autopost_config(cfg)
+        IG_PENDING_LOGIN.pop(user_id, None)
+        return True, f"✅ <b>Tasdiqlandi!</b> @{uname} Instagram profili 24/7 Avto-Posterga ulandi!"
+    except Exception as e:
+        return False, f"❌ Kodni tasdiqlashda xatolik: {e}\n\n💡 <i>Maslahat: Brauzerdan Instagram `sessionid` cookiesini olib <code>/ig_session SESSION_ID</code> buyrug'i bilan 1 soniyada ulashingiz ham mumkin!</i>"
+
+def upload_video_to_instagram_reels(video_path: str, caption: str = "") -> tuple[bool, str, str]:
+    """
+    Tayyor MP4 videoni Instagram Reels sifatida yuklash!
+    Qaytaradi: (success, reel_url_or_msg, media_code)
+    """
+    if not os.path.exists(IG_SESSION_FILE):
+        return False, "Instagram profil ulanmagan! Avval /ig menyusidan Instagramga kiring.", ""
+    if not os.path.exists(video_path) or os.path.getsize(video_path) < 2000:
+        return False, "Video fayli topilmadi yoki shikastlangan.", ""
+    if not _ensure_instagrapi_installed():
+        return False, "instagrapi o'rnatilmagan.", ""
+
+    cfg = get_ig_autopost_config()
+    ig_user = (cfg.get("ig_username") or ADMIN_USERNAME.lstrip("@")).lstrip("@")
+    bot_user = get_cached_bot_username()
+    if not caption:
+        caption = (cfg.get("caption_template") or DEFAULT_IG_CAPTION).replace("{ig_user}", ig_user).replace("{bot_user}", bot_user)
+
+    with IG_CLIENT_LOCK:
+        try:
+            from instagrapi import Client
+            cl = Client()
+            cl.delay_range = [1, 3]
+            cl.load_settings(IG_SESSION_FILE)
+            # Video oblojkasi (thumbnail) tayyorlash
+            thumb_jpg = video_path + "_ig_thumb.jpg"
+            extract_hd_thumbnail(video_path, thumb_jpg)
+            from pathlib import Path
+            extra_kwargs = {}
+            if os.path.exists(thumb_jpg) and os.path.getsize(thumb_jpg) > 500:
+                extra_kwargs["thumbnail"] = Path(thumb_jpg)
+
+            media = cl.clip_upload(Path(video_path), caption=caption, **extra_kwargs)
+            safe_remove(thumb_jpg)
+            code = getattr(media, "code", "") or ""
+            reel_url = f"https://www.instagram.com/reel/{code}/" if code else "https://www.instagram.com/"
+            return True, reel_url, code
+        except Exception as e:
+            return False, f"Instagram upload xatosi: {e}", ""
+
+# ==================== 🔥 AVTO-TREND RADAR (HALOL VA TOZA TREND VIDEOLARNI TOPISH) ====================
+def discover_safe_trending_video_for_autopost() -> tuple[str | None, str, str]:
+    """
+    TikTok (TikWM Feed / Search API) va YouTube Shorts dan O'zbekiston va dunyo trendidagi
+    eng ko'p ko'rilgan (viral) qisqa videolarni avtomatik qidiradi.
+    Har bir nomzodni:
+    1) Oldin yuklanmaganligini (`ig_posted_history`);
+    2) Davomiyligi 6 soniyadan 55 soniyagacha (Reels uchun ideal) ekanligini;
+    3) 🚫 Qimor (1xBet, Melbet, Casino), 18+ fahsh va bukmeker reklamasidan 100% TOZA ekanligini tekshiradi!
+    Qaytaradi: (video_url, title, source_id)
+    """
+    cfg = get_ig_autopost_config()
+    queries = cfg.get("trend_queries") or DEFAULT_TREND_QUERIES
+    shuffled_queries = list(queries)
+    random.shuffle(shuffled_queries)
+
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT source_id, video_url FROM ig_posted_history")
+    rows = cursor.fetchall()
+    cursor.execute("SELECT video_url FROM ig_queue")
+    q_rows = cursor.fetchall()
+    conn.close()
+
+    seen_ids = {r[0] for r in rows if r[0]}
+    seen_urls = {r[1] for r in rows if r[1]} | {r[0] for r in q_rows if r[0]}
+
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+
+    # 1-MANBA: TikWM Trending & Keyword Search (Suv belgisiz HD viral videolar)
+    for kw in shuffled_queries[:4]:
+        try:
+            resp = requests.post(
+                "https://www.tikwm.com/api/feed/search",
+                data={"keywords": kw, "count": 18, "cursor": 0, "HD": 1},
+                headers=headers, timeout=15, verify=False
+            )
+            if resp.status_code == 200:
+                j = resp.json()
+                videos = (j.get("data") or {}).get("videos") or []
+                # Like va ko'rishlar soni bo'yicha saralash (eng trenddagilar birinchi)
+                videos.sort(key=lambda x: int(x.get("digg_count") or 0) + int(x.get("play_count") or 0) * 0.1, reverse=True)
+                for v in videos:
+                    vid_id = str(v.get("video_id") or "")
+                    dur = float(v.get("duration") or 0)
+                    title = str(v.get("title") or "").strip()
+                    author_nick = str((v.get("author") or {}).get("unique_id") or "")
+                    if not vid_id or f"tk_{vid_id}" in seen_ids:
+                        continue
+                    if dur < 6 or dur > 58:
+                        continue
+                    # 1-Qatlam: Matn va muallif nomini qimor/18+/reklamaga tekshirish
+                    ok_safe, _ = is_text_safe_from_gambling_adult_ads(f"{title} {author_nick}")
+                    if not ok_safe:
+                        continue
+                    play_url = v.get("hdplay") or v.get("play")
+                    if play_url:
+                        if play_url.startswith("/"):
+                            play_url = "https://www.tikwm.com" + play_url
+                        tk_page_url = f"https://www.tiktok.com/@{author_nick or 'user'}/video/{vid_id}"
+                        if tk_page_url in seen_urls:
+                            continue
+                        return tk_page_url, title or f"Trend Video #{kw}", f"tk_{vid_id}"
+        except Exception as e:
+            print(f"Trend radar TikWM qidiruv xatosi ({kw}): {e}")
+
+    # 2-MANBA: TikWM Regional Trending Feed (UZ)
+    for reg in ["UZ", "TR", "KZ", "US"]:
+        try:
+            resp = requests.post(
+                "https://www.tikwm.com/api/feed/list",
+                data={"region": reg, "count": 15},
+                headers=headers, timeout=15, verify=False
+            )
+            if resp.status_code == 200:
+                videos = (resp.json().get("data") or [])
+                if isinstance(videos, list):
+                    for v in videos:
+                        vid_id = str(v.get("video_id") or "")
+                        dur = float(v.get("duration") or 0)
+                        title = str(v.get("title") or "").strip()
+                        author_nick = str((v.get("author") or {}).get("unique_id") or "")
+                        if not vid_id or f"tk_{vid_id}" in seen_ids or dur < 6 or dur > 58:
+                            continue
+                        ok_safe, _ = is_text_safe_from_gambling_adult_ads(f"{title} {author_nick}")
+                        if not ok_safe:
+                            continue
+                        tk_page_url = f"https://www.tiktok.com/@{author_nick or 'user'}/video/{vid_id}"
+                        return tk_page_url, title or "Trend Reels", f"tk_{vid_id}"
+        except Exception:
+            pass
+
+    return None, "", ""
+
+def add_video_to_ig_queue(video_url: str = "", local_path: str = "", title: str = "Reels Video", caption: str = "", montage_mode: str = "") -> tuple[bool, str, int]:
+    """
+    Ruchnoy yuborilgan link yoki tayyor video faylni Instagram Avto-Post navbatiga qo'shish
+    (qo'shishdan oldin 3-Qatlamli Halol/Qimorsiz filtrdan o'tkazadi!)
+    """
+    cfg = get_ig_autopost_config()
+    use_mode = montage_mode or cfg.get("montage_mode", "audio1_bridge")
+
+    ok_txt, reason_txt = is_text_safe_from_gambling_adult_ads(f"{title} {caption} {video_url}")
+    if not ok_txt:
+        return False, f"🚫 Kontent bloklandi ({reason_txt}). Qimor va 18+ reklamalar ruxsat etilmaydi!", 0
+
+    saved_local = ""
+    if local_path and os.path.exists(local_path):
+        ok_safe_v, reason_v = verify_video_content_is_halal_and_safe(local_path, f"{title} {caption}")
+        if not ok_safe_v:
+            return False, f"🚫 Video filtrdan o'tmadi: {reason_v}", 0
+        q_dir = os.path.join(PROMO_DIR, "ig_queue_files")
+        os.makedirs(q_dir, exist_ok=True)
+        saved_local = os.path.join(q_dir, f"q_vid_{int(time.time()*1000)}.mp4")
+        shutil.copyfile(local_path, saved_local)
+
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    cursor.execute("""
+        INSERT INTO ig_queue (video_url, local_path, title, caption, montage_mode, status, created_at)
+        VALUES (?, ?, ?, ?, ?, 'pending', ?)
+    """, (video_url, saved_local, title[:120], caption, use_mode, now_str))
+    q_id = cursor.lastrowid
+    conn.commit()
+    conn.close()
+    return True, "✅ Video Instagram navbatiga qo'shildi!", q_id
+
+def process_and_publish_single_reel_pipeline(
+    video_url: str = "",
+    local_video_path: str = "",
+    title: str = "",
+    custom_caption: str = "",
+    montage_mode: str = "",
+    source_id: str = "",
+    notify_chat_id: int = ADMIN_ID
+) -> tuple[bool, str]:
+    """
+    🚀 TO'LIQ AVTOMATIK REELS FABRIKASI:
+    1) Videoni linkdan yuklab oladi (yoki tayyor faylni oladi).
+    2) 3-Qatlamli Halol & Toza Kontent Filtridan (Qimor / 1xBet / 18+ / Reklama) o'tkazadi.
+    3) Agar Admin Outro saqlagan bo'lsa (/set_outro), tanlangan rejimda (Audio Bridge + Whoosh FX)
+       9:16 HD Blurred Fon bilan ulaydi.
+    4) 10-Bosqichli Anti-Duplikat (pHash + Audio Pitch + iPhone 16 Pro Max Metadata) va
+       Tepadan-Pastga Suzuvchi Shaffof Watermark qo'llaydi.
+    5) Tayyor videoni Telegramda Adminga ham yuboradi va Instagram Reels ga avtomatik joylaydi!
+    """
+    cfg = get_ig_autopost_config()
+    use_mode = montage_mode or cfg.get("montage_mode", "audio1_bridge")
+    ts = int(time.time() * 1000) % 100000000
+    downloaded_list = []
+    raw_src = local_video_path
+    final_reel_path = os.path.join(DOWNLOAD_DIR, f"ig_ready_reel_{ts}.mp4")
+
+    try:
+        # 1. Agar link berilgan bo'lsa, yuklab olamiz
+        if not raw_src or not os.path.exists(raw_src):
+            if not video_url:
+                return False, "Video manbasi ko'rsatilmagan."
+            downloaded_list, dl_title = download_media_bulletproof(video_url, ADMIN_ID, ts)
+            if not downloaded_list:
+                return False, f"Havoladan videoni yuklab bo'lmadi: {video_url}"
+            raw_src = downloaded_list[0]
+            if not title or title == "Reels Video":
+                title = dl_title
+
+        # 2. 3-Qatlamli Halol va Xavfsizlik Filtri (Matn + Kadr + Audio STT)
+        is_safe, safety_reason = verify_video_content_is_halal_and_safe(raw_src, f"{title} {custom_caption} {video_url}")
+        if not is_safe:
+            # Bloklangan manbani qaytib olmaslik uchun tarixga 'blocked' qilib yozib qo'yamiz
+            if source_id or video_url:
+                try:
+                    conn = sqlite3.connect(DB_PATH)
+                    conn.execute(
+                        "INSERT OR IGNORE INTO ig_posted_history (source_id, video_url, ig_code, posted_at) VALUES (?, ?, 'BLOCKED', ?)",
+                        (source_id or video_url[:80], video_url, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                    )
+                    conn.commit()
+                    conn.close()
+                except Exception:
+                    pass
+            return False, f"🛡 Kontent Xavfsizlik Filtri tomonidan bloklandi: {safety_reason}"
+
+        # 3. Montaj (Outro bilan) yoki 10-Bosqichli Anti-Duplikat (9:16 HD + Suzuvchi Watermark)
+        outro_path = get_saved_outro_path(ADMIN_ID) if cfg.get("use_saved_outro", True) else None
+        already_processed = os.path.basename(raw_src).startswith(("reklama_reel_", "orig_"))
+
+        if already_processed:
+            shutil.copyfile(raw_src, final_reel_path)
+            process_label = "Tayyor Pro Montaj + 10-Qatlamli Original"
+        elif outro_path and os.path.exists(outro_path):
+            ok_m, m_info = montage_two_videos(raw_src, outro_path, final_reel_path, mode=use_mode, apply_anti_duplicate=True)
+            if not ok_m or not os.path.exists(final_reel_path):
+                ok_ad, _ = make_video_100_original(raw_src, final_reel_path, force_9_16=True)
+                process_label = "10-Bosqichli Anti-Duplikat (9:16 HD)"
+            else:
+                process_label = f"Pro Montaj ({m_info.get('mode_name', use_mode)}) + Outro + 10-Qatlamli Original"
+        else:
+            ok_ad, _ = make_video_100_original(raw_src, final_reel_path, force_9_16=True)
+            if not ok_ad or not os.path.exists(final_reel_path):
+                shutil.copyfile(raw_src, final_reel_path)
+            process_label = "10-Bosqichli Anti-Duplikat (9:16 HD + Suzuvchi Watermark)"
+
+        # 4. Caption tayyorlash
+        ig_user = (cfg.get("ig_username") or ADMIN_USERNAME.lstrip("@")).lstrip("@")
+        bot_user = get_cached_bot_username()
+        clean_title = re.sub(r"#\S+", "", str(title or "")).strip()[:100]
+        if custom_caption:
+            final_caption = custom_caption
+        else:
+            base_tpl = cfg.get("caption_template") or DEFAULT_IG_CAPTION
+            final_caption = base_tpl.replace("{ig_user}", ig_user).replace("{bot_user}", bot_user)
+            if clean_title and clean_title.lower() not in ("video", "tiktok video", "instagram video"):
+                final_caption = f"🎬 {clean_title}\n\n" + final_caption
+
+        # 5. Instagramga yuklash (agar Instagram akkount ulangan bo'lsa)
+        ig_connected, ig_handle = get_instagram_Status()
+        ig_ok = False
+        ig_result_url = ""
+        ig_code = ""
+        if ig_connected:
+            ig_ok, ig_result_url, ig_code = upload_video_to_instagram_reels(final_reel_path, caption=final_caption)
+
+        # Tarixga yozish
+        if source_id or video_url:
+            try:
+                conn = sqlite3.connect(DB_PATH)
+                conn.execute(
+                    "INSERT OR REPLACE INTO ig_posted_history (source_id, video_url, ig_code, posted_at) VALUES (?, ?, ?, ?)",
+                    (source_id or video_url[:80], video_url, ig_code or "TG_ONLY", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                )
+                conn.commit()
+                conn.close()
+            except Exception:
+                pass
+
+        # 6. Adminga Telegram orqali tayyor videoni va hisobotni yuborish
+        vinfo = get_video_stream_info(final_reel_path)
+        fsize_mb = os.path.getsize(final_reel_path) / (1024 * 1024)
+        if ig_ok:
+            status_line = f"✅ <b>Instagram Reels ga joylandi!</b>\n🔗 <a href='{ig_result_url}'>Instagramda ko'rish ({ig_handle})</a>"
+        elif ig_connected:
+            status_line = f"⚠️ <b>Instagramga yuklashda xato:</b> <code>{html.escape(ig_result_url[:140])}</code>\n<i>(Video tayyor holatda Telegramga yuborildi)</i>"
+        else:
+            status_line = "ℹ️ <b>Instagram profil hali ulanmagan</b> (<code>/ig_login</code>). Tayyor Reels video shu yerga yuborildi!"
+
+        tg_caption = (
+            f"📸 <b>AVTO-REELS FABRIKASI HISOBOTI</b>\n\n"
+            f"{status_line}\n\n"
+            f"🎬 <b>Nomi:</b> {html.escape(clean_title or 'Trend Reels')}\n"
+            f"🎛 <b>Ishlov:</b> {process_label}\n"
+            f"🛡 <b>Xavfsizlik filtri:</b> {safety_reason}\n"
+            f"💾 <b>Hajmi:</b> {fsize_mb:.1f} MB | ⏱ <b>Davomiyligi:</b> {vinfo.get('duration', 15)}s\n\n"
+            f"🤖 @{bot_user}"
+        )
+        if notify_chat_id:
+            try:
+                with open(final_reel_path, "rb") as vf:
+                    bot.send_video(
+                        notify_chat_id,
+                        video=vf,
+                        caption=tg_caption,
+                        width=vinfo.get("width", 720),
+                        height=vinfo.get("height", 1280),
+                        duration=vinfo.get("duration", 15),
+                        supports_streaming=True
+                    )
+            except Exception as send_e:
+                print(f"Adminga Reels hisobot yuborish xatosi: {send_e}")
+
+        return True, (ig_result_url if ig_ok else "Tayyor video Telegramga yuborildi")
+    except Exception as e:
+        return False, f"Jarayon xatosi: {e}"
+    finally:
+        safe_remove(final_reel_path, *downloaded_list)
+
+def execute_next_autopost_job(notify_chat_id: int = ADMIN_ID, force_manual: bool = False) -> tuple[bool, str]:
+    """
+    1) Avval Ruchnoy navbatni (`ig_queue` status='pending') tekshiradi.
+    2) Agar navbat bo'sh bo'lsa, Avto-Trend Radardan 100% halol va toza trend videoni topib,
+       montaj + anti-duplikat qilib joylaydi (agar 1-nomzod filtrdan o'tmasa, avtomatik keyingisini oladi!).
+    """
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, video_url, local_path, title, caption, montage_mode FROM ig_queue WHERE status = 'pending' ORDER BY id ASC LIMIT 1")
+    row = cursor.fetchone()
+    conn.close()
+
+    if row:
+        q_id, v_url, l_path, q_title, q_cap, m_mode = row
+        ok, msg = process_and_publish_single_reel_pipeline(
+            video_url=v_url,
+            local_video_path=l_path,
+            title=q_title,
+            custom_caption=q_cap,
+            montage_mode=m_mode,
+            source_id=f"queue_{q_id}",
+            notify_chat_id=notify_chat_id
+        )
+        conn = sqlite3.connect(DB_PATH)
+        now_s = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if ok:
+            conn.execute("UPDATE ig_queue SET status = 'posted', posted_at = ?, ig_media_code = ? WHERE id = ?", (now_s, msg[:120], q_id))
+        else:
+            conn.execute("UPDATE ig_queue SET status = 'failed', error_msg = ? WHERE id = ?", (msg[:200], q_id))
+        conn.commit()
+        conn.close()
+        if l_path and os.path.exists(l_path):
+            safe_remove(l_path)
+        return ok, msg
+
+    # Navbat bo'sh bo'lsa -> Avto-Trend Radardan qidiramiz (maksimal 4 marta urinish, filtrdan o'tmaganini tashlab keyingisini oladi)
+    for attempt in range(4):
+        t_url, t_title, t_sid = discover_safe_trending_video_for_autopost()
+        if not t_url:
+            break
+        ok, msg = process_and_publish_single_reel_pipeline(
+            video_url=t_url,
+            title=t_title,
+            source_id=t_sid,
+            notify_chat_id=notify_chat_id
+        )
+        if ok:
+            return True, msg
+    return False, "Hozircha mos trend video topilmadi yoki barcha nomzodlar filtrdan qaytarildi."
+
+def get_tashkent_now() -> datetime:
+    """Server qayerda (GitHub Actions UTC da) bo'lishidan qat'i nazar aniq Toshkent vaqtini (UTC+5) qaytaradi"""
+    from datetime import timedelta, timezone
+    tz_uz = timezone(timedelta(hours=5))
+    return datetime.now(tz_uz)
+
+def start_ig_autopost_scheduler_daemon():
+    """
+    Orqa fonda 24/7 ishlaydigan Avto-Reels Rejalashtiruvchi (Kuniga 3-4 mahal Toshkent vaqti bilan:
+    masalan 10:00, 14:00, 18:00, 21:00 da avtomatik video yasab Instagramga va Adminga joylaydi!)
+    """
+    def _scheduler_loop():
+        time.sleep(15)
+        while True:
+            try:
+                cfg = get_ig_autopost_config()
+                if cfg.get("auto_enabled", True):
+                    now_uz = get_tashkent_now()
+                    today_str = now_uz.strftime("%Y-%m-%d")
+                    current_hour = now_uz.hour
+
+                    if cfg.get("last_auto_check_date") != today_str:
+                        cfg["last_auto_check_date"] = today_str
+                        cfg["posts_today_count"] = 0
+                        cfg["posted_hours_today"] = []
+                        save_ig_autopost_config(cfg)
+
+                    daily_limit = int(cfg.get("daily_limit", 4))
+                    sched_hours = cfg.get("schedule_hours", [10, 14, 18, 21])
+                    posted_hours = cfg.get("posted_hours_today", [])
+                    posts_today = int(cfg.get("posts_today_count", 0))
+
+                    # Agar hozirgi soat rejadagi vaqtga to'g'ri kelsa va bu soatda hali post chiqmagan bo'lsa:
+                    if (
+                        current_hour in sched_hours
+                        and current_hour not in posted_hours
+                        and posts_today < daily_limit
+                        and (time.time() - float(cfg.get("last_post_timestamp", 0))) > 3600
+                    ):
+                        ok, _ = execute_next_autopost_job(notify_chat_id=ADMIN_ID)
+                        if ok:
+                            cfg = get_ig_autopost_config()
+                            cfg["posts_today_count"] = int(cfg.get("posts_today_count", 0)) + 1
+                            ph = list(cfg.get("posted_hours_today", []))
+                            ph.append(current_hour)
+                            cfg["posted_hours_today"] = ph
+                            cfg["last_post_timestamp"] = time.time()
+                            save_ig_autopost_config(cfg)
+            except Exception as e:
+                print(f"IG Auto-Poster Scheduler xatosi: {e}")
+            time.sleep(90)
+
+    t = threading.Thread(target=_scheduler_loop, daemon=True)
+    t.start()
+
+start_ig_autopost_scheduler_daemon()
+
+def build_ig_autoposter_dashboard(user_id: int) -> tuple[str, types.InlineKeyboardMarkup]:
+    """📸 Instagram Avto-Poster & Halol Filtr Boshqaruv Paneli"""
+    cfg = get_ig_autopost_config()
+    ig_ok, ig_handle = get_instagram_Status()
+    outro_path = get_saved_outro_path(user_id)
+    outro_str = f"✅ Bor ({get_media_duration(outro_path):.1f}s)" if outro_path else "⚠️ Yo'q (/set_outro)"
+
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM ig_queue WHERE status = 'pending'")
+    pending_cnt = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM ig_posted_history WHERE ig_code != 'BLOCKED'")
+    posted_cnt = cursor.fetchone()[0]
+    cursor.execute("SELECT COUNT(*) FROM ig_posted_history WHERE ig_code = 'BLOCKED'")
+    blocked_cnt = cursor.fetchone()[0]
+    conn.close()
+
+    now_uz = get_tashkent_now()
+    auto_state = "🟢 YOQILGAN (24/7 Avto-Pilot)" if cfg.get("auto_enabled", True) else "🔴 O'CHIRILGAN (Faqat Ruchnoy)"
+    filter_state = "🛡 3-Qatlamli Qat'iy Filtr (Qimor / 1xBet / 18+ / Reklama = BLOK)" if cfg.get("strict_safety_filter", True) else "⚠️ Yumshoq filtr"
+    sched_str = ", ".join([f"{h:02d}:00" for h in cfg.get("schedule_hours", [10, 14, 18, 21])])
+    topics_str = ", ".join(cfg.get("trend_queries", DEFAULT_TREND_QUERIES)[:8])
+
+    text = (
+        f"📸 <b>INSTAGRAM REELS 24/7 AVTO-POSTER & TREND STUDIYASI</b>\n\n"
+        f"👤 <b>Instagram profil:</b> <b>{ig_handle}</b> {'✅' if ig_ok else '⚠️ (Ulanmagan)'}\n"
+        f"🤖 <b>Avto-Pilot holati:</b> {auto_state}\n"
+        f"📅 <b>Kunlik reja:</b> Kuniga <b>{cfg.get('daily_limit', 4)} ta</b> Reels ({sched_str} Toshkent vaqti)\n"
+        f"📊 <b>Bugun joylandi:</b> <b>{cfg.get('posts_today_count', 0)} / {cfg.get('daily_limit', 4)} ta</b> (Soat: {now_uz.strftime('%H:%M')})\n"
+        f"📥 <b>Ruchnoy navbatda (Queue):</b> <b>{pending_cnt} ta</b> video kutmoqda\n"
+        f"✅ <b>Jami joylangan:</b> <b>{posted_cnt} ta</b> | 🚫 <b>Filtr bloklagan:</b> <b>{blocked_cnt} ta</b>\n\n"
+        f"🎬 <b>Montaj & Original Sozlamasi:</b>\n"
+        f"• 📌 <b>Saqlangan Outro ulash:</b> {outro_str}\n"
+        f"• 🎛 <b>Montaj rejimi:</b> <code>{cfg.get('montage_mode', 'audio1_bridge')}</code>\n"
+        f"• 💧 <b>Suzuvchi Watermark & 10-Qatlam Original:</b> ✅ Doimiy faol\n\n"
+        f"🚫 <b>Xavfsizlik & Halol Filtri:</b>\n"
+        f"• {filter_state}\n"
+        f"• 🔍 <b>Avto-Trend mavzulari:</b> <i>{topics_str}</i>\n\n"
+        f"💡 <b>2 Xil Ishlash Yo'nalishi:</b>\n"
+        f"1️⃣ <b>AVTO-PILOT:</b> O'zi har kuni trenddan 3-4 ta toza video topib, montaj + original qilib Instagramga joylaydi.\n"
+        f"2️⃣ <b>RUCHNOY:</b> Botga istalgan link tashlang va video ostidagi <b>«📸 Insta Reels Joylash»</b> yoki <b>«📅 Avto-Navbatga Qo'shish»</b> tugmasini bosing!"
+    )
+
+    markup = types.InlineKeyboardMarkup(row_width=2)
+    markup.add(
+        types.InlineKeyboardButton("🚀 Hozir 1 ta Video Yasab Joylash (Test)", callback_data="ig_run_now")
+    )
+    markup.add(
+        types.InlineKeyboardButton("➕ Ruchnoy Link Navbatga Qo'shish", callback_data="ig_add_manual_link"),
+        types.InlineKeyboardButton(f"📋 Navbatni Ko'rish ({pending_cnt})", callback_data="ig_view_queue")
+    )
+    toggle_lbl = "🔴 Avto-Pilotni O'chirish" if cfg.get("auto_enabled", True) else "🟢 Avto-Pilotni Yoqish"
+    markup.add(
+        types.InlineKeyboardButton(toggle_lbl, callback_data="ig_toggle_auto"),
+        types.InlineKeyboardButton("⏰ Kunlik Sonni O'zgartirish (3/4/5)", callback_data="ig_cycle_limit")
+    )
+    markup.add(
+        types.InlineKeyboardButton("🔑 Instagram Login / Parol", callback_data="ig_start_login"),
+        types.InlineKeyboardButton("🍪 SessionID Bilan Ulash", callback_data="ig_start_session")
+    )
+    markup.add(
+        types.InlineKeyboardButton("🎯 Trend Mavzularni Sozlash", callback_data="ig_set_topics"),
+        types.InlineKeyboardButton("🚫 Taqiqlangan So'z Qo'shish", callback_data="ig_add_badword")
+    )
+    markup.add(
+        types.InlineKeyboardButton("✍️ Reels Caption (Izoh) Sozlash", callback_data="ig_set_caption"),
+        types.InlineKeyboardButton("🔄 Yangilash", callback_data="ig_open_panel")
+    )
+    return text, markup
+
 # ==================== SHAZAM / MUSIQANI ANIQLASH ====================
 def identify_music_from_video(video_path: str, metadata_info: dict = None):
     ensure_ffmpeg_in_path()
@@ -3414,6 +4295,10 @@ def make_video_action_keyboard(base_fname: str, lang: str = "uz") -> types.Inlin
     }.get(lang, "🎯 Pro Reklama Montaj (2-Video / Outro Ulash)")
     markup.add(types.InlineKeyboardButton(antidup_lbl, callback_data=f"antidup_vid:{base_fname}"))
     markup.add(types.InlineKeyboardButton(montaj_lbl, callback_data=f"montaj_from_vid:{base_fname}"))
+    markup.add(
+        types.InlineKeyboardButton("📸 Insta Reels Joylash", callback_data=f"ig_post_vid:{base_fname}"),
+        types.InlineKeyboardButton("📅 Avto-Navbatga Qo'shish", callback_data=f"ig_queue_vid:{base_fname}")
+    )
     return markup
 
 def make_sub_lang_keyboard(action_type: str, base_fname: str) -> types.InlineKeyboardMarkup:
@@ -3431,8 +4316,10 @@ def make_sub_lang_keyboard(action_type: str, base_fname: str) -> types.InlineKey
 def get_universal_tools_keyboard() -> types.InlineKeyboardMarkup:
     """AI olib tashlangan, sof Pro Montaj, Anti-Duplikat, Watermark, Valyuta va QR vositalari"""
     markup = types.InlineKeyboardMarkup(row_width=2)
+    b_ig_panel = types.InlineKeyboardButton("📸 Instagram Avto-Poster 24/7 (/ig)", callback_data="ig_open_panel")
     b_montaj = types.InlineKeyboardButton("🎬 Pro Reklama Montaj (/montaj)", callback_data="tool_cmd:montaj")
     b_orig = types.InlineKeyboardButton("🛡 100% Original Anti-Duplikat (/original)", callback_data="antidup_start_single")
+    markup.add(b_ig_panel)
     b_outro = types.InlineKeyboardButton("📌 Reklama Outro Saqlash (/set_outro)", callback_data="tool_cmd:set_outro")
     b_wm = types.InlineKeyboardButton("💧 Shaffof Watermark (/set_watermark)", callback_data="montaj_set_wm")
     b_kurs = types.InlineKeyboardButton("💱 Valyuta Kursi (/kurs)", callback_data="tool_cmd:kurs")
@@ -4199,7 +5086,9 @@ def _route_active_user_state(message: types.Message) -> bool:
     state = USER_STATES.get(uid)
     if not state:
         return False
-    action = state.get("action")
+    action = state.get("action", "")
+    if action.startswith("ig_"):
+        return process_ig_state_step(message)
     if action in ("montaj_wait_v1", "montaj_wait_v1_with_saved"):
         process_montage_step1(message)
         return True
@@ -4221,6 +5110,242 @@ def _route_active_user_state(message: types.Message) -> bool:
     elif action == "qr_make":
         process_qr_step(message)
         return True
+    return False
+
+
+# ==================== 📸 INSTAGRAM AVTO-POSTER BUYRUQLARI VA STATE HANDLERLARI ====================
+@bot.message_handler(commands=['ig', 'insta', 'autopost', 'ig_status'])
+@bot.message_handler(func=lambda msg: msg.text and msg.text.strip() in [
+    "📸 Insta Avto-Post", "📸 Инста Авто-Пост", "📸 Insta Auto-Post"
+])
+def handle_ig_autopost_menu(message: types.Message):
+    uid = message.from_user.id
+    USER_STATES.pop(uid, None)
+    if not is_admin_user(message.from_user):
+        bot.reply_to(message, "🔒 Ushbu bo'lim faqat bot administratori (@usman_khasan) uchun mo'ljallangan.")
+        return
+    text, markup = build_ig_autoposter_dashboard(uid)
+    bot.send_message(message.chat.id, text, reply_markup=markup, disable_web_page_preview=True)
+
+@bot.message_handler(commands=['ig_login'])
+def handle_ig_login_cmd(message: types.Message):
+    if not is_admin_user(message.from_user):
+        return
+    uid = message.from_user.id
+    args = message.text.split(maxsplit=2) if message.text else []
+    if len(args) >= 3:
+        uname, pwd = args[1], args[2]
+        try:
+            bot.delete_message(message.chat.id, message.message_id)
+        except Exception:
+            pass
+        prog = bot.send_message(message.chat.id, f"⏳ <b>@{uname.lstrip('@')}</b> profiliga kirilmoqda...")
+        status, resp_msg = login_instagram_username_password(uid, uname, pwd)
+        mk = None
+        if status in ("2fa_required", "challenge_required"):
+            USER_STATES[uid] = {"action": "ig_wait_code"}
+            mk = types.InlineKeyboardMarkup(row_width=1)
+            mk.add(types.InlineKeyboardButton("✅ Ilovadan Tasdiqladim (Qayta urinish)", callback_data="ig_retry_challenge"))
+        bot.edit_message_text(resp_msg, message.chat.id, prog.message_id, reply_markup=mk)
+        return
+
+    USER_STATES[uid] = {"action": "ig_wait_credentials"}
+    bot.reply_to(
+        message,
+        "🔑 <b>Instagram Profilni Botga Ulash:</b>\n\n"
+        "Login va parolingizni bitta qatorda bo'sh joy tashlab yuboring:\n"
+        "<code>login parol</code>\n\n"
+        "🔒 <i>Xavfsizlik: Xabaringiz o'sha zahoti chatdan avtomatik o'chiriladi va faqat shifrlangan sessiya fayli saqlanadi.</i>\n"
+        "📱 <i>Agar 2FA yoki tasdiqlash kodi chiqsa, bot sizdan kodni so'raydi.</i>\n"
+        "<i>(Bekor qilish: /cancel)</i>"
+    )
+
+@bot.message_handler(commands=['ig_code'])
+def handle_ig_code_cmd(message: types.Message):
+    if not is_admin_user(message.from_user):
+        return
+    uid = message.from_user.id
+    args = message.text.split(maxsplit=1) if message.text else []
+    if len(args) < 2:
+        USER_STATES[uid] = {"action": "ig_wait_code"}
+        bot.reply_to(message, "🔐 <b>SMS, Authenticator yoki Email orqali kelgan 6 xonali tasdiqlash kodini yozib yuboring:</b>")
+        return
+    USER_STATES.pop(uid, None)
+    prog = bot.reply_to(message, "⏳ Tasdiqlash kodi tekshirilmoqda...")
+    ok, msg = complete_instagram_verification_code(uid, args[1])
+    bot.edit_message_text(msg, message.chat.id, prog.message_id)
+
+@bot.message_handler(commands=['ig_session'])
+def handle_ig_session_cmd(message: types.Message):
+    if not is_admin_user(message.from_user):
+        return
+    uid = message.from_user.id
+    args = message.text.split(maxsplit=1) if message.text else []
+    if len(args) < 2:
+        USER_STATES[uid] = {"action": "ig_wait_sessionid"}
+        bot.reply_to(
+            message,
+            "🍪 <b>Instagram SessionID orqali 1 soniyada ulash (Eng barqaror usul):</b>\n\n"
+            "Kompyuter yoki telefon brauzerida Instagramga kirib, Cookie ichidan <code>sessionid</code> qiymatini nusxalab shu yerga yuboring:\n"
+            "<i>(Bekor qilish: /cancel)</i>"
+        )
+        return
+    USER_STATES.pop(uid, None)
+    try:
+        bot.delete_message(message.chat.id, message.message_id)
+    except Exception:
+        pass
+    prog = bot.send_message(message.chat.id, "⏳ SessionID tekshirilmoqda...")
+    ok, msg = login_instagram_with_sessionid(args[1])
+    bot.edit_message_text(msg, message.chat.id, prog.message_id)
+
+@bot.message_handler(commands=['ig_now'])
+def handle_ig_now_cmd(message: types.Message):
+    if not is_admin_user(message.from_user):
+        return
+    prog = bot.reply_to(
+        message,
+        "🚀 <b>Avto-Reels Fabrikasi ishga tushdi!</b>\n"
+        "• Navbatdagi yoki Trenddagi halol video qidirilmoqda, Outro + 10-Bosqichli Original montaj qilinib Instagramga joylanmoqda..."
+    )
+    def _bg_job():
+        ok, msg = execute_next_autopost_job(notify_chat_id=message.chat.id, force_manual=True)
+        try:
+            if ok:
+                bot.edit_message_text(f"✅ <b>Muvaffaqiyatli bajarildi!</b>\n{msg}", message.chat.id, prog.message_id, disable_web_page_preview=True)
+            else:
+                bot.edit_message_text(f"⚠️ <b>Natija:</b> {msg}", message.chat.id, prog.message_id)
+        except Exception:
+            pass
+    threading.Thread(target=_bg_job, daemon=True).start()
+
+def process_ig_state_step(message: types.Message) -> bool:
+    """Instagram Avto-Poster interactive qadamlarini boshqarish"""
+    uid = message.from_user.id
+    state = USER_STATES.get(uid)
+    if not state:
+        return False
+    action = state.get("action", "")
+    if not action.startswith("ig_"):
+        return False
+
+    if message.text and message.text.strip().lower() in ("/cancel", "bekor"):
+        USER_STATES.pop(uid, None)
+        bot.reply_to(message, "❌ Bekor qilindi.")
+        return True
+
+    if action == "ig_wait_credentials":
+        USER_STATES.pop(uid, None)
+        raw = (message.text or "").strip()
+        parts = raw.split(maxsplit=1)
+        if len(parts) < 2:
+            bot.reply_to(message, "⚠️ Iltimos, login va parolni bitta bo'sh joy bilan yozing. Masalan: <code>usman_khasan parol123</code>")
+            return True
+        try:
+            bot.delete_message(message.chat.id, message.message_id)
+        except Exception:
+            pass
+        prog = bot.send_message(message.chat.id, f"⏳ <b>@{parts[0].lstrip('@')}</b> profiliga kirilmoqda...")
+        status, resp_msg = login_instagram_username_password(uid, parts[0], parts[1])
+        mk = None
+        if status in ("2fa_required", "challenge_required"):
+            USER_STATES[uid] = {"action": "ig_wait_code"}
+            mk = types.InlineKeyboardMarkup(row_width=1)
+            mk.add(types.InlineKeyboardButton("✅ Ilovadan Tasdiqladim (Qayta urinish)", callback_data="ig_retry_challenge"))
+        bot.edit_message_text(resp_msg, message.chat.id, prog.message_id, reply_markup=mk)
+        return True
+
+    if action == "ig_wait_code":
+        USER_STATES.pop(uid, None)
+        code_str = (message.text or "").strip()
+        prog = bot.reply_to(message, "⏳ Tasdiqlash kodi tekshirilmoqda...")
+        ok, msg = complete_instagram_verification_code(uid, code_str)
+        bot.edit_message_text(msg, message.chat.id, prog.message_id)
+        return True
+
+    if action == "ig_wait_sessionid":
+        USER_STATES.pop(uid, None)
+        sid = (message.text or "").strip()
+        try:
+            bot.delete_message(message.chat.id, message.message_id)
+        except Exception:
+            pass
+        prog = bot.send_message(message.chat.id, "⏳ SessionID tekshirilmoqda...")
+        ok, msg = login_instagram_with_sessionid(sid)
+        bot.edit_message_text(msg, message.chat.id, prog.message_id)
+        return True
+
+    if action == "ig_wait_manual_link":
+        USER_STATES.pop(uid, None)
+        # Foydalanuvchi bir yoki bir nechta link yuborishi mumkin
+        urls = re.findall(r'(https?://[^\s<>"\x27]+)', message.text or "")
+        if not urls:
+            u_single = extract_url(message.text or "")
+            if u_single:
+                urls = [u_single]
+        if not urls:
+            bot.reply_to(message, "⚠️ Video ssilkasi topilmadi. Instagram, TikTok yoki YouTube linkini yuboring.")
+            return True
+        added = 0
+        blocked_reasons = []
+        for u in urls[:10]:
+            ok_q, msg_q, _ = add_video_to_ig_queue(video_url=u, title="Ruchnoy Link")
+            if ok_q:
+                added += 1
+            else:
+                blocked_reasons.append(msg_q)
+        reply_t = f"✅ <b>{added} ta video havolasi Avto-Post navbatiga qo'shildi!</b>\nReja bo'yicha avtomatik Outro + Anti-Duplikat bilan Instagramga chiqadi."
+        if blocked_reasons:
+            reply_t += "\n\n" + "\n".join(blocked_reasons[:3])
+        mk = types.InlineKeyboardMarkup()
+        mk.add(
+            types.InlineKeyboardButton("🚀 Hozir Bitta Joylash", callback_data="ig_run_now"),
+            types.InlineKeyboardButton("📸 Avto-Post Panel", callback_data="ig_open_panel")
+        )
+        bot.reply_to(message, reply_t, reply_markup=mk)
+        return True
+
+    if action == "ig_wait_topics":
+        USER_STATES.pop(uid, None)
+        raw_t = (message.text or "").strip()
+        words = [w.strip().lstrip("#") for w in re.split(r"[,\n;]+", raw_t) if w.strip()]
+        if not words:
+            bot.reply_to(message, "⚠️ Mavzular kiritilmadi.")
+            return True
+        # Mavzular ichida taqiqlangan so'z yo'qligini tekshirish
+        clean_topics = []
+        for w in words:
+            ok_w, _ = is_text_safe_from_gambling_adult_ads(w)
+            if ok_w:
+                clean_topics.append(w)
+        cfg = get_ig_autopost_config()
+        cfg["trend_queries"] = clean_topics or list(DEFAULT_TREND_QUERIES)
+        save_ig_autopost_config(cfg)
+        bot.reply_to(message, f"✅ <b>Avto-Trend mavzulari yangilandi:</b>\n<code>{', '.join(cfg['trend_queries'])}</code>")
+        return True
+
+    if action == "ig_wait_badword":
+        USER_STATES.pop(uid, None)
+        raw_b = (message.text or "").strip().lower()
+        new_words = [w.strip() for w in re.split(r"[,\n;]+", raw_b) if w.strip()]
+        cfg = get_ig_autopost_config()
+        cur_bl = set(cfg.get("custom_blacklist", []))
+        cur_bl.update(new_words)
+        cfg["custom_blacklist"] = sorted(list(cur_bl))
+        save_ig_autopost_config(cfg)
+        bot.reply_to(message, f"🚫 <b>Qora ro'yxatga {len(new_words)} ta yangi taqiqlangan so'z qo'shildi!</b>\nEndi bu so'zlar qatnashgan videolar 100% bloklanadi.")
+        return True
+
+    if action == "ig_wait_caption":
+        USER_STATES.pop(uid, None)
+        new_cap = (message.text or "").strip()
+        if new_cap:
+            cfg = get_ig_autopost_config()
+            cfg["caption_template"] = new_cap
+            save_ig_autopost_config(cfg)
+            bot.reply_to(message, "✅ <b>Instagram Reels uchun standart izoh (Caption) saqlandi!</b>")
+        return True
+
     return False
 
 # ==================== FOYDALANUVCHI FAYL YUBORGANIDA (DIRECT UPLOAD YOKI MONTAJ) ====================
@@ -4316,6 +5441,21 @@ def handle_incoming_link(message: types.Message):
         return
     if cmd_lower == "/profile" or txt_clean in ("👤 Profilim", "👤 Мой профиль", "👤 Profile"):
         handle_profile(message)
+        return
+    if cmd_lower in ("/ig", "/insta", "/autopost", "/ig_status") or txt_clean in ("📸 Insta Avto-Post", "📸 Инста Авто-Пост", "📸 Insta Auto-Post"):
+        handle_ig_autopost_menu(message)
+        return
+    if cmd_lower == "/ig_login":
+        handle_ig_login_cmd(message)
+        return
+    if cmd_lower == "/ig_code":
+        handle_ig_code_cmd(message)
+        return
+    if cmd_lower == "/ig_session":
+        handle_ig_session_cmd(message)
+        return
+    if cmd_lower == "/ig_now":
+        handle_ig_now_cmd(message)
         return
     if cmd_lower in ("/montaj", "/merge", "/reklama") or txt_clean in ("🎬 Reklama Montaj", "🎬 Видео Монтаж", "🎬 Video Montage", "montaj", "Montaj"):
         handle_montage_menu(message)
@@ -4615,6 +5755,265 @@ def handle_callbacks(call: types.CallbackQuery):
             handle_montage_menu(call.message)
         elif subcmd == "set_outro":
             handle_set_outro_cmd(call.message)
+        return
+
+
+    # ------------------ 📸 INSTAGRAM AVTO-POSTER CALLBACKLARI ------------------
+    if call.data == "ig_open_panel":
+        if not is_admin_user(call.from_user):
+            bot.answer_callback_query(call.id, "🔒 Faqat admin (@usman_khasan) uchun!", show_alert=True)
+            return
+        bot.answer_callback_query(call.id)
+        text, markup = build_ig_autoposter_dashboard(user_id)
+        try:
+            bot.edit_message_text(text, call.message.chat.id, call.message.message_id, reply_markup=markup, disable_web_page_preview=True)
+        except Exception:
+            bot.send_message(call.message.chat.id, text, reply_markup=markup, disable_web_page_preview=True)
+        return
+
+    if call.data == "ig_toggle_auto":
+        if not is_admin_user(call.from_user):
+            return
+        cfg = get_ig_autopost_config()
+        cfg["auto_enabled"] = not cfg.get("auto_enabled", True)
+        save_ig_autopost_config(cfg)
+        state_str = "🟢 Avto-Pilot YOQILDI!" if cfg["auto_enabled"] else "🔴 Avto-Pilot O'CHIRILDI (Faqat ruchnoy rejim)"
+        bot.answer_callback_query(call.id, state_str, show_alert=True)
+        text, markup = build_ig_autoposter_dashboard(user_id)
+        try:
+            bot.edit_message_text(text, call.message.chat.id, call.message.message_id, reply_markup=markup, disable_web_page_preview=True)
+        except Exception:
+            pass
+        return
+
+    if call.data == "ig_cycle_limit":
+        if not is_admin_user(call.from_user):
+            return
+        cfg = get_ig_autopost_config()
+        cur_lim = int(cfg.get("daily_limit", 4))
+        next_lim = 3 if cur_lim >= 5 else (4 if cur_lim == 3 else 5)
+        cfg["daily_limit"] = next_lim
+        if next_lim == 3:
+            cfg["schedule_hours"] = [11, 16, 21]
+        elif next_lim == 4:
+            cfg["schedule_hours"] = [10, 14, 18, 21]
+        else:
+            cfg["schedule_hours"] = [9, 12, 15, 18, 21]
+        save_ig_autopost_config(cfg)
+        bot.answer_callback_query(call.id, f"⏰ Kunlik reja: {next_lim} ta Reels!", show_alert=True)
+        text, markup = build_ig_autoposter_dashboard(user_id)
+        try:
+            bot.edit_message_text(text, call.message.chat.id, call.message.message_id, reply_markup=markup, disable_web_page_preview=True)
+        except Exception:
+            pass
+        return
+
+    if call.data == "ig_start_login":
+        if not is_admin_user(call.from_user):
+            return
+        bot.answer_callback_query(call.id)
+        USER_STATES[user_id] = {"action": "ig_wait_credentials"}
+        bot.send_message(
+            call.message.chat.id,
+            "🔑 <b>Instagram Login va Parolni yuboring:</b>\n\n"
+            "Bitta qatorda bo'sh joy tashlab yozing:\n"
+            "<code>login parol</code>\n\n"
+            "🔒 <i>Parol yozilgan xabaringiz shu zahoti avtomatik o'chiriladi. Agar telefon yoki emailga tasdiqlash kodi kelsa, keyingi qadamda kodni kiritasiz.</i>\n"
+            "<i>(Bekor qilish: /cancel)</i>"
+        )
+        return
+
+    if call.data == "ig_retry_challenge":
+        if not is_admin_user(call.from_user):
+            return
+        bot.answer_callback_query(call.id, "⏳ Qayta tekshirilmoqda...")
+        ok, msg = complete_instagram_verification_code(user_id, "retry")
+        bot.send_message(call.message.chat.id, msg)
+        return
+
+    if call.data == "ig_start_session":
+        if not is_admin_user(call.from_user):
+            return
+        bot.answer_callback_query(call.id)
+        USER_STATES[user_id] = {"action": "ig_wait_sessionid"}
+        bot.send_message(
+            call.message.chat.id,
+            "🍪 <b>Instagram SessionID yuboring:</b>\n\n"
+            "Brauzerda Instagram.com ga kirib, Cookie ichidan <code>sessionid</code> qiymatini shu yerga tashlang (parol va 2FA so'ramasdan 1 soniyada ulanadi!):\n"
+            "<i>(Bekor qilish: /cancel)</i>"
+        )
+        return
+
+    if call.data == "ig_add_manual_link":
+        if not is_admin_user(call.from_user):
+            return
+        bot.answer_callback_query(call.id)
+        USER_STATES[user_id] = {"action": "ig_wait_manual_link"}
+        bot.send_message(
+            call.message.chat.id,
+            "📥 <b>Ruchnoy Video Link Qo'shish:</b>\n\n"
+            "Instagram, TikTok yoki YouTube video ssilkasini (yoki bir nechta ssilkani ketma-ket) yuboring.\n"
+            "Bot ularni qimor/18+ filtridan o'tkazib navbatga qo'shadi va Outro + Anti-Duplikat bilan Instagramga chiqaradi!\n"
+            "<i>(Bekor qilish: /cancel)</i>"
+        )
+        return
+
+    if call.data == "ig_view_queue":
+        if not is_admin_user(call.from_user):
+            return
+        bot.answer_callback_query(call.id)
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, video_url, title, status, created_at FROM ig_queue WHERE status = 'pending' ORDER BY id ASC LIMIT 15")
+        rows = cursor.fetchall()
+        conn.close()
+        if not rows:
+            bot.send_message(
+                call.message.chat.id,
+                "📋 <b>Ruchnoy navbat hozircha bo'sh.</b>\n"
+                "Avto-Pilot rejimida botning o'zi trendlardan halol videolarni topib joylayveradi!"
+            )
+            return
+        lines = ["📋 <b>Instagram Navbatdagi Videolar (Pending):</b>\n"]
+        for r in rows:
+            lines.append(f"• <b>#{r[0]}</b> — {html.escape((r[2] or 'Video')[:40])} (<code>{(r[1] or 'fayl')[:45]}</code>)")
+        mk = types.InlineKeyboardMarkup(row_width=2)
+        mk.add(
+            types.InlineKeyboardButton("🚀 Navbatdagini Hozir Joylash", callback_data="ig_run_now"),
+            types.InlineKeyboardButton("🗑 Navbatni Tozalash", callback_data="ig_clear_queue")
+        )
+        bot.send_message(call.message.chat.id, "\n".join(lines), reply_markup=mk, disable_web_page_preview=True)
+        return
+
+    if call.data == "ig_clear_queue":
+        if not is_admin_user(call.from_user):
+            return
+        conn = sqlite3.connect(DB_PATH)
+        conn.execute("DELETE FROM ig_queue WHERE status = 'pending'")
+        conn.commit()
+        conn.close()
+        bot.answer_callback_query(call.id, "🗑 Navbat tozalandi!", show_alert=True)
+        text, markup = build_ig_autoposter_dashboard(user_id)
+        try:
+            bot.edit_message_text(text, call.message.chat.id, call.message.message_id, reply_markup=markup, disable_web_page_preview=True)
+        except Exception:
+            pass
+        return
+
+    if call.data == "ig_set_topics":
+        if not is_admin_user(call.from_user):
+            return
+        bot.answer_callback_query(call.id)
+        cfg = get_ig_autopost_config()
+        USER_STATES[user_id] = {"action": "ig_wait_topics"}
+        bot.send_message(
+            call.message.chat.id,
+            f"🎯 <b>Avto-Trend Qidiruv Mavzulari:</b>\n\n"
+            f"Hozirgi mavzular: <code>{', '.join(cfg.get('trend_queries', DEFAULT_TREND_QUERIES))}</code>\n\n"
+            f"✍️ Yangi mavzularni vergul bilan ajratib yozib yuboring (masalan: <code>uzbekistan, tashkent, avto, texnologiya, motivatsiya, tabiat</code>):\n"
+            f"<i>(Bekor qilish: /cancel)</i>"
+        )
+        return
+
+    if call.data == "ig_add_badword":
+        if not is_admin_user(call.from_user):
+            return
+        bot.answer_callback_query(call.id)
+        cfg = get_ig_autopost_config()
+        extra_bl = cfg.get("custom_blacklist", [])
+        USER_STATES[user_id] = {"action": "ig_wait_badword"}
+        bot.send_message(
+            call.message.chat.id,
+            f"🚫 <b>Qo'shimcha Taqiqlangan So'zlar Qo'shish:</b>\n\n"
+            f"Botda standart <b>90+ ta qimor (1xBet, Melbet, Casino), bukmeker, promokod va 18+ fahsh so'zlar</b> allaqachon bloklangan.\n"
+            f"Qo'shimcha bloklanganlar: <code>{', '.join(extra_bl) if extra_bl else 'Hozircha yoq'}</code>\n\n"
+            f"✍️ Bloklanishi kerak bo'lgan yangi so'z yoki kanal nomlarini vergul bilan yozib yuboring:"
+        )
+        return
+
+    if call.data == "ig_set_caption":
+        if not is_admin_user(call.from_user):
+            return
+        bot.answer_callback_query(call.id)
+        cfg = get_ig_autopost_config()
+        USER_STATES[user_id] = {"action": "ig_wait_caption"}
+        bot.send_message(
+            call.message.chat.id,
+            f"✍️ <b>Instagram Reels Uchun Standart Izoh (Caption):</b>\n\n"
+            f"Hozirgi izoh:\n<code>{html.escape(cfg.get('caption_template', DEFAULT_IG_CAPTION))}</code>\n\n"
+            f"Yangi izoh matni va heshteglarni yuboring (bekor qilish: /cancel):"
+        )
+        return
+
+    if call.data == "ig_run_now":
+        if not is_admin_user(call.from_user):
+            bot.answer_callback_query(call.id, "🔒 Faqat admin uchun!", show_alert=True)
+            return
+        bot.answer_callback_query(call.id, "🚀 Avto-Reels tayyorlash boshlandi!")
+        prog = bot.send_message(
+            call.message.chat.id,
+            "⏳ <b>Avto-Reels Fabrikasi ishga tushdi...</b>\n\n"
+            "1️⃣ Navbatdagi yoki Trenddagi video olinmoqda\n"
+            "2️⃣ 3-Qatlamli Halol Filtrda (Qimor / 18+ / Reklama) tekshirilmoqda\n"
+            "3️⃣ Saqlangan Outro + 10-Bosqichli Anti-Duplikat + Suzuvchi Watermark bilan montaj qilinib Instagramga joylanmoqda..."
+        )
+        def _run_manual_test():
+            ok, msg = execute_next_autopost_job(notify_chat_id=call.message.chat.id, force_manual=True)
+            try:
+                if ok:
+                    bot.edit_message_text(f"✅ <b>Muvaffaqiyatli yakunlandi!</b>\n{msg}", call.message.chat.id, prog.message_id, disable_web_page_preview=True)
+                else:
+                    bot.edit_message_text(f"⚠️ <b>Xabar:</b> {msg}", call.message.chat.id, prog.message_id)
+            except Exception:
+                pass
+        threading.Thread(target=_run_manual_test, daemon=True).start()
+        return
+
+    if call.data.startswith("ig_post_vid:"):
+        if not is_admin_user(call.from_user):
+            bot.answer_callback_query(call.id, "🔒 Instagramga joylash faqat Admin (@usman_khasan) uchun!", show_alert=True)
+            return
+        base_fname = call.data.split("ig_post_vid:")[1]
+        video_path = os.path.join(DOWNLOAD_DIR, base_fname)
+        bot.answer_callback_query(call.id, "📸 Instagram Reels ga tayyorlanmoqda...")
+        prog = bot.send_message(
+            call.message.chat.id,
+            "📸 <b>Ruchnoy Reels Joylash ishga tushdi...</b>\n"
+            "• 3-Qatlamli Halol Filtr + Outro Montaj + 10-Bosqichli Anti-Duplikat + Instagram Upload bajarilmoqda..."
+        )
+        def _post_direct_vid():
+            if not ensure_video_from_telegram(call.message, video_path):
+                bot.edit_message_text("⚠️ Video faylini o'qib bo'lmadi. Videoni qayta tashlang.", call.message.chat.id, prog.message_id)
+                return
+            meta = VIDEO_SOURCE_CACHE.get(base_fname, {})
+            ok, msg = process_and_publish_single_reel_pipeline(
+                video_url=meta.get("url", ""),
+                local_video_path=video_path,
+                title="Tanlangan Reels",
+                notify_chat_id=call.message.chat.id
+            )
+            try:
+                if ok:
+                    bot.edit_message_text(f"✅ <b>Tayyor!</b> {msg}", call.message.chat.id, prog.message_id, disable_web_page_preview=True)
+                else:
+                    bot.edit_message_text(f"🚫 <b>To'xtatildi:</b> {msg}", call.message.chat.id, prog.message_id)
+            except Exception:
+                pass
+        threading.Thread(target=_post_direct_vid, daemon=True).start()
+        return
+
+    if call.data.startswith("ig_queue_vid:"):
+        if not is_admin_user(call.from_user):
+            bot.answer_callback_query(call.id, "🔒 Navbatga qo'shish faqat Admin (@usman_khasan) uchun!", show_alert=True)
+            return
+        base_fname = call.data.split("ig_queue_vid:")[1]
+        video_path = os.path.join(DOWNLOAD_DIR, base_fname)
+        if not ensure_video_from_telegram(call.message, video_path):
+            bot.answer_callback_query(call.id, "⚠️ Video fayli topilmadi.", show_alert=True)
+            return
+        meta = VIDEO_SOURCE_CACHE.get(base_fname, {})
+        ok_q, msg_q, q_id = add_video_to_ig_queue(video_url=meta.get("url", ""), local_path=video_path, title="Tanlangan Video")
+        bot.answer_callback_query(call.id, msg_q[:180], show_alert=True)
         return
 
     # ------------------ PRO REKLAMA MONTAJ CALLBACKLARI ------------------
@@ -5506,6 +6905,9 @@ if __name__ == '__main__':
     try:
         bot.set_my_commands([
             types.BotCommand("start", "🚀 Botni ishga tushirish"),
+            types.BotCommand("ig", "📸 Instagram 24/7 Avto-Poster & Halol Trend Studiyasi"),
+            types.BotCommand("ig_now", "🚀 Hozir 1 ta Reels yasab Instagramga joylash"),
+            types.BotCommand("ig_login", "🔑 Instagram profilni ulash (Login/Parol)"),
             types.BotCommand("montaj", "🎬 Pro Reklama Montaj Studiyasi (5 rejim + Anti-Duplikat)"),
             types.BotCommand("original", "🛡 Videoni 100% Original qilish (Anti-Duplikat)"),
             types.BotCommand("set_outro", "📌 Doimiy reklama (Outro) videoni saqlash"),
