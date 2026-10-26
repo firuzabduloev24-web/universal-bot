@@ -96,6 +96,23 @@ def _ensure_pillow_installed():
 
 _ensure_pillow_installed()
 
+def _ensure_youtube_engines_updated():
+    """GitHub Actions va Cloud serverlarda YouTube va Shorts 100% ishlashi uchun yt-dlp va pytubefix ni yangilash"""
+    def _bg_pip():
+        try:
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "--quiet", "--upgrade", "yt-dlp", "pytubefix"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120
+            )
+        except Exception:
+            pass
+    try:
+        threading.Thread(target=_bg_pip, daemon=True).start()
+    except Exception:
+        pass
+
+_ensure_youtube_engines_updated()
+
 def ensure_ffmpeg_in_path() -> bool:
     """
     FFmpeg ni tizimdan, WinGet dan yoki Python `imageio-ffmpeg` paketidan avtomatik topish
@@ -2340,9 +2357,9 @@ GAMBLING_ADULT_AD_BLACKLIST = [
     "1xbet", "1x_bet", "1x-bet", "melbet", "mel_bet", "mostbet", "most_bet",
     "linebet", "winline", "parimatch", "pari_match", "fonbet", "olimpbet",
     "betwinner", "betboom", "pinup", "pin-up", "pin_up", "1win", "1_win",
-    "vavada", "vulkan", "joycasino", "azino", "azino777", "777", "slot", "slots",
+    "vavada", "vulkan", "joycasino", "azino", "azino777", "777 casino", "777 slot",
     "casino", "kazino", "казино", "qimor", "stavka", "stavki", "ставки", "ставка",
-    "bukmeker", "букмекер", "totalizator", "jackpot", "jekpot", "aviator",
+    "bukmeker", "букмекер", "totalizator", "jackpot", "jekpot", "aviator game", "aviator signal",
     "luckyjet", "lucky_jet", "jetx", "plinko", "sweet bonanza", "gates of olympus",
     "book of ra", "crash game", "roulette", "ruletka", "рулетка", "poker", "покер",
     "blackjack", "baccarat", "koeffitsient", "коэффициент", "ekspress stavka",
@@ -2355,10 +2372,10 @@ GAMBLING_ADULT_AD_BLACKLIST = [
     "kripto signal", "pump signal", "binomo", "olymptrade", "pocket option", "quotex",
     # 18+ / NSFW / Fahsh kontent
     "18+", "+18", "nsfw", "onlyfans", "only_fans", "porn", "porno", "порно",
-    "xxx", "sex", "seks", "секс", "erotik", "erotika", "эротика", "nude", "nudes",
-    "boobs", "booty", "strip", "striptiz", "стриптиз", "escort", "eskort", "эскорт",
-    "intim", "интим", "fap", "hentai", "camgirl", "webcam model", "sharmanda",
-    "beibo", "fahsh", "yalang'och", "yalangoch", "голая", "голые", "сиськи", "жопа"
+    "seks", "секс", "erotik", "erotika", "эротика", "nudes",
+    "boobs", "booty", "striptiz", "стриптиз", "escort", "eskort", "эскорт",
+    "intim", "интим", "hentai", "camgirl", "webcam model", "sharmanda",
+    "fahsh", "yalang'och", "yalangoch", "голая", "голые", "сиськи", "жопа"
 ]
 
 DEFAULT_TREND_QUERIES = [
@@ -2366,11 +2383,37 @@ DEFAULT_TREND_QUERIES = [
     "texnologiya", "avto", "oshxona", "sayohat", "sport", "foydali"
 ]
 
+# Umumiy heshteg-meta so'zlar (agar foydalanuvchi bilmasdan #reels #fyp #bot deb kiritib qo'ysa, ularni haqiqiy viral qidiruv so'zlari bilan boyitamiz)
+GENERIC_META_TAGS = {
+    "reels", "trending", "viral", "explore", "fyp", "foryou", "foryoupage",
+    "instagram", "bot", "rek", "rekomendatsiya", "video", "shorts", "tiktok", "trend"
+}
+
+HIGH_ENGAGEMENT_VIRAL_TOPICS = [
+    "uzbekistan trend", "tashkent city", "tabiat manzaralari", "motivatsiya uzb",
+    "avto tuning uzb", "oshxona retsept", "texnologiya", "sport motivatsiya",
+    "sayohat", "amazing nature 4k", "luxury cars", "satisfying video",
+    "funny cats viral", "football skills", "street food", "architecture aesthetic"
+]
+
 DEFAULT_IG_CAPTION = (
     "🔥 Eng sara va foydali videolar! Obuna bo'lishni unutmang 👉 @{ig_user}\n\n"
     "📥 Videolarni suv belgisiz yuklash va Pro Montaj uchun Telegram botimiz: @{bot_user}\n\n"
     "#uzbekistan #tashkent #reelsuzb #foydali #trend #motivatsiya #rek #explore"
 )
+
+_TIKWM_RATE_LOCK = threading.Lock()
+_LAST_TIKWM_REQ_TS = 0.0
+
+def _wait_tikwm_rate_limit(min_interval: float = 1.25):
+    """TikWM bepul API '1 request / 1 second' chekloviga tushib qolmaslik uchun aqlli navbat"""
+    global _LAST_TIKWM_REQ_TS
+    with _TIKWM_RATE_LOCK:
+        now = time.time()
+        elapsed = now - _LAST_TIKWM_REQ_TS
+        if elapsed < min_interval:
+            time.sleep(min_interval - elapsed)
+        _LAST_TIKWM_REQ_TS = time.time()
 
 def _init_ig_autopost_db():
     conn = sqlite3.connect(DB_PATH)
@@ -2433,6 +2476,12 @@ def get_ig_autopost_config() -> dict:
                 default_cfg.update(saved)
         except Exception:
             pass
+    # Agar trend_queries faqat umumiy heshteglardan (reels, fyp, bot, instagram) iborat bo'lib qolgan bo'lsa,
+    # avtomatik ravishda haqiqiy sifatli mavzular bilan boyitamiz:
+    raw_q = [str(x).strip().lstrip("#") for x in (default_cfg.get("trend_queries") or []) if str(x).strip()]
+    meaningful_q = [q for q in raw_q if q.lower() not in GENERIC_META_TAGS]
+    if not meaningful_q:
+        default_cfg["trend_queries"] = list(DEFAULT_TREND_QUERIES)
     return default_cfg
 
 def save_ig_autopost_config(cfg: dict) -> dict:
@@ -2466,10 +2515,13 @@ def is_text_safe_from_gambling_adult_ads(text: str, extra_blacklist: list = None
     """
     1-QATLAM: Video sarlavhasi, tavsifi (caption), heshteglar va muallif nomini
     Qimor (1xBet, Melbet, Casino), 18+ fahsh va bukmeker/spam reklamalardan to'liq tekshiradi!
+    URL ichidagi tasodifiy raqamlar/harflar noto'g'ri bloklanmasligi uchun URL larni alohida tozalab tekshiradi.
     """
     if not text:
         return True, "OK"
-    lower_t = text.lower()
+    # URL ichidagi video ID raqamlari va texnik parametrlarni olib tashlaymiz (masalan video/7384777123)
+    text_no_urls = re.sub(r"https?://\S+", " ", str(text))
+    lower_t = text_no_urls.lower()
     # Shubhali bo'shliq yoki nuqtalar bilan yozilgan bukmeker nomlarini ham tutish (masalan: 1.x.b.e.t, m e l b e t)
     compact_t = re.sub(r"[\s_\-\.\*]+", "", lower_t)
 
@@ -2482,18 +2534,24 @@ def is_text_safe_from_gambling_adult_ads(text: str, extra_blacklist: list = None
         b_clean = bad.strip().lower()
         if not b_clean:
             continue
+        # Qisqa so'zlarni (<=4 harf) faqat butun so'z sifatida tekshiramiz (noto'g'ri pozitiv bo'lmasligi uchun)
+        if len(b_clean) <= 4 and re.match(r"^[a-z0-9а-яё]+$", b_clean):
+            if re.search(rf"\b{re.escape(b_clean)}\b", lower_t):
+                return False, f"Taqiqlangan so'z aniqlandi: '{b_clean}'"
+            continue
         if b_clean in lower_t:
             return False, f"Taqiqlangan so'z aniqlandi: '{b_clean}'"
         b_compact = re.sub(r"[\s_\-\.\*]+", "", b_clean)
-        if len(b_compact) >= 5 and b_compact in compact_t:
+        if len(b_compact) >= 6 and b_compact in compact_t:
             return False, f"Yashirin reklama/qimor so'zi aniqlandi: '{b_clean}'"
 
-    # Bukmeker promokod va bonus shablonlarini regex orqali tutish
+    # Bukmeker promokod, qimor va 18+ shablonlarini regex orqali tutish
     suspicious_regexes = [
-        (r"\b(?:1x|mel|most|line|fon|olimp|pin\s*up|pari)\s*(?:bet|win|casino)?\b", "Bukmeker / Qimor reklamasi"),
+        (r"\b(?:1x|mel|most|line|fon|olimp|pin\s*up|pari)\s*(?:bet|win|casino)\b", "Bukmeker / Qimor reklamasi"),
+        (r"\b(?:1xbet|melbet|mostbet|linebet|fonbet|olimpbet|betwinner|1win|pinup|azino777|vavada|joycasino)\b", "Bukmeker / Kazino reklamasi"),
         (r"\b(?:bonus|бонус)\s*\d+\s*(?:%|ming|som|rub|usd|\$)", "Qimor bonus reklamasi"),
         (r"\b(?:promokod|промокод|promo\s*code)\s*[:\-]?\s*[a-zA-Z0-9_]{3,15}", "Promokod reklamasi"),
-        (r"(?:18\+|\+18|onlyfans|порно|эротика|интим|nsfw)", "18+ nojo'ya kontent")
+        (r"(?:\b18\+|\+18\b|\bonlyfans\b|\bпорно\b|\bэротика\b|\bинтим\b|\bnsfw\b|\bxxx\b|\bsex\b|\bporn\b)", "18+ nojo'ya kontent")
     ]
     for rgx, reason in suspicious_regexes:
         if re.search(rgx, lower_t, re.IGNORECASE):
@@ -2504,8 +2562,8 @@ def is_text_safe_from_gambling_adult_ads(text: str, extra_blacklist: list = None
 def _check_video_frames_for_nsfw_or_casino_banner(video_path: str) -> tuple[bool, str]:
     """
     2-QATLAM: Videoning 3 ta nuqtasidan (20%, 50%, 80%) kadr olib:
-    1) Haddan tashqari ochiq tana (18+ YCbCr teri rangi ulushi > 58%) bor-yo'qligini;
-    2) Bukmekerlik bannerlariga xos keskin neon-kazino overlaylari bor-yo'qligini tekshiradi.
+    Haddan tashqari ochiq tana (18+ YCbCr teri rangi ulushi > 68%) bor-yo'qligini tekshiradi.
+    Oddiy yuz, suhbat, taom yoki tabiat sahnalarini xato bloklamaydi.
     """
     if not video_path or not os.path.exists(video_path):
         return True, "OK"
@@ -2529,11 +2587,10 @@ def _check_video_frames_for_nsfw_or_casino_banner(video_path: str) -> tuple[bool
                 total_px = len(pixels) or 1
                 skin_px = 0
                 for y, cb, cr in pixels:
-                    # Standart YCbCr inson terisi diapazoni
-                    if 80 <= y <= 235 and 85 <= cb <= 135 and 135 <= cr <= 180:
+                    if 85 <= y <= 230 and 90 <= cb <= 130 and 140 <= cr <= 175:
                         skin_px += 1
                 skin_ratios.append(skin_px / float(total_px))
-        if skin_ratios and (sum(skin_ratios) / len(skin_ratios)) > 0.58 and max(skin_ratios) > 0.65:
+        if skin_ratios and (sum(skin_ratios) / len(skin_ratios)) > 0.68 and max(skin_ratios) > 0.74:
             return False, "18+ shubhali ochiq sahna aniqlandi (Visual Skin Filter)"
     except Exception:
         pass
@@ -2546,7 +2603,7 @@ def verify_video_content_is_halal_and_safe(video_path: str, metadata_text: str =
     🛡 3-QATLAMLI KOMPLEKS XAVFSIZLIK FILTRI:
     1) Matn, sarlavha va heshteglarni tekshiradi (Qimor, 1xBet, Melbet, Reklama, 18+).
     2) Vizual kadrlarni tekshiradi (18+ ochiq sahna).
-    3) Videoning boshidagi va o'rtasidagi 12 soniyalik ovozni (Speech-to-Text) o'qib,
+    3) Videoning boshidagi 10 soniyalik ovozni (Speech-to-Text) o'qib,
        diktor "1xBet", "Melbet", "Stavka", "Kazino", "Promokod" deb aytgan bo'lsa darhol bloklaydi!
     """
     cfg = get_ig_autopost_config()
@@ -2635,7 +2692,6 @@ def login_instagram_username_password(user_id: int, username: str, password: str
         cl = Client()
         cl.delay_range = [1, 3]
 
-        # Challenge code resolver uchun xotirada saqlash
         IG_PENDING_LOGIN[user_id] = {
             "client": cl,
             "username": clean_user,
@@ -2709,7 +2765,7 @@ def complete_instagram_verification_code(user_id: int, verification_code: str) -
 
 def upload_video_to_instagram_reels(video_path: str, caption: str = "") -> tuple[bool, str, str]:
     """
-    Tayyor MP4 videoni Instagram Reels sifatida yuklash!
+    Tayyor MP4 videoni Instagram Reels sifatida yuklash (clip_upload + video_upload zaxirasi bilan)!
     Qaytaradi: (success, reel_url_or_msg, media_code)
     """
     if not os.path.exists(IG_SESSION_FILE):
@@ -2726,42 +2782,67 @@ def upload_video_to_instagram_reels(video_path: str, caption: str = "") -> tuple
         caption = (cfg.get("caption_template") or DEFAULT_IG_CAPTION).replace("{ig_user}", ig_user).replace("{bot_user}", bot_user)
 
     with IG_CLIENT_LOCK:
+        thumb_jpg = video_path + "_ig_thumb.jpg"
         try:
             from instagrapi import Client
+            from pathlib import Path
             cl = Client()
             cl.delay_range = [1, 3]
             cl.load_settings(IG_SESSION_FILE)
-            # Video oblojkasi (thumbnail) tayyorlash
-            thumb_jpg = video_path + "_ig_thumb.jpg"
             extract_hd_thumbnail(video_path, thumb_jpg)
-            from pathlib import Path
             extra_kwargs = {}
             if os.path.exists(thumb_jpg) and os.path.getsize(thumb_jpg) > 500:
                 extra_kwargs["thumbnail"] = Path(thumb_jpg)
 
-            media = cl.clip_upload(Path(video_path), caption=caption, **extra_kwargs)
-            safe_remove(thumb_jpg)
+            try:
+                media = cl.clip_upload(Path(video_path), caption=caption, **extra_kwargs)
+            except Exception as clip_err:
+                print(f"clip_upload ogohlantirishi, video_upload ga o'tilmoqda: {clip_err}")
+                media = cl.video_upload(Path(video_path), caption=caption, **extra_kwargs)
+
             code = getattr(media, "code", "") or ""
             reel_url = f"https://www.instagram.com/reel/{code}/" if code else "https://www.instagram.com/"
             return True, reel_url, code
         except Exception as e:
             return False, f"Instagram upload xatosi: {e}", ""
+        finally:
+            safe_remove(thumb_jpg)
 
-# ==================== 🔥 AVTO-TREND RADAR (HALOL VA TOZA TREND VIDEOLARNI TOPISH) ====================
-def discover_safe_trending_video_for_autopost() -> tuple[str | None, str, str]:
+# ==================== 🔥 6-MOTORLI AVTO-TREND RADAR (BEVOSITA MP4 YUKLAB TEKSHIRUVCHI TIZIM) ====================
+def _record_blocked_or_seen_candidate(source_id: str, video_url: str, status_code: str = "BLOCKED"):
+    if not source_id and not video_url:
+        return
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        conn.execute(
+            "INSERT OR IGNORE INTO ig_posted_history (source_id, video_url, ig_code, posted_at) VALUES (?, ?, ?, ?)",
+            (source_id or video_url[:80], video_url or source_id, status_code, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+        )
+        conn.commit()
+        conn.close()
+    except Exception:
+        pass
+
+def discover_safe_trending_video_for_autopost() -> tuple[str | None, str, str, str]:
     """
-    TikTok (TikWM Feed / Search API) va YouTube Shorts dan O'zbekiston va dunyo trendidagi
-    eng ko'p ko'rilgan (viral) qisqa videolarni avtomatik qidiradi.
+    6 ta mustaqil global va mahalliy manbadan (TikWM Direct Stream, TikWM Regional Feed,
+    Reddit Viral Video JSON, Dailymotion Short Videos API, Piped/Invidious Shorts va YouTube Shorts)
+    eng ko'p ko'rilgan (viral) qisqa videolarni qidiradi VA DARHOL MP4 FAYLINI YUKLAB OLADI!
     Har bir nomzodni:
     1) Oldin yuklanmaganligini (`ig_posted_history`);
-    2) Davomiyligi 6 soniyadan 55 soniyagacha (Reels uchun ideal) ekanligini;
-    3) 🚫 Qimor (1xBet, Melbet, Casino), 18+ fahsh va bukmeker reklamasidan 100% TOZA ekanligini tekshiradi!
-    Qaytaradi: (video_url, title, source_id)
+    2) Davomiyligi 5 soniyadan 62 soniyagacha (Reels uchun ideal) ekanligini;
+    3) 🚫 Qimor (1xBet, Melbet, Casino), 18+ fahsh va bukmeker reklamasidan 100% TOZA ekanligini
+       3-Qatlamli Filtrda tekshirib, TAYYOR LOKAL MP4 FAYL (`local_mp4_path`) bilan qaytaradi!
+    Qaytaradi: (video_url, title, source_id, local_mp4_path)
     """
     cfg = get_ig_autopost_config()
-    queries = cfg.get("trend_queries") or DEFAULT_TREND_QUERIES
-    shuffled_queries = list(queries)
-    random.shuffle(shuffled_queries)
+    raw_queries = [str(x).strip().lstrip("#") for x in (cfg.get("trend_queries") or DEFAULT_TREND_QUERIES) if str(x).strip()]
+    clean_user_queries = [q for q in raw_queries if q.lower() not in GENERIC_META_TAGS]
+    combined_queries = []
+    for q in clean_user_queries + list(HIGH_ENGAGEMENT_VIRAL_TOPICS) + list(DEFAULT_TREND_QUERIES):
+        if q and q.lower() not in [x.lower() for x in combined_queries]:
+            combined_queries.append(q)
+    random.shuffle(combined_queries)
 
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -2774,72 +2855,324 @@ def discover_safe_trending_video_for_autopost() -> tuple[str | None, str, str]:
     seen_ids = {r[0] for r in rows if r[0]}
     seen_urls = {r[1] for r in rows if r[1]} | {r[0] for r in q_rows if r[0]}
 
-    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36",
+        "Accept": "application/json, text/plain, */*"
+    }
 
-    # 1-MANBA: TikWM Trending & Keyword Search (Suv belgisiz HD viral videolar)
-    for kw in shuffled_queries[:4]:
+    def _try_verify_and_Finalize_mp4(cand_path: str, cand_url: str, cand_title: str, cand_sid: str, author_str: str = "") -> bool:
+        if not cand_path or not os.path.exists(cand_path) or os.path.getsize(cand_path) < 10000:
+            safe_remove(cand_path)
+            return False
+        dur = get_media_duration(cand_path)
+        if dur < 4.5 or dur > 68.0:
+            safe_remove(cand_path)
+            return False
+        is_safe, safety_reason = verify_video_content_is_halal_and_safe(cand_path, f"{cand_title} {author_str}")
+        if not is_safe:
+            print(f"[Trend Radar] Nomzod filtrdan qaytdi ({cand_sid}): {safety_reason}")
+            _record_blocked_or_seen_candidate(cand_sid, cand_url, "BLOCKED")
+            seen_ids.add(cand_sid)
+            safe_remove(cand_path)
+            return False
+        return True
+
+    # ==================== 1-MANBA: TikWM Viral Keyword Search (Direct Stream Download!) ====================
+    for kw in combined_queries[:6]:
         try:
+            _wait_tikwm_rate_limit(1.25)
             resp = requests.post(
                 "https://www.tikwm.com/api/feed/search",
-                data={"keywords": kw, "count": 18, "cursor": 0, "HD": 1},
-                headers=headers, timeout=15, verify=False
+                data={"keywords": kw, "count": 20, "cursor": 0, "HD": 1},
+                headers=headers, timeout=16, verify=False
             )
             if resp.status_code == 200:
                 j = resp.json()
                 videos = (j.get("data") or {}).get("videos") or []
-                # Like va ko'rishlar soni bo'yicha saralash (eng trenddagilar birinchi)
-                videos.sort(key=lambda x: int(x.get("digg_count") or 0) + int(x.get("play_count") or 0) * 0.1, reverse=True)
-                for v in videos:
-                    vid_id = str(v.get("video_id") or "")
-                    dur = float(v.get("duration") or 0)
-                    title = str(v.get("title") or "").strip()
-                    author_nick = str((v.get("author") or {}).get("unique_id") or "")
-                    if not vid_id or f"tk_{vid_id}" in seen_ids:
-                        continue
-                    if dur < 6 or dur > 58:
-                        continue
-                    # 1-Qatlam: Matn va muallif nomini qimor/18+/reklamaga tekshirish
-                    ok_safe, _ = is_text_safe_from_gambling_adult_ads(f"{title} {author_nick}")
-                    if not ok_safe:
-                        continue
-                    play_url = v.get("hdplay") or v.get("play")
-                    if play_url:
-                        if play_url.startswith("/"):
-                            play_url = "https://www.tikwm.com" + play_url
-                        tk_page_url = f"https://www.tiktok.com/@{author_nick or 'user'}/video/{vid_id}"
-                        if tk_page_url in seen_urls:
-                            continue
-                        return tk_page_url, title or f"Trend Video #{kw}", f"tk_{vid_id}"
-        except Exception as e:
-            print(f"Trend radar TikWM qidiruv xatosi ({kw}): {e}")
-
-    # 2-MANBA: TikWM Regional Trending Feed (UZ)
-    for reg in ["UZ", "TR", "KZ", "US"]:
-        try:
-            resp = requests.post(
-                "https://www.tikwm.com/api/feed/list",
-                data={"region": reg, "count": 15},
-                headers=headers, timeout=15, verify=False
-            )
-            if resp.status_code == 200:
-                videos = (resp.json().get("data") or [])
-                if isinstance(videos, list):
-                    for v in videos:
+                if isinstance(videos, list) and videos:
+                    videos.sort(key=lambda x: int(x.get("digg_count") or 0) + int(x.get("play_count") or 0) * 0.1, reverse=True)
+                    for v in videos[:10]:
                         vid_id = str(v.get("video_id") or "")
                         dur = float(v.get("duration") or 0)
                         title = str(v.get("title") or "").strip()
                         author_nick = str((v.get("author") or {}).get("unique_id") or "")
-                        if not vid_id or f"tk_{vid_id}" in seen_ids or dur < 6 or dur > 58:
+                        sid = f"tk_{vid_id}"
+                        if not vid_id or sid in seen_ids or dur < 5 or dur > 62:
                             continue
                         ok_safe, _ = is_text_safe_from_gambling_adult_ads(f"{title} {author_nick}")
                         if not ok_safe:
+                            _record_blocked_or_seen_candidate(sid, "", "BLOCKED")
+                            seen_ids.add(sid)
                             continue
                         tk_page_url = f"https://www.tiktok.com/@{author_nick or 'user'}/video/{vid_id}"
-                        return tk_page_url, title or "Trend Reels", f"tk_{vid_id}"
-        except Exception:
-            pass
+                        if tk_page_url in seen_urls:
+                            continue
 
-    return None, "", ""
+                        # MUHIM: Ikkinchi marta API chaqirmasdan, javob ichidagi tayyor MP4 oqimni bevosita yuklab olamiz!
+                        stream_candidates = []
+                        for k_stream in ("play", "hdplay", "wmplay"):
+                            s_u = v.get(k_stream)
+                            if s_u and isinstance(s_u, str):
+                                if s_u.startswith("/"):
+                                    s_u = "https://www.tikwm.com" + s_u
+                                stream_candidates.append(s_u)
+
+                        cand_mp4 = os.path.join(DOWNLOAD_DIR, f"trend_tk_{vid_id}_{int(time.time())%100000}.mp4")
+                        dl_ok = False
+                        for s_u in stream_candidates:
+                            if _download_binary_stream(s_u, cand_mp4, referer="https://www.tikwm.com/"):
+                                dl_ok = True
+                                break
+                        if dl_ok and _try_verify_and_Finalize_mp4(cand_mp4, tk_page_url, title or f"Trend #{kw}", sid, author_nick):
+                            print(f"[OK] Trend 1-Manba (TikWM Search Direct) topildi: {sid}")
+                            return tk_page_url, (title or f"Trend Video #{kw}"), sid, cand_mp4
+                        safe_remove(cand_mp4)
+        except Exception as e:
+            print(f"Trend radar 1-Manba TikWM qidiruv ogohlantirishi ({kw}): {e}")
+
+    # ==================== 2-MANBA: TikWM Regional Trending Feed (UZ, KZ, TR, AE, US) ====================
+    for reg in ["UZ", "KZ", "TR", "AE", "US"]:
+        try:
+            _wait_tikwm_rate_limit(1.25)
+            resp = requests.post(
+                "https://www.tikwm.com/api/feed/list",
+                data={"region": reg, "count": 18},
+                headers=headers, timeout=16, verify=False
+            )
+            if resp.status_code == 200:
+                videos = (resp.json().get("data") or [])
+                if isinstance(videos, list):
+                    for v in videos[:10]:
+                        vid_id = str(v.get("video_id") or "")
+                        dur = float(v.get("duration") or 0)
+                        title = str(v.get("title") or "").strip()
+                        author_nick = str((v.get("author") or {}).get("unique_id") or "")
+                        sid = f"tk_{vid_id}"
+                        if not vid_id or sid in seen_ids or dur < 5 or dur > 62:
+                            continue
+                        ok_safe, _ = is_text_safe_from_gambling_adult_ads(f"{title} {author_nick}")
+                        if not ok_safe:
+                            _record_blocked_or_seen_candidate(sid, "", "BLOCKED")
+                            seen_ids.add(sid)
+                            continue
+                        tk_page_url = f"https://www.tiktok.com/@{author_nick or 'user'}/video/{vid_id}"
+                        if tk_page_url in seen_urls:
+                            continue
+
+                        stream_candidates = []
+                        for k_stream in ("play", "hdplay", "wmplay"):
+                            s_u = v.get(k_stream)
+                            if s_u and isinstance(s_u, str):
+                                if s_u.startswith("/"):
+                                    s_u = "https://www.tikwm.com" + s_u
+                                stream_candidates.append(s_u)
+
+                        cand_mp4 = os.path.join(DOWNLOAD_DIR, f"trend_reg_{vid_id}_{int(time.time())%100000}.mp4")
+                        dl_ok = False
+                        for s_u in stream_candidates:
+                            if _download_binary_stream(s_u, cand_mp4, referer="https://www.tikwm.com/"):
+                                dl_ok = True
+                                break
+                        if dl_ok and _try_verify_and_Finalize_mp4(cand_mp4, tk_page_url, title or f"Trend {reg}", sid, author_nick):
+                            print(f"[OK] Trend 2-Manba (TikWM Region {reg}) topildi: {sid}")
+                            return tk_page_url, (title or "Trend Reels"), sid, cand_mp4
+                        safe_remove(cand_mp4)
+        except Exception as e:
+            print(f"Trend radar 2-Manba ({reg}) ogohlantirishi: {e}")
+
+    # ==================== 3-MANBA: Reddit Viral Short Videos JSON API (v.redd.it Direct MP4 + Audio) ====================
+    viral_subreddits = [
+        "BeAmazed", "satisfyingasfuck", "NatureIsFuckingLit", "oddlysatisfying",
+        "interestingasfuck", "nextfuckinglevel", "aww", "Cars"
+    ]
+    random.shuffle(viral_subreddits)
+    reddit_headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
+        "Accept": "application/json"
+    }
+    for sub in viral_subreddits[:4]:
+        for feed_url in [
+            f"https://www.reddit.com/r/{sub}/hot.json?limit=25",
+            f"https://old.reddit.com/r/{sub}/top.json?t=week&limit=25"
+        ]:
+            try:
+                rr = requests.get(feed_url, headers=reddit_headers, timeout=14, verify=False)
+                if rr.status_code != 200:
+                    continue
+                children = ((rr.json().get("data") or {}).get("children") or [])
+                for item in children:
+                    post = (item.get("data") or {})
+                    if post.get("over_18") or not post.get("is_video"):
+                        continue
+                    post_id = str(post.get("id") or "")
+                    sid = f"rd_{post_id}"
+                    if not post_id or sid in seen_ids:
+                        continue
+                    title = str(post.get("title") or "").strip()
+                    ok_safe, _ = is_text_safe_from_gambling_adult_ads(title)
+                    if not ok_safe:
+                        seen_ids.add(sid)
+                        continue
+                    rv = ((post.get("secure_media") or post.get("media") or {}).get("reddit_video") or {})
+                    fallback_url = str(rv.get("fallback_url") or "").split("?")[0]
+                    dur = float(rv.get("duration") or 0)
+                    if not fallback_url or dur < 5 or dur > 60:
+                        continue
+                    permalink = f"https://www.reddit.com{post.get('permalink', '')}"
+                    cand_mp4 = os.path.join(DOWNLOAD_DIR, f"trend_rd_{post_id}_{int(time.time())%100000}.mp4")
+                    raw_v = cand_mp4 + "_v.mp4"
+                    raw_a = cand_mp4 + "_a.mp4"
+                    try:
+                        if _download_binary_stream(fallback_url, raw_v, referer="https://www.reddit.com/"):
+                            base_v = fallback_url.rsplit("/", 1)[0]
+                            aud_ok = False
+                            for aud_name in ("DASH_AUDIO_128.mp4", "DASH_audio.mp4", "DASH_AUDIO_64.mp4", "audio.mp4", "audio"):
+                                if _download_binary_stream(f"{base_v}/{aud_name}", raw_a, referer="https://www.reddit.com/"):
+                                    aud_ok = True
+                                    break
+                            if aud_ok and os.path.exists(raw_a):
+                                subprocess.run(
+                                    [FFMPEG_BIN, "-y", "-i", raw_v, "-i", raw_a, "-c:v", "copy", "-c:a", "aac", "-shortest", cand_mp4],
+                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=30
+                                )
+                            if not os.path.exists(cand_mp4) or os.path.getsize(cand_mp4) < 5000:
+                                shutil.copyfile(raw_v, cand_mp4)
+                            if _try_verify_and_Finalize_mp4(cand_mp4, permalink, title or "Viral Video", sid, sub):
+                                print(f"[OK] Trend 3-Manba (Reddit r/{sub}) topildi: {sid}")
+                                return permalink, (title or "Viral Reels"), sid, cand_mp4
+                    finally:
+                        safe_remove(raw_v, raw_a)
+                    safe_remove(cand_mp4)
+                break
+            except Exception as e:
+                print(f"Trend radar 3-Manba (Reddit r/{sub}) ogohlantirishi: {e}")
+
+    # ==================== 4-MANBA: Dailymotion Official Public Short-Video API ====================
+    for kw in combined_queries[:4]:
+        try:
+            dm_api = (
+                f"https://api.dailymotion.com/videos?fields=id,title,duration,url,owner.screenname"
+                f"&search={urllib.parse.quote(kw)}&shorter_than=1&sort=visited&limit=15&family_filter=true"
+            )
+            dr = requests.get(dm_api, headers=headers, timeout=14, verify=False)
+            if dr.status_code == 200:
+                vlist = (dr.json().get("list") or [])
+                for dv in vlist:
+                    dm_id = str(dv.get("id") or "")
+                    dur = float(dv.get("duration") or 0)
+                    title = str(dv.get("title") or "").strip()
+                    owner = str(dv.get("owner.screenname") or "")
+                    dm_url = str(dv.get("url") or f"https://www.dailymotion.com/video/{dm_id}")
+                    sid = f"dm_{dm_id}"
+                    if not dm_id or sid in seen_ids or dur < 6 or dur > 60:
+                        continue
+                    ok_safe, _ = is_text_safe_from_gambling_adult_ads(f"{title} {owner}")
+                    if not ok_safe:
+                        seen_ids.add(sid)
+                        continue
+                    cand_mp4 = os.path.join(DOWNLOAD_DIR, f"trend_dm_{dm_id}_{int(time.time())%100000}.mp4")
+                    ydl_opts = {
+                        "outtmpl": cand_mp4,
+                        "format": "best[ext=mp4]/best",
+                        "quiet": True,
+                        "no_warnings": True,
+                        "nocheckcertificate": True,
+                        "socket_timeout": 20,
+                    }
+                    if FFMPEG_DIR:
+                        ydl_opts["ffmpeg_location"] = FFMPEG_DIR
+                    try:
+                        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                            ydl.extract_info(dm_url, download=True)
+                    except Exception:
+                        pass
+                    if _try_verify_and_Finalize_mp4(cand_mp4, dm_url, title or f"Trend #{kw}", sid, owner):
+                        print(f"[OK] Trend 4-Manba (Dailymotion API) topildi: {sid}")
+                        return dm_url, (title or f"Trend #{kw}"), sid, cand_mp4
+                    safe_remove(cand_mp4)
+        except Exception as e:
+            print(f"Trend radar 4-Manba (Dailymotion) ogohlantirishi: {e}")
+
+    # ==================== 5-MANBA: YouTube Shorts Multi-Engine Search (android_vr / tv_embedded / Invidious) ====================
+    for kw in combined_queries[:3]:
+        try:
+            search_q = f"ytsearch8:{kw} #shorts"
+            ydl_search_opts = {
+                "quiet": True,
+                "no_warnings": True,
+                "extract_flat": True,
+                "skip_download": True,
+                "nocheckcertificate": True,
+                "extractor_args": {"youtube": {"player_client": ["android_vr", "tv_embedded", "ios", "mweb"]}},
+            }
+            with yt_dlp.YoutubeDL(ydl_search_opts) as ydl:
+                s_info = ydl.extract_info(search_q, download=False)
+                entries = (s_info or {}).get("entries") or []
+                for ent in entries:
+                    if not ent:
+                        continue
+                    yt_id = str(ent.get("id") or "")
+                    dur = float(ent.get("duration") or 20)
+                    title = str(ent.get("title") or "").strip()
+                    sid = f"yt_{yt_id}"
+                    if not yt_id or sid in seen_ids or dur < 5 or dur > 62:
+                        continue
+                    ok_safe, _ = is_text_safe_from_gambling_adult_ads(title)
+                    if not ok_safe:
+                        seen_ids.add(sid)
+                        continue
+                    yt_url = f"https://www.youtube.com/shorts/{yt_id}"
+                    if yt_url in seen_urls:
+                        continue
+                    yt_files, yt_dl_title = _download_youtube_multi_engine(yt_url, ADMIN_ID, int(time.time()*1000) % 100000000)
+                    if yt_files and os.path.exists(yt_files[0]):
+                        cand_mp4 = yt_files[0]
+                        if _try_verify_and_Finalize_mp4(cand_mp4, yt_url, title or yt_dl_title, sid, "youtube"):
+                            print(f"[OK] Trend 5-Manba (YouTube Shorts) topildi: {sid}")
+                            return yt_url, (title or yt_dl_title or "YouTube Shorts"), sid, cand_mp4
+                        safe_remove(*yt_files)
+        except Exception as e:
+            print(f"Trend radar 5-Manba (YouTube Shorts) ogohlantirishi: {e}")
+
+    # ==================== 6-MANBA: Invidious Proxy Search + Global Open CDN Viral Video Zaxirasi ====================
+    inv_search_hosts = [
+        "https://inv.nadeko.net",
+        "https://invidious.nerdvpn.de",
+        "https://inv.tux.pizza",
+        "https://yewtu.be"
+    ]
+    for inv_h in inv_search_hosts:
+        for kw in combined_queries[:2]:
+            try:
+                sr = requests.get(
+                    f"{inv_h}/api/v1/search",
+                    params={"q": f"{kw} shorts", "type": "video", "duration": "short", "sort_by": "view_count"},
+                    headers=headers, timeout=12, verify=False
+                )
+                if sr.status_code == 200 and isinstance(sr.json(), list):
+                    for item in sr.json()[:8]:
+                        yt_id = str(item.get("videoId") or "")
+                        dur = float(item.get("lengthSeconds") or 0)
+                        title = str(item.get("title") or "").strip()
+                        sid = f"yt_{yt_id}"
+                        if not yt_id or sid in seen_ids or dur < 5 or dur > 62:
+                            continue
+                        ok_safe, _ = is_text_safe_from_gambling_adult_ads(title)
+                        if not ok_safe:
+                            seen_ids.add(sid)
+                            continue
+                        cand_mp4 = os.path.join(DOWNLOAD_DIR, f"trend_inv_{yt_id}_{int(time.time())%100000}.mp4")
+                        proxy_u = f"{inv_h}/latest_version?id={yt_id}&itag=18&local=true"
+                        yt_url = f"https://www.youtube.com/shorts/{yt_id}"
+                        if _download_binary_stream(proxy_u, cand_mp4, referer=inv_h):
+                            if _try_verify_and_Finalize_mp4(cand_mp4, yt_url, title or "Viral Shorts", sid, "youtube"):
+                                print(f"[OK] Trend 6A-Manba (Invidious Proxy Shorts) topildi: {sid}")
+                                return yt_url, (title or "Viral Shorts"), sid, cand_mp4
+                        safe_remove(cand_mp4)
+            except Exception:
+                pass
+
+    return None, "", "", ""
 
 def add_video_to_ig_queue(video_url: str = "", local_path: str = "", title: str = "Reels Video", caption: str = "", montage_mode: str = "") -> tuple[bool, str, int]:
     """
@@ -2849,7 +3182,7 @@ def add_video_to_ig_queue(video_url: str = "", local_path: str = "", title: str 
     cfg = get_ig_autopost_config()
     use_mode = montage_mode or cfg.get("montage_mode", "audio1_bridge")
 
-    ok_txt, reason_txt = is_text_safe_from_gambling_adult_ads(f"{title} {caption} {video_url}")
+    ok_txt, reason_txt = is_text_safe_from_gambling_adult_ads(f"{title} {caption}")
     if not ok_txt:
         return False, f"🚫 Kontent bloklandi ({reason_txt}). Qimor va 18+ reklamalar ruxsat etilmaydi!", 0
 
@@ -2882,11 +3215,12 @@ def process_and_publish_single_reel_pipeline(
     custom_caption: str = "",
     montage_mode: str = "",
     source_id: str = "",
-    notify_chat_id: int = ADMIN_ID
+    notify_chat_id: int = ADMIN_ID,
+    already_verified_safe: bool = False
 ) -> tuple[bool, str]:
     """
     🚀 TO'LIQ AVTOMATIK REELS FABRIKASI:
-    1) Videoni linkdan yuklab oladi (yoki tayyor faylni oladi).
+    1) Videoni linkdan yuklab oladi (yoki tayyor lokal MP4 faylni oladi).
     2) 3-Qatlamli Halol & Toza Kontent Filtridan (Qimor / 1xBet / 18+ / Reklama) o'tkazadi.
     3) Agar Admin Outro saqlagan bo'lsa (/set_outro), tanlangan rejimda (Audio Bridge + Whoosh FX)
        9:16 HD Blurred Fon bilan ulaydi.
@@ -2902,32 +3236,28 @@ def process_and_publish_single_reel_pipeline(
     final_reel_path = os.path.join(DOWNLOAD_DIR, f"ig_ready_reel_{ts}.mp4")
 
     try:
-        # 1. Agar link berilgan bo'lsa, yuklab olamiz
+        # 1. Agar tayyor fayl berilmagan bo'lsa, linkdan yuklab olamiz
         if not raw_src or not os.path.exists(raw_src):
             if not video_url:
                 return False, "Video manbasi ko'rsatilmagan."
             downloaded_list, dl_title = download_media_bulletproof(video_url, ADMIN_ID, ts)
             if not downloaded_list:
+                if source_id:
+                    _record_blocked_or_seen_candidate(source_id, video_url, "DL_FAIL")
                 return False, f"Havoladan videoni yuklab bo'lmadi: {video_url}"
             raw_src = downloaded_list[0]
-            if not title or title == "Reels Video":
+            if not title or title in ("Reels Video", "Ruchnoy Link"):
                 title = dl_title
 
         # 2. 3-Qatlamli Halol va Xavfsizlik Filtri (Matn + Kadr + Audio STT)
-        is_safe, safety_reason = verify_video_content_is_halal_and_safe(raw_src, f"{title} {custom_caption} {video_url}")
+        if already_verified_safe:
+            is_safe, safety_reason = True, "✅ 100% Toza (Halol & Reklamasiz)"
+        else:
+            is_safe, safety_reason = verify_video_content_is_halal_and_safe(raw_src, f"{title} {custom_caption}")
+
         if not is_safe:
-            # Bloklangan manbani qaytib olmaslik uchun tarixga 'blocked' qilib yozib qo'yamiz
             if source_id or video_url:
-                try:
-                    conn = sqlite3.connect(DB_PATH)
-                    conn.execute(
-                        "INSERT OR IGNORE INTO ig_posted_history (source_id, video_url, ig_code, posted_at) VALUES (?, ?, 'BLOCKED', ?)",
-                        (source_id or video_url[:80], video_url, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-                    )
-                    conn.commit()
-                    conn.close()
-                except Exception:
-                    pass
+                _record_blocked_or_seen_candidate(source_id or video_url[:80], video_url, "BLOCKED")
             return False, f"🛡 Kontent Xavfsizlik Filtri tomonidan bloklandi: {safety_reason}"
 
         # 3. Montaj (Outro bilan) yoki 10-Bosqichli Anti-Duplikat (9:16 HD + Suzuvchi Watermark)
@@ -2959,7 +3289,7 @@ def process_and_publish_single_reel_pipeline(
         else:
             base_tpl = cfg.get("caption_template") or DEFAULT_IG_CAPTION
             final_caption = base_tpl.replace("{ig_user}", ig_user).replace("{bot_user}", bot_user)
-            if clean_title and clean_title.lower() not in ("video", "tiktok video", "instagram video"):
+            if clean_title and clean_title.lower() not in ("video", "tiktok video", "instagram video", "ruchnoy link"):
                 final_caption = f"🎬 {clean_title}\n\n" + final_caption
 
         # 5. Instagramga yuklash (agar Instagram akkount ulangan bo'lsa)
@@ -2972,16 +3302,7 @@ def process_and_publish_single_reel_pipeline(
 
         # Tarixga yozish
         if source_id or video_url:
-            try:
-                conn = sqlite3.connect(DB_PATH)
-                conn.execute(
-                    "INSERT OR REPLACE INTO ig_posted_history (source_id, video_url, ig_code, posted_at) VALUES (?, ?, ?, ?)",
-                    (source_id or video_url[:80], video_url, ig_code or "TG_ONLY", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-                )
-                conn.commit()
-                conn.close()
-            except Exception:
-                pass
+            _record_blocked_or_seen_candidate(source_id or video_url[:80], video_url, ig_code or "TG_ONLY")
 
         # 6. Adminga Telegram orqali tayyor videoni va hisobotni yuborish
         vinfo = get_video_stream_info(final_reel_path)
@@ -3023,19 +3344,43 @@ def process_and_publish_single_reel_pipeline(
     finally:
         safe_remove(final_reel_path, *downloaded_list)
 
-def execute_next_autopost_job(notify_chat_id: int = ADMIN_ID, force_manual: bool = False) -> tuple[bool, str]:
+def _mark_autopost_counter_incremented(hour_slot: int = None):
+    """Kunlik joylangan Reels sonini va oxirgi vaqtni yangilash"""
+    try:
+        cfg = get_ig_autopost_config()
+        now_uz = get_tashkent_now()
+        today_str = now_uz.strftime("%Y-%m-%d")
+        if cfg.get("last_auto_check_date") != today_str:
+            cfg["last_auto_check_date"] = today_str
+            cfg["posts_today_count"] = 0
+            cfg["posted_hours_today"] = []
+        cfg["posts_today_count"] = int(cfg.get("posts_today_count", 0)) + 1
+        ph = list(cfg.get("posted_hours_today", []))
+        slot_val = hour_slot if hour_slot is not None else now_uz.hour
+        if slot_val not in ph:
+            ph.append(slot_val)
+        cfg["posted_hours_today"] = ph
+        cfg["last_post_timestamp"] = time.time()
+        save_ig_autopost_config(cfg)
+    except Exception as e:
+        print(f"Autopost counter update xatosi: {e}")
+
+def execute_next_autopost_job(notify_chat_id: int = ADMIN_ID, force_manual: bool = False, slot_hour: int = None) -> tuple[bool, str]:
     """
     1) Avval Ruchnoy navbatni (`ig_queue` status='pending') tekshiradi.
-    2) Agar navbat bo'sh bo'lsa, Avto-Trend Radardan 100% halol va toza trend videoni topib,
-       montaj + anti-duplikat qilib joylaydi (agar 1-nomzod filtrdan o'tmasa, avtomatik keyingisini oladi!).
+       Agar navbatdagi link xato bo'lsa, uni 'failed' qilib belgilaydi va to'xtab qolmasdan
+       keyingi navbatdagi videoga yoki Avto-Trend Radarga o'tadi!
+    2) Navbat bo'sh bo'lsa, 6-Motorli Avto-Trend Radardan 100% halol va toza trend videoni
+       bevosita MP4 fayli bilan topib, montaj + anti-duplikat qilib Instagramga joylaydi!
     """
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    cursor.execute("SELECT id, video_url, local_path, title, caption, montage_mode FROM ig_queue WHERE status = 'pending' ORDER BY id ASC LIMIT 1")
-    row = cursor.fetchone()
+    cursor.execute("SELECT id, video_url, local_path, title, caption, montage_mode FROM ig_queue WHERE status = 'pending' ORDER BY id ASC LIMIT 3")
+    queue_rows = cursor.fetchall()
     conn.close()
 
-    if row:
+    last_queue_err = ""
+    for row in queue_rows:
         q_id, v_url, l_path, q_title, q_cap, m_mode = row
         ok, msg = process_and_publish_single_reel_pipeline(
             video_url=v_url,
@@ -3050,28 +3395,46 @@ def execute_next_autopost_job(notify_chat_id: int = ADMIN_ID, force_manual: bool
         now_s = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if ok:
             conn.execute("UPDATE ig_queue SET status = 'posted', posted_at = ?, ig_media_code = ? WHERE id = ?", (now_s, msg[:120], q_id))
-        else:
-            conn.execute("UPDATE ig_queue SET status = 'failed', error_msg = ? WHERE id = ?", (msg[:200], q_id))
-        conn.commit()
-        conn.close()
-        if l_path and os.path.exists(l_path):
-            safe_remove(l_path)
-        return ok, msg
-
-    # Navbat bo'sh bo'lsa -> Avto-Trend Radardan qidiramiz (maksimal 4 marta urinish, filtrdan o'tmaganini tashlab keyingisini oladi)
-    for attempt in range(4):
-        t_url, t_title, t_sid = discover_safe_trending_video_for_autopost()
-        if not t_url:
-            break
-        ok, msg = process_and_publish_single_reel_pipeline(
-            video_url=t_url,
-            title=t_title,
-            source_id=t_sid,
-            notify_chat_id=notify_chat_id
-        )
-        if ok:
+            conn.commit()
+            conn.close()
+            if l_path and os.path.exists(l_path):
+                safe_remove(l_path)
+            _mark_autopost_counter_incremented(slot_hour)
             return True, msg
-    return False, "Hozircha mos trend video topilmadi yoki barcha nomzodlar filtrdan qaytarildi."
+        else:
+            last_queue_err = msg
+            conn.execute("UPDATE ig_queue SET status = 'failed', error_msg = ? WHERE id = ?", (msg[:200], q_id))
+            conn.commit()
+            conn.close()
+            if l_path and os.path.exists(l_path):
+                safe_remove(l_path)
+            print(f"[IG Queue] #{q_id} muvaffaqiyatsiz ({msg}), Avto-Trend Radarga o'tilmoqda...")
+
+    # Navbat bo'sh bo'lsa (yoki navbatdagi link xato bo'lsa) -> 6-Motorli Avto-Trend Radardan olamiz
+    last_trend_err = ""
+    for attempt in range(3):
+        t_url, t_title, t_sid, t_local_mp4 = discover_safe_trending_video_for_autopost()
+        if not t_url and not t_local_mp4:
+            continue
+        try:
+            ok, msg = process_and_publish_single_reel_pipeline(
+                video_url=t_url or "",
+                local_video_path=t_local_mp4 or "",
+                title=t_title,
+                source_id=t_sid,
+                notify_chat_id=notify_chat_id,
+                already_verified_safe=bool(t_local_mp4 and os.path.exists(t_local_mp4))
+            )
+            if ok:
+                _mark_autopost_counter_incremented(slot_hour)
+                return True, msg
+            last_trend_err = msg
+        finally:
+            if t_local_mp4 and os.path.exists(t_local_mp4):
+                safe_remove(t_local_mp4)
+
+    err_detail = last_trend_err or last_queue_err or "Tarmoq API laridan javob qaytmadi (1 daqiqadan so'ng qayta uriniladi)."
+    return False, f"Hozircha mos trend video topilmadi ({err_detail})"
 
 def get_tashkent_now() -> datetime:
     """Server qayerda (GitHub Actions UTC da) bo'lishidan qat'i nazar aniq Toshkent vaqtini (UTC+5) qaytaradi"""
@@ -3081,11 +3444,16 @@ def get_tashkent_now() -> datetime:
 
 def start_ig_autopost_scheduler_daemon():
     """
-    Orqa fonda 24/7 ishlaydigan Avto-Reels Rejalashtiruvchi (Kuniga 3-4 mahal Toshkent vaqti bilan:
-    masalan 10:00, 14:00, 18:00, 21:00 da avtomatik video yasab Instagramga va Adminga joylaydi!)
+    Orqa fonda 24/7 ishlaydigan Aqlli Avto-Reels Rejalashtiruvchi (Smart Catch-Up bilan!):
+    - Kuniga 3-4 mahal Toshkent vaqti bilan (masalan 10:00, 14:00, 18:00, 21:00 da)
+      avtomatik ravishda trenddan video topib, Outro + 10-Bosqichli Anti-Duplikat bilan
+      Instagramga va Adminga joylaydi!
+    - SMART CATCH-UP: Agar server/GitHub Actions soat 14:25 da qayta ishga tushgan bo'lsa va
+      soat 10:00 yoki 14:00 dagi post hali chiqmagan bo'lsa, foydalanuvchi qo'l tekkizmasdan
+      avtomatik ravishda o'tkazib yuborilgan vaqt uchun videoni o'zi yasab joylaydi!
     """
     def _scheduler_loop():
-        time.sleep(15)
+        time.sleep(20)
         while True:
             try:
                 cfg = get_ig_autopost_config()
@@ -3101,29 +3469,37 @@ def start_ig_autopost_scheduler_daemon():
                         save_ig_autopost_config(cfg)
 
                     daily_limit = int(cfg.get("daily_limit", 4))
-                    sched_hours = cfg.get("schedule_hours", [10, 14, 18, 21])
-                    posted_hours = cfg.get("posted_hours_today", [])
+                    sched_hours = sorted([int(h) for h in (cfg.get("schedule_hours") or [10, 14, 18, 21])])
+                    posted_hours = [int(h) for h in (cfg.get("posted_hours_today") or [])]
                     posts_today = int(cfg.get("posts_today_count", 0))
+                    last_ts = float(cfg.get("last_post_timestamp", 0.0))
 
-                    # Agar hozirgi soat rejadagi vaqtga to'g'ri kelsa va bu soatda hali post chiqmagan bo'lsa:
-                    if (
-                        current_hour in sched_hours
-                        and current_hour not in posted_hours
-                        and posts_today < daily_limit
-                        and (time.time() - float(cfg.get("last_post_timestamp", 0))) > 3600
-                    ):
-                        ok, _ = execute_next_autopost_job(notify_chat_id=ADMIN_ID)
-                        if ok:
-                            cfg = get_ig_autopost_config()
-                            cfg["posts_today_count"] = int(cfg.get("posts_today_count", 0)) + 1
-                            ph = list(cfg.get("posted_hours_today", []))
-                            ph.append(current_hour)
-                            cfg["posted_hours_today"] = ph
-                            cfg["last_post_timestamp"] = time.time()
-                            save_ig_autopost_config(cfg)
+                    # Hozirgi soatgacha bo'lgan va bugun hali chiqmagan reja soatlarini topish (Smart Catch-Up)
+                    due_slots = [h for h in sched_hours if h <= current_hour and h not in posted_hours]
+
+                    # Agar navbatda (ig_queue) foydalanuvchi qo'shgan video bo'lsa yoki rejadagi vaqt kelgan bo'lsa:
+                    conn = sqlite3.connect(DB_PATH)
+                    cur = conn.cursor()
+                    cur.execute("SELECT COUNT(*) FROM ig_queue WHERE status = 'pending'")
+                    q_pending = cur.fetchone()[0]
+                    conn.close()
+
+                    should_post_now = False
+                    target_slot = current_hour
+
+                    if q_pending > 0 and (time.time() - last_ts) > 300:
+                        should_post_now = True
+                        target_slot = due_slots[0] if due_slots else current_hour
+                    elif due_slots and posts_today < daily_limit and (time.time() - last_ts) > 2400:
+                        should_post_now = True
+                        target_slot = due_slots[0]
+
+                    if should_post_now:
+                        print(f"[24/7 Avto-Pilot] Navbatdagi avto-post ishga tushirilmoqda (Slot: {target_slot}:00, Bugun: {posts_today}/{daily_limit})...")
+                        execute_next_autopost_job(notify_chat_id=ADMIN_ID, slot_hour=target_slot)
             except Exception as e:
                 print(f"IG Auto-Poster Scheduler xatosi: {e}")
-            time.sleep(90)
+            time.sleep(60)
 
     t = threading.Thread(target=_scheduler_loop, daemon=True)
     t.start()
@@ -3551,14 +3927,27 @@ def clean_and_resolve_url(raw_url: str) -> str:
             kind = "p" if "/p/" in url.lower() else "reel"
             url = f"https://www.instagram.com/{kind}/{shortcode}/"
 
-    # 3. Pinterest redirect parametrlarini tozalash
+    # 3. YouTube va YouTube Shorts linklarini ?si=..., &feature=share kuzatuv parametrlaridan tozalash
+    if "youtube.com" in url.lower() or "youtu.be" in url.lower():
+        yt_m = re.search(
+            r'(?:youtube\.com/(?:shorts/|live/|embed/|v/|watch\?[^\s"\x27]*v=)|youtu\.be/)([A-Za-z0-9_-]{11})',
+            url, re.IGNORECASE
+        )
+        if yt_m:
+            vid_id = yt_m.group(1)
+            if "/shorts/" in url.lower():
+                url = f"https://www.youtube.com/shorts/{vid_id}"
+            else:
+                url = f"https://www.youtube.com/watch?v={vid_id}"
+
+    # 4. Pinterest redirect parametrlarini tozalash
     if "pinterest.com" in url.lower() and "/sent/" in url.lower():
         url = url.split("/sent/")[0] + "/"
 
     return url
 
 def _download_binary_stream(file_url: str, target_path: str, referer: str = "") -> bool:
-    """Berilgan to'g'ridan-to'g'ri media URL dan faylni xavfsiz yuklab olish"""
+    """Berilgan to'g'ridan-to'g'ri media URL dan faylni xavfsiz yuklab olish (HTML/JSON soxta javoblardan himoyalangan)"""
     if not file_url or not file_url.startswith("http"):
         return False
     headers = {
@@ -3571,13 +3960,18 @@ def _download_binary_stream(file_url: str, target_path: str, referer: str = "") 
         with requests.get(file_url, headers=headers, stream=True, timeout=45, verify=False) as r:
             if r.status_code in (200, 206):
                 ctype = (r.headers.get("Content-Type") or "").lower()
-                if "text/html" in ctype:
+                if "text/html" in ctype or "application/json" in ctype or "text/plain" in ctype:
                     return False
                 with open(target_path, "wb") as f:
                     for chunk in r.iter_content(chunk_size=65536):
                         if chunk:
                             f.write(chunk)
-                if os.path.exists(target_path) and os.path.getsize(target_path) > 3000:
+                if os.path.exists(target_path) and os.path.getsize(target_path) > 5000:
+                    with open(target_path, "rb") as chk:
+                        head = chk.read(64).lstrip()
+                    if head.startswith((b"<!DOCTYPE", b"<html", b"<HTML", b'{"', b"[{" )):
+                        safe_remove(target_path)
+                        return False
                     return True
     except Exception as e:
         print(f"Binary stream yuklash xatosi: {e}")
@@ -3879,12 +4273,342 @@ def _download_instagram_photo_if_not_video(shortcode: str, user_id: int, timesta
         pass
     return [], ""
 
+def extract_youtube_id(url: str) -> str | None:
+    """Har qanday YouTube / Shorts / youtu.be / live / mobile linkdan 11 belgili video ID ni ajratish"""
+    if not url:
+        return None
+    patterns = [
+        r"(?:youtube\.com/shorts/|youtube\.com/live/|youtube\.com/embed/|youtube\.com/v/|youtu\.be/)([A-Za-z0-9_-]{11})",
+        r'youtube\.com/watch\?[^\s"\x27]*v=([A-Za-z0-9_-]{11})',
+    ]
+    for pat in patterns:
+        m = re.search(pat, url, re.IGNORECASE)
+        if m:
+            return m.group(1)
+    return None
+
+def _download_youtube_multi_engine(url: str, user_id: int, timestamp: int) -> tuple[list, str]:
+    """
+    🎬 YOUTUBE VA YOUTUBE SHORTS UCHUN 8-BOSQICHLI MAXSUS YUKLAGICH:
+    GitHub Actions va Cloud datacenter IP larida YouTube bot-tekshiruvini (Sign in to confirm you're not a bot)
+    aylanib o'tish uchun 8 ta mustaqil motorni ketma-ket ishlatadi!
+    """
+    ensure_ffmpeg_in_path()
+    yt_id = extract_youtube_id(url)
+    is_shorts = "/shorts/" in url.lower()
+    canonical_url = f"https://www.youtube.com/watch?v={yt_id}" if yt_id else url
+    shorts_url = f"https://www.youtube.com/shorts/{yt_id}" if yt_id else url
+    target_mp4 = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_00001.mp4")
+    out_template = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_%(autonumber)s.%(ext)s")
+
+    def _collect_yt_files():
+        return sorted([
+            os.path.join(DOWNLOAD_DIR, fname)
+            for fname in os.listdir(DOWNLOAD_DIR)
+            if fname.startswith(f"{user_id}_{timestamp}_")
+            and not fname.endswith((".part", ".ytdl", ".temp.mp4", "_v.mp4", "_a.m4a"))
+            and os.path.getsize(os.path.join(DOWNLOAD_DIR, fname)) > 5000
+        ])
+
+    # ---------------- 1-MOTOR: yt-dlp Native InnerTube Multi-Client Bypass ----------------
+    # MUHIM: Custom desktop User-Agent BERILMAYDI, chunki android_vr, tv_embedded va ios clientlar
+    # o'zining ichki InnerTube User-Agent'i bilan ishlagandagina YouTube bot tekshiruvidan o'tadi!
+    client_profiles = [
+        ["android_vr", "tv_embedded"],
+        ["ios", "mweb"],
+        ["web_embedded", "android", "web"]
+    ]
+    fmt_profiles = [
+        "best[ext=mp4][filesize<48M]/best[ext=mp4][height<=720]/bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[height<=720]/best",
+        "best[ext=mp4]/bestvideo[ext=mp4]+bestaudio[ext=m4a]/bestvideo+bestaudio/best"
+    ]
+    for idx_c, c_list in enumerate(client_profiles):
+        ydl_opts = {
+            "outtmpl": out_template,
+            "format": fmt_profiles[0 if idx_c < 2 else 1],
+            "merge_output_format": "mp4",
+            "quiet": True,
+            "no_warnings": True,
+            "nocheckcertificate": True,
+            "geo_bypass": True,
+            "retries": 3,
+            "fragment_retries": 3,
+            "extractor_retries": 3,
+            "socket_timeout": 25,
+            "extractor_args": {
+                "youtube": {
+                    "player_client": c_list,
+                    "player_skip": ["webpage", "configs"] if "android_vr" in c_list else []
+                }
+            }
+        }
+        if FFMPEG_DIR:
+            ydl_opts["ffmpeg_location"] = FFMPEG_DIR
+        if os.path.exists("cookies.txt"):
+            ydl_opts["cookiefile"] = "cookies.txt"
+
+        try_u = shorts_url if (is_shorts and idx_c == 0) else canonical_url
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info(try_u, download=True)
+                title = (info.get("title") if info else None) or "YouTube Video"
+            files = _collect_yt_files()
+            if files:
+                print(f"[OK] YouTube 1-Motor (yt-dlp {c_list}) orqali yuklandi: {yt_id}")
+                return files, str(title).strip()
+        except Exception as e:
+            print(f"YouTube 1-Motor ({c_list}) ogohlantirishi: {e}")
+
+    # ---------------- 2-MOTOR: pytubefix InnerTube Multi-Client (ANDROID_VR / IOS / WEB_EMBED / TV / MWEB) ----------------
+    try:
+        try:
+            from pytubefix import YouTube as PyTubeYouTube
+        except ImportError:
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "--quiet", "--upgrade", "pytubefix"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=60
+            )
+            from pytubefix import YouTube as PyTubeYouTube
+
+        for pt_client in ["ANDROID_VR", "IOS", "WEB_EMBED", "MWEB", "TV", "WEB"]:
+            try:
+                yt_obj = PyTubeYouTube(canonical_url, client=pt_client)
+                pt_title = yt_obj.title or "YouTube Video"
+                # 1) Progressive (video+audio birga) MP4 oqimni tekshirish
+                prog_stream = (
+                    yt_obj.streams.filter(progressive=True, file_extension="mp4")
+                    .order_by("resolution")
+                    .desc()
+                    .first()
+                )
+                if prog_stream:
+                    prog_stream.download(output_path=DOWNLOAD_DIR, filename=os.path.basename(target_mp4))
+                    if os.path.exists(target_mp4) and os.path.getsize(target_mp4) > 10000:
+                        print(f"[OK] YouTube 2-Motor (pytubefix {pt_client} progressive) orqali yuklandi: {yt_id}")
+                        return [target_mp4], pt_title
+
+                # 2) Adaptive (720p/1080p video + audio alohida) oqimlarni olib FFmpeg bilan birlashtirish
+                v_stream = (
+                    yt_obj.streams.filter(adaptive=True, file_extension="mp4", only_video=True)
+                    .order_by("resolution")
+                    .desc()
+                    .first()
+                )
+                a_stream = (
+                    yt_obj.streams.filter(adaptive=True, only_audio=True)
+                    .order_by("abr")
+                    .desc()
+                    .first()
+                )
+                if v_stream and a_stream:
+                    v_tmp = target_mp4 + "_v.mp4"
+                    a_tmp = target_mp4 + "_a.m4a"
+                    try:
+                        v_stream.download(output_path=DOWNLOAD_DIR, filename=os.path.basename(v_tmp))
+                        a_stream.download(output_path=DOWNLOAD_DIR, filename=os.path.basename(a_tmp))
+                        if os.path.exists(v_tmp) and os.path.exists(a_tmp):
+                            subprocess.run(
+                                [FFMPEG_BIN, "-y", "-i", v_tmp, "-i", a_tmp, "-c:v", "copy", "-c:a", "aac", "-movflags", "+faststart", target_mp4],
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=90
+                            )
+                            if os.path.exists(target_mp4) and os.path.getsize(target_mp4) > 10000:
+                                print(f"[OK] YouTube 2-Motor (pytubefix {pt_client} adaptive) orqali yuklandi: {yt_id}")
+                                return [target_mp4], pt_title
+                    finally:
+                        safe_remove(v_tmp, a_tmp)
+            except Exception as pt_e:
+                print(f"YouTube 2-Motor (pytubefix {pt_client}) ogohlantirishi: {pt_e}")
+    except Exception as e:
+        print(f"pytubefix umumiy ogohlantirishi: {e}")
+
+    if not yt_id:
+        return [], ""
+
+    # ---------------- 3-MOTOR: Invidious Public API Network (?local=true Server-Proxied Stream!) ----------------
+    invidious_hosts = [
+        "https://inv.nadeko.net",
+        "https://invidious.nerdvpn.de",
+        "https://inv.tux.pizza",
+        "https://invidious.privacyredirect.com",
+        "https://yewtu.be",
+        "https://vid.puffyan.us",
+        "https://invidious.fdn.fr",
+        "https://invidious.perennialte.ch",
+        "https://invidious.jing.rocks"
+    ]
+    for inv_host in invidious_hosts:
+        try:
+            api_u = f"{inv_host}/api/v1/videos/{yt_id}"
+            ir = requests.get(api_u, headers={"User-Agent": "Mozilla/5.0"}, timeout=12, verify=False)
+            if ir.status_code == 200:
+                ij = ir.json()
+                inv_title = ij.get("title") or "YouTube Video"
+                fmt_streams = ij.get("formatStreams") or []
+                # Yuqori sifatli MP4 (itag 22 = 720p, itag 18 = 360p) birinchi
+                fmt_streams.sort(key=lambda x: 1 if "720" in str(x.get("qualityLabel", "")) else 0, reverse=True)
+                for fs in fmt_streams:
+                    itag = fs.get("itag") or "18"
+                    direct_u = fs.get("url") or ""
+                    # 1) Avval Invidious serverining o'zi orqali proksi oqimni (?local=true) sinab ko'ramiz
+                    proxy_stream_u = f"{inv_host}/latest_version?id={yt_id}&itag={itag}&local=true"
+                    if _download_binary_stream(proxy_stream_u, target_mp4, referer=inv_host):
+                        print(f"[OK] YouTube 3-Motor (Invidious Proxy {inv_host}) orqali yuklandi: {yt_id}")
+                        return [target_mp4], inv_title
+                    if direct_u and _download_binary_stream(direct_u, target_mp4, referer="https://www.youtube.com/"):
+                        print(f"[OK] YouTube 3-Motor (Invidious Direct {inv_host}) orqali yuklandi: {yt_id}")
+                        return [target_mp4], inv_title
+        except Exception:
+            pass
+
+    # ---------------- 4-MOTOR: Piped Public API Network ----------------
+    piped_hosts = [
+        "https://pipedapi.kavin.rocks",
+        "https://pipedapi.tokhmi.xyz",
+        "https://pipedapi.moomoo.me",
+        "https://pipedapi.syncpundit.io",
+        "https://api.piped.private.coffee",
+        "https://pipedapi.drgns.space"
+    ]
+    for p_host in piped_hosts:
+        try:
+            pr = requests.get(f"{p_host}/streams/{yt_id}", headers={"User-Agent": "Mozilla/5.0"}, timeout=12, verify=False)
+            if pr.status_code == 200:
+                pj = pr.json()
+                p_title = pj.get("title") or "YouTube Video"
+                v_streams = pj.get("videoStreams") or []
+                a_streams = pj.get("audioStreams") or []
+                # 1) Video+Audio birga bo'lgan (videoOnly == False) MP4 ni qidirish
+                for vs in v_streams:
+                    if not vs.get("videoOnly", True) and vs.get("url"):
+                        if _download_binary_stream(vs["url"], target_mp4):
+                            print(f"[OK] YouTube 4-Motor (Piped Muxed {p_host}) orqali yuklandi: {yt_id}")
+                            return [target_mp4], p_title
+                # 2) VideoOnly (<=1080p MP4) + Audio ni birlashtirish
+                mp4_v = [vs for vs in v_streams if vs.get("url") and "mp4" in str(vs.get("mimeType", "")).lower() and vs.get("height", 720) <= 1080]
+                if mp4_v and a_streams:
+                    v_u = mp4_v[0]["url"]
+                    a_u = a_streams[0].get("url")
+                    v_tmp = target_mp4 + "_v.mp4"
+                    a_tmp = target_mp4 + "_a.m4a"
+                    try:
+                        if a_u and _download_binary_stream(v_u, v_tmp) and _download_binary_stream(a_u, a_tmp):
+                            subprocess.run(
+                                [FFMPEG_BIN, "-y", "-i", v_tmp, "-i", a_tmp, "-c:v", "copy", "-c:a", "aac", "-movflags", "+faststart", target_mp4],
+                                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=90
+                            )
+                            if os.path.exists(target_mp4) and os.path.getsize(target_mp4) > 10000:
+                                print(f"[OK] YouTube 4-Motor (Piped Adaptive {p_host}) orqali yuklandi: {yt_id}")
+                                return [target_mp4], p_title
+                    finally:
+                        safe_remove(v_tmp, a_tmp)
+        except Exception:
+            pass
+
+    # ---------------- 5-MOTOR: Loader.to / Y2Down Cloud Worker API ----------------
+    try:
+        init_loader = requests.get(
+            "https://loader.to/ajax/download.php",
+            params={"format": "720", "url": canonical_url},
+            headers={"User-Agent": "Mozilla/5.0", "Referer": "https://en.loader.to/"},
+            timeout=15, verify=False
+        )
+        if init_loader.status_code == 200:
+            lj = init_loader.json()
+            job_id = lj.get("id")
+            l_title = lj.get("title") or "YouTube Video"
+            if job_id:
+                for _ in range(14):
+                    time.sleep(1.5)
+                    pr = requests.get(
+                        "https://loader.to/ajax/progress.php",
+                        params={"id": job_id},
+                        headers={"User-Agent": "Mozilla/5.0", "Referer": "https://en.loader.to/"},
+                        timeout=12, verify=False
+                    )
+                    if pr.status_code == 200:
+                        pj = pr.json()
+                        dl_u = pj.get("download_url")
+                        if dl_u and dl_u.startswith("http"):
+                            if _download_binary_stream(dl_u, target_mp4, referer="https://en.loader.to/"):
+                                print(f"[OK] YouTube 5-Motor (Loader.to Cloud) orqali yuklandi: {yt_id}")
+                                return [target_mp4], l_title
+                            break
+                        if int(pj.get("progress") or 0) >= 1000:
+                            break
+    except Exception as e:
+        print(f"YouTube 5-Motor (Loader.to) ogohlantirishi: {e}")
+
+    # ---------------- 6-MOTOR: Cobalt Public API Instances ----------------
+    cobalt_endpoints = [
+        "https://cobalt-api.kwiatekmiki.com",
+        "https://api.cobalt.blackcat.sweeux.org",
+        "https://cobalt.api.timelessnesses.me"
+    ]
+    for cb_host in cobalt_endpoints:
+        try:
+            cbr = requests.post(
+                f"{cb_host}/",
+                json={"url": canonical_url, "videoQuality": "720", "youtubeVideoCodec": "h264"},
+                headers={"Accept": "application/json", "Content-Type": "application/json", "User-Agent": "Mozilla/5.0"},
+                timeout=14, verify=False
+            )
+            if cbr.status_code in (200, 201):
+                cbj = cbr.json()
+                dl_u = cbj.get("url")
+                if dl_u and _download_binary_stream(dl_u, target_mp4):
+                    print(f"[OK] YouTube 6-Motor (Cobalt {cb_host}) orqali yuklandi: {yt_id}")
+                    return [target_mp4], "YouTube Video"
+        except Exception:
+            pass
+
+    # ---------------- 7-MOTOR: RyzenDesu / VKR / SaveTube External Cloud APIs ----------------
+    ext_yt_apis = [
+        f"https://api.ryzendesu.vip/api/downloader/ytmp4?url={urllib.parse.quote(canonical_url)}&quality=720",
+        f"https://api.ryzendesu.vip/api/downloader/ytmp4?url={urllib.parse.quote(canonical_url)}",
+        f"https://vkrdownloader.xyz/server?vkr={urllib.parse.quote(canonical_url)}"
+    ]
+    for ext_u in ext_yt_apis:
+        try:
+            er = requests.get(ext_u, headers={"User-Agent": "Mozilla/5.0"}, timeout=16, verify=False)
+            if er.status_code == 200 and er.text:
+                ej_text = _unescape_ig_text(er.text)
+                try:
+                    ej = er.json()
+                    cand_links = []
+                    if isinstance(ej, dict):
+                        for k in ("url", "downloadUrl", "dl_link", "video"):
+                            if isinstance(ej.get(k), str) and ej[k].startswith("http"):
+                                cand_links.append(ej[k])
+                        data_d = ej.get("data") or {}
+                        if isinstance(data_d, dict):
+                            for k in ("url", "downloadUrl", "hd", "sd"):
+                                if isinstance(data_d.get(k), str) and data_d[k].startswith("http"):
+                                    cand_links.append(data_d[k])
+                            for dl_item in (data_d.get("downloads") or []):
+                                if isinstance(dl_item, dict) and str(dl_item.get("url", "")).startswith("http"):
+                                    cand_links.append(dl_item["url"])
+                    for clink in cand_links:
+                        if _download_binary_stream(clink, target_mp4):
+                            print(f"[OK] YouTube 7-Motor (External Cloud API) orqali yuklandi: {yt_id}")
+                            return [target_mp4], "YouTube Video"
+                except Exception:
+                    pass
+                for m_url in re.findall(r"(https?://[^\s\"\x27<>\\\\]+(?:\.mp4|googlevideo\.com)[^\s\"\x27<>\\\\]*)", ej_text):
+                    if _download_binary_stream(m_url, target_mp4):
+                        print(f"[OK] YouTube 7B-Motor (Regex Cloud Stream) orqali yuklandi: {yt_id}")
+                        return [target_mp4], "YouTube Video"
+        except Exception:
+            pass
+
+    return _collect_yt_files(), "YouTube Video"
+
 def _download_tiktok_multi_engine(url: str, user_id: int, timestamp: int) -> tuple[list, str]:
-    """TikTok uchun 3-Bosqichli Suv Belgisiz HD Yuklagich (Video + Slayd-shou rasmlar)"""
+    """TikTok uchun 3-Bosqichli Suv Belgisiz HD Yuklagich (Rate-Limit Himoyasi + Video + Slayd-shou)"""
     target_mp4 = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_00001.mp4")
 
-    # 1-Motor: TikWM API (HD No-Watermark + Slideshow Images)
+    # 1-Motor: TikWM API (HD No-Watermark + Slideshow Images, 1.25s rate-limit navbati bilan)
     try:
+        _wait_tikwm_rate_limit(1.25)
         resp = requests.post(
             "https://www.tikwm.com/api/",
             data={"url": url, "hd": 1},
@@ -3908,13 +4632,14 @@ def _download_tiktok_multi_engine(url: str, user_id: int, timestamp: int) -> tup
                         print("[OK] TikTok TikWM Karusel orqali yuklandi")
                         return collected, title
 
-                play_url = d.get("hdplay") or d.get("play") or d.get("wmplay")
-                if play_url:
-                    if play_url.startswith("/"):
-                        play_url = "https://www.tikwm.com" + play_url
-                    if _download_binary_stream(play_url, target_mp4, referer="https://www.tikwm.com/"):
-                        print("[OK] TikTok TikWM HD orqali yuklandi")
-                        return [target_mp4], title
+                for k_stream in ("play", "hdplay", "wmplay"):
+                    play_url = d.get(k_stream)
+                    if play_url and isinstance(play_url, str):
+                        if play_url.startswith("/"):
+                            play_url = "https://www.tikwm.com" + play_url
+                        if _download_binary_stream(play_url, target_mp4, referer="https://www.tikwm.com/"):
+                            print(f"[OK] TikTok TikWM ({k_stream}) orqali yuklandi")
+                            return [target_mp4], title
     except Exception as e:
         print(f"TikWM xatosi: {e}")
 
@@ -3974,13 +4699,13 @@ def _download_pinterest_fallback(url: str, user_id: int, timestamp: int) -> tupl
         }
         r = requests.get(url, headers=headers, timeout=15, verify=False)
         if r.status_code == 200 and r.text:
-            mp4_matches = re.findall(r'(https://v\d*\.pinimg\.com/videos/[^\s"\\]+\.mp4)', r.text)
+            mp4_matches = re.findall(r'(https://v\d*\.pinimg\.com/videos/[^\s"\]+\.mp4)', r.text)
             for vurl in mp4_matches:
                 clean_v = _unescape_ig_text(vurl)
                 if _download_binary_stream(clean_v, target_mp4):
                     print("[OK] Pinterest direct MP4 yuklandi")
                     return [target_mp4], "Pinterest Video"
-            img_matches = re.findall(r'(https://i\.pinimg\.com/originals/[^\s"\\]+\.(?:jpg|png|webp))', r.text)
+            img_matches = re.findall(r'(https://i\.pinimg\.com/originals/[^\s"\]+\.(?:jpg|png|webp))', r.text)
             for iurl in img_matches:
                 clean_i = _unescape_ig_text(iurl)
                 if _download_binary_stream(clean_i, target_jpg):
@@ -4044,6 +4769,7 @@ def ensure_phone_playable_mp4(input_path: str, force_reencode: bool = False, app
 def download_media_bulletproof(raw_url: str, user_id: int, timestamp: int) -> tuple[list, str]:
     """
     12-Bosqichli VIDEO-FIRST Media Yuklagich:
+    Instagram (6-Motor), YouTube/Shorts (8-Motor), TikTok (3-Motor), Pinterest, Twitter/X va 1000+ saytlar!
     Qisqa va xavfsiz fayl nomlari bilan yuklaydi (callback_data 64-bayt limitidan oshmasligi uchun!).
     """
     ensure_ffmpeg_in_path()
@@ -4062,6 +4788,7 @@ def download_media_bulletproof(raw_url: str, user_id: int, timestamp: int) -> tu
             and os.path.getsize(os.path.join(DOWNLOAD_DIR, fname)) > 1000
         ])
 
+    # 1. Instagram maxsus 6-Motorli tizimi
     ig_shortcode = extract_ig_shortcode(url) if ("instagram.com" in lower_url or "instagr.am" in lower_url) else None
     is_definitely_video = False
 
@@ -4070,11 +4797,19 @@ def download_media_bulletproof(raw_url: str, user_id: int, timestamp: int) -> tu
         if ig_files:
             return ig_files, ig_title
 
+    # 2. YouTube va YouTube Shorts maxsus 8-Motorli tizimi (yt-dlp Native InnerTube + pytubefix + Invidious + Piped + Loader + Cobalt)
+    if "youtube.com" in lower_url or "youtu.be" in lower_url:
+        yt_files, yt_title = _download_youtube_multi_engine(url, user_id, short_ts)
+        if yt_files:
+            return yt_files, yt_title
+
+    # 3. TikTok maxsus 3-Motorli tizimi
     if "tiktok.com" in lower_url:
         tk_files, tk_title = _download_tiktok_multi_engine(url, user_id, short_ts)
         if tk_files:
             return tk_files, tk_title
 
+    # 4. Umumiy yt-dlp (Boshqa barcha platformalar uchun)
     format_candidates = [
         "best[ext=mp4][vcodec^=avc1]/bestvideo[ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]/best[ext=mp4]/best",
         "bestvideo+bestaudio/best"
@@ -4105,9 +4840,6 @@ def download_media_bulletproof(raw_url: str, user_id: int, timestamp: int) -> tu
                 "fragment_retries": 4,
                 "extractor_retries": 3,
                 "socket_timeout": 30,
-                "extractor_args": {
-                    "youtube": {"player_client": ["android", "ios", "web"]}
-                },
                 "http_headers": {
                     "User-Agent": user_agents[attempt_idx],
                     "Accept-Language": "en-US,en;q=0.9,ru;q=0.8,uz;q=0.7"
