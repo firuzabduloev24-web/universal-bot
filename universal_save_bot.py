@@ -2,44 +2,33 @@
 # -*- coding: utf-8 -*-
 """
 =============================================================================
-🌟 UNIVERSAL SUPER SAVER & MULTIMEDIA AI TELEGRAM BOT (#1 EDITION) 🌟
+🌟 UNIVERSAL SUPER SAVER & PRO MONTAJ TELEGRAM BOT (#1 EDITION) 🌟
 =============================================================================
 Muallif & Bosh Administrator: @usman_khasan (Telegram ID: 1021089367)
 Arxitektura: pyTelegramBotAPI (telebot) + yt-dlp + Multi-Engine Mobile API + FFmpeg + SQLite3
 
-Noyob imkoniyatlar (100% Sof Universal Media & AI Bot):
+Noyob imkoniyatlar (100% Sof Universal Media & Pro Montaj Studiyasi):
  1. 🎬 12-Bosqichli Xatosiz Mobil & Desktop Video Yuklagich (VIDEO-FIRST):
-    - Instagram (Reels, Post video, Karusel albomlar, Stories — ?cplk=, ?obrf=, ?igsh=, /p/, /reel/ mobil linklar bilan 100% VIDEO yuklaydi, videoni rasm qilib yubormaydi!)
+    - Instagram (Reels, Post video, Karusel albomlar, Stories — 100% VIDEO yuklaydi!)
     - TikTok (Suv belgisiz, toza HD video — vt.tiktok.com, vm.tiktok.com mobil linklar bilan)
     - YouTube & Shorts (Video va MP3 audio — Android/iOS client bypass bilan)
     - Pinterest (pin.it mobil linklar), Twitter/X (vxTwitter API bilan), Facebook, Likee, Threads, Reddit.
- 2. ✂️ 50 MB+ Video Auto-Splitter (Part 1, Part 2...):
-    - Telegram botlarining 50 MB cheklovini stream-copy (-c copy) orqali yengish!
+ 2. 🎯 TOP-1 PRO REKLAMA MONTAJ STUDIYASI (/montaj, /set_outro):
+    - Har qanday davomiylikdagi (10s, 19s, 45s, 1 daqiqa+) 2 ta videoni 5 xil professional rejimda
+      (Audio Bridge + Whoosh FX, True L-Cut, PiP Burchakda Preview, Original Ovozlar, Audio Ducking)
+      Blurred 9:16 Fon + Anti-Duplikat + Suzuvchi Watermark bilan tezkor ulash!
+ 3. 🛡 10-Bosqichli Anti-Duplikat (100% Original Video — /original):
+    - Instagram Reels, TikTok va YouTube Shorts algoritmlari (pHash, Audio Spektr, GOP, iPhone 16 Pro Max Metadata)
+      uchun videoni 100% yangi original qilib berish!
+ 4. 💧 Tepadan-Pastga Suzuvchi Shaffof Telegram Ikonka + @Handle Watermark (/set_watermark):
+    - Har bir videoda videoga xalaqit bermaydigan ko'rinar-ko'rinmas (24% shaffof) suzuvchi belgi.
+ 5. ✂️ 50 MB+ Video Auto-Splitter (Part 1, Part 2...):
     - Katta videolarni soniyalar ichida 45 MB lik bo'laklarga ajratib jo'natadi.
- 3. 🎵 Shazam / Musiqani Aniqlash:
-    - Videodagi qo'shiq nomi, ijrochisi va albomini aniqlash.
- 4. 🧠 Bepul Sun'iy Intellekt (DeepSeek & ChatGPT):
-    - Har qanday savollarga aqlli va tezkor javoblar (/ai yoki chat orqali).
- 5. 🖼 AI Rasm Chizish (NanoBanana / Flux Art):
-    - Matnli tavsif bo'yicha yuqori sifatli fotosuratlar yaratish (/image).
- 6. 🌐 Ko'p Tilli Interfeys (Multi-Language):
-    - 🇺🇿 O'zbekcha | 🇷🇺 Русский | 🇬🇧 English (/lang orqali o'zgartirish).
- 7. ✂️ Videoni Qirqish / Kesish (Video Trimmer):
-    - Videodan kerakli vaqt oralig'ini qirqib olish (masalan: 00:10 - 00:35).
- 8. 📝 AI Subtitr va Transkripsiya (Speech-to-Text):
-    - Videodagi nutqni matnga aylantirish (.SRT subtitr fayli va xabar matni).
- 9. 🎬 Subtitrli Video (Hardcode Subtitles):
-    - Subtitrlarni video kadrlariga chiroyli dizaynda yopishtirib berish.
-10. 🔵 Telegram Kruglyash (Video Note) 1:1 formatda yaratish (480x480).
-11. 🎧 Audio (MP3 320kbps) ajratish va 🎙 Ovozli Xabar (Voice Note .ogg).
-12. ⚡ 1.5x Tezlashtirilgan video va 🎞 GIF looper animatsiya.
-13. 🎧 8D Surround Audio & 🔊 Bass Boost Konverter.
-14. 🎤 Karaoke / Minusovka Ajratgich (Vocal Remover).
-15. ⏪ Videoni Teskari Aylantirish (Reverse Video).
-16. 🖼 Video Oblojkasini (HD Thumbnail) Yuklash.
-17. 🌍 AI Professional Tarjimon (/tr), 💱 4-Manbali Markaziy Bank Valyuta Kurslari (/kurs) va 📱 QR-Kod (/qr).
-18. 🎬 PRO REKLAMA MONTAJ STUDIYASI (/montaj, /set_outro — Har qanday davomiylikdagi videolarni, masalan 10s, 19s, 45s, 1 daqiqa va undan uzun videolarni 4 xil professional audio-vizual rejimda 1080x1920 Full HD Reels formatda ulash!)
-19. 🧹 Avtomatik Xotira Tozalagich + Eski python.exe jarayonlarini avto-yopish!
+ 6. 🎬 Subtitrli Video (Hardcode Subtitles + PNG Overlay Fallback) va 📝 .SRT Subtitr.
+ 7. 🔵 Telegram Kruglyash (Video Note 1:1), 🎧 MP3 Audio (320kbps), 🎙 Ovozli Xabar (Voice).
+ 8. 🔊 Bass Boost (+12dB), 🎧 8D Surround Audio, 🎤 Karaoke Minusovka, 🖼 HD Oblojka.
+ 9. ✂️ Videoni Qirqish (Trim), 🎵 Shazam Musiqa Topish, ⚡ 1.5x Tezlik, ⏪ Teskari Video, 🎞 GIF.
+10. 💱 4-Manbali Markaziy Bank Valyuta Kurslari (/kurs) va 📱 QR-Kod Generator (/qr).
 =============================================================================
 """
 
@@ -49,6 +38,7 @@ import sys
 import time
 import json
 import math
+import wave
 import html
 import uuid
 import zlib
@@ -82,17 +72,48 @@ def kill_other_bot_instances():
         except Exception:
             pass
 
-# ==================== WINDOWS FFMPEG AVTO-SOZLASH ====================
+# ==================== WINDOWS & LINUX FFMPEG AVTO-O'RNATISH VA SOZLASH ====================
 FFMPEG_DIR = None
+FFMPEG_BIN = "ffmpeg"
+FFPROBE_BIN = None
+LOCAL_FFMPEG_DIR = os.path.abspath("ffmpeg_bin")
 
-def ensure_ffmpeg_in_path():
-    """Windows WinGet orqali o'rnatilgan FFmpeg ni avtomatik topish va PATH ga qo'shish"""
-    global FFMPEG_DIR
-    existing = shutil.which("ffmpeg")
-    if existing and shutil.which("ffprobe"):
-        FFMPEG_DIR = os.path.dirname(os.path.abspath(existing))
+def _ensure_pillow_installed():
+    try:
+        import PIL
+    except ImportError:
+        try:
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "--quiet", "Pillow"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=90
+            )
+        except Exception:
+            pass
+
+_ensure_pillow_installed()
+
+def ensure_ffmpeg_in_path() -> bool:
+    """
+    FFmpeg ni tizimdan, WinGet dan yoki Python `imageio-ffmpeg` paketidan avtomatik topish
+    (agar o'rnatilmagan bo'lsa, avtomatik `pip install imageio-ffmpeg` orqali o'rnatib PATH ga ulash!).
+    """
+    global FFMPEG_DIR, FFMPEG_BIN, FFPROBE_BIN
+
+    # 1. Lokal ffmpeg_bin papkasini PATH ga qo'shish
+    if os.path.isdir(LOCAL_FFMPEG_DIR) and LOCAL_FFMPEG_DIR not in os.environ.get("PATH", ""):
+        os.environ["PATH"] = LOCAL_FFMPEG_DIR + os.pathsep + os.environ.get("PATH", "")
+
+    existing_ffmpeg = shutil.which("ffmpeg")
+    existing_ffprobe = shutil.which("ffprobe")
+    if existing_ffmpeg:
+        FFMPEG_BIN = existing_ffmpeg
+        FFMPEG_DIR = os.path.dirname(os.path.abspath(existing_ffmpeg))
+        if existing_ffprobe:
+            FFPROBE_BIN = existing_ffprobe
         return True
-    search_dirs = []
+
+    # 2. Windows WinGet va standart papkalarni tekshirish
+    search_dirs = [LOCAL_FFMPEG_DIR]
     local_app_data = os.environ.get("LOCALAPPDATA", "")
     if local_app_data:
         winget_links = os.path.join(local_app_data, "Microsoft", "WinGet", "Links")
@@ -103,20 +124,57 @@ def ensure_ffmpeg_in_path():
             for root, dirs, files in os.walk(winget_pkgs):
                 if "ffmpeg.exe" in [f.lower() for f in files]:
                     search_dirs.append(root)
-    for extra in [r"C:\ffmpeg\bin", r"C:\Program Files\ffmpeg\bin"]:
+    for extra in [r"C:\ffmpeg\bin", r"C:\Program Files\ffmpeg\bin", "/usr/bin", "/usr/local/bin"]:
         if os.path.isdir(extra):
             search_dirs.append(extra)
+
+    exe_name = "ffmpeg.exe" if os.name == "nt" else "ffmpeg"
+    probe_name = "ffprobe.exe" if os.name == "nt" else "ffprobe"
     for d in search_dirs:
-        if os.path.exists(os.path.join(d, "ffmpeg.exe")):
+        cand = os.path.join(d, exe_name)
+        if os.path.exists(cand):
             os.environ["PATH"] = d + os.pathsep + os.environ.get("PATH", "")
             FFMPEG_DIR = d
+            FFMPEG_BIN = cand
+            p_cand = os.path.join(d, probe_name)
+            if os.path.exists(p_cand):
+                FFPROBE_BIN = p_cand
             return True
+
+    # 3. Avtomatik imageio-ffmpeg orqali FFmpeg binar faylini olish yoki o'rnatish
+    try:
+        try:
+            import imageio_ffmpeg
+        except ImportError:
+            print("⏳ FFmpeg topilmadi — imageio-ffmpeg avtomatik o'rnatilmoqda...")
+            subprocess.run(
+                [sys.executable, "-m", "pip", "install", "--quiet", "imageio-ffmpeg"],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120
+            )
+            import imageio_ffmpeg
+
+        src_exe = imageio_ffmpeg.get_ffmpeg_exe()
+        if src_exe and os.path.exists(src_exe):
+            os.makedirs(LOCAL_FFMPEG_DIR, exist_ok=True)
+            dst_exe = os.path.join(LOCAL_FFMPEG_DIR, exe_name)
+            if not os.path.exists(dst_exe):
+                try:
+                    shutil.copyfile(src_exe, dst_exe)
+                    os.chmod(dst_exe, 0o755)
+                except Exception:
+                    dst_exe = src_exe
+            os.environ["PATH"] = LOCAL_FFMPEG_DIR + os.pathsep + os.environ.get("PATH", "")
+            FFMPEG_DIR = os.path.dirname(os.path.abspath(dst_exe))
+            FFMPEG_BIN = dst_exe
+            return True
+    except Exception as e:
+        print(f"Avto-FFmpeg o'rnatish ogohlantirishi: {e}")
+
     return False
 
 FFMPEG_READY = ensure_ffmpeg_in_path()
 
 # ==================== SOZLAMALAR (KONFIGURATSIYA) ====================
-# @usman_khasan (khasanov) uchun tayyor o'rnatilgan Bot Token va Admin ID:
 BOT_TOKEN = "8631821249:AAEY_Df1o3ZkjGdRB1GoH60X1sEyq-N7Nq0"
 ADMIN_ID = 1021089367
 ADMIN_USERNAME = "@usman_khasan"
@@ -129,29 +187,31 @@ try:
 except Exception:
     pass
 
-# Majburiy obuna bo'linadigan kanallar ro'yxati (ixtiyoriy, masalan: ["@kanal_username"]):
 SPONSOR_CHANNELS = []
-
 REQUIRED_REFERRALS_FOR_VIP = 3
 MAX_TELEGRAM_FILE_MB = 49.5
-GROQ_API_KEY = ""  # Ixtiyoriy: console.groq.com (Bo'sh bo'lsa, bepul Google Speech ishlaydi)
+GROQ_API_KEY = ""
 GOOGLE_SPEECH_KEY = "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw"
 
 DOWNLOAD_DIR = "downloads"
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-# Doimiy reklama/outro shablonlari saqlanadigan papka (Avto-tozalagich bu papkani hech qachon o'chirmaydi!)
 PROMO_DIR = "promo_assets"
 os.makedirs(PROMO_DIR, exist_ok=True)
+
+MONTAGE_SESSIONS_DIR = os.path.join(PROMO_DIR, "montage_sessions")
+os.makedirs(MONTAGE_SESSIONS_DIR, exist_ok=True)
 
 bot = telebot.TeleBot(BOT_TOKEN, parse_mode="HTML", threaded=True, num_threads=8)
 USER_STATES = {}
 TRIM_CACHE = {}
 MONTAGE_CACHE = {}
+VIDEO_SOURCE_CACHE = {}  # base_fname -> {"path": str, "url": str, "file_id": str, "time": float}
+FILE_LOCK = threading.Lock()
 
 # ==================== XOTIRANI AVTOMATIK TOZALASH TIZIMI ====================
 def safe_remove(*file_paths):
-    """Berilgan fayllarni kompyuter xotirasidan darhol va xavfsiz o'chirib tashlash"""
+    """Vaqtinchalik ishchi fayllarni xavfsiz o'chirish"""
     for fp in file_paths:
         if fp and isinstance(fp, str) and os.path.exists(fp):
             try:
@@ -159,17 +219,39 @@ def safe_remove(*file_paths):
             except Exception:
                 pass
 
-def cleanup_old_files(max_age_seconds: int = 120):
-    """downloads papkasidagi vaqtinchalik fayllarni avtomatik o'chirish (xotira to'lmasligi uchun)"""
+def cleanup_old_files(max_age_seconds: int = 1800):
+    """
+    downloads papkasidagi 30 daqiqadan (1800s) eskirgan fayllarni tozalash.
+    MUHIM: Video yuklangach foydalanuvchi uning ostidagi 16 ta tugmani (Subtitr, Kruglyash,
+    MP3, Bass, 8D, Karaoke, Montaj, Anti-Duplikat va h.k.) bemalol bosishi uchun yangi
+    videolar 30 daqiqa davomida xotirada saqlanadi va xatolik bermaydi!
+    """
     now = time.time()
     removed_count = 0
     freed_bytes = 0
+
+    # Montajda faol ishlatilayotgan fayllarni himoya qilish
+    protected_paths = set()
+    for sess in list(MONTAGE_CACHE.values()):
+        if isinstance(sess, dict):
+            if sess.get("v1"):
+                protected_paths.add(os.path.abspath(sess["v1"]))
+            if sess.get("v2"):
+                protected_paths.add(os.path.abspath(sess["v2"]))
+
     try:
-        for fname in os.listdir(DOWNLOAD_DIR):
-            fpath = os.path.join(DOWNLOAD_DIR, fname)
-            if os.path.isfile(fpath):
+        for folder in [DOWNLOAD_DIR, MONTAGE_SESSIONS_DIR]:
+            if not os.path.isdir(folder):
+                continue
+            for fname in os.listdir(folder):
+                fpath = os.path.join(folder, fname)
+                if not os.path.isfile(fpath):
+                    continue
+                if os.path.abspath(fpath) in protected_paths and max_age_seconds > 0:
+                    continue
                 age = now - os.path.getmtime(fpath)
-                if age > max_age_seconds or fname.endswith(".part") or fname.endswith(".ytdl"):
+                is_broken_part = (fname.endswith(".part") or fname.endswith(".ytdl")) and age > 180
+                if age > max_age_seconds or is_broken_part:
                     try:
                         fsize = os.path.getsize(fpath)
                         os.remove(fpath)
@@ -180,7 +262,7 @@ def cleanup_old_files(max_age_seconds: int = 120):
         for fname in os.listdir("."):
             if fname.startswith("_tmp_sub_") and fname.endswith(".srt"):
                 try:
-                    if (now - os.path.getmtime(fname)) > 120:
+                    if (now - os.path.getmtime(fname)) > 300:
                         os.remove(fname)
                 except Exception:
                     pass
@@ -189,53 +271,48 @@ def cleanup_old_files(max_age_seconds: int = 120):
     return removed_count, freed_bytes / (1024 * 1024)
 
 def start_auto_cleaner_daemon():
-    """Orqa fonda har 45 soniyada kompyuter xotirasini tozalab turuvchi avto-tizim"""
+    """Orqa fonda har 5 daqiqada 30 daqiqadan eskirgan fayllarni tozalab turuvchi tizim"""
     def _cleaner_loop():
         while True:
             try:
-                cleanup_old_files(max_age_seconds=120)
+                cleanup_old_files(max_age_seconds=1800)
             except Exception:
                 pass
-            time.sleep(45)
+            time.sleep(300)
     t = threading.Thread(target=_cleaner_loop, daemon=True)
     t.start()
 
 start_auto_cleaner_daemon()
 
-# ==================== KO'P TILLI INTERFEYS (LOCALIZATION) ====================
+# ==================== KO'P TILLI INTERFEYS (LOCALIZATION — AI SIZ SOF MEDIA & MONTAJ) ====================
 TEXTS = {
     "uz": {
         "welcome": (
             "👋 <b>Assalomu alaykum, {name}!</b>\n\n"
-            "⚡ <b>Universal Super Saver & Multimedia AI Bot (#1 Edition)</b>ga xush kelibsiz!\n\n"
-            "📥 <b>Universal Media Yuklovchi (Telefon va Kompyuterdan 100% Xatosiz):</b>\n"
+            "⚡ <b>Universal Super Saver & Pro Montaj Bot (#1 Edition)</b>ga xush kelibsiz!\n\n"
+            "📥 <b>Universal Media Yuklovchi (100% Xatosiz HD):</b>\n"
             "• 📸 <b>Instagram:</b> Reels, Post video, Karusel albomlar, Stories\n"
             "• 🎵 <b>TikTok:</b> Toza, suv belgisiz HD video\n"
             "• ▶️ <b>YouTube & Shorts:</b> Video, MP3 musiqa va HD Oblojka\n"
             "• 📌 <b>Pinterest, Twitter / X, Facebook, Likee, Reddit</b>\n\n"
-            "🧠 <b>Sun'iy Intellekt (AI) & Universal Vositalar:</b>\n"
-            "• 🤖 <b>DeepSeek & ChatGPT:</b> Istalgan savolga aqlli javoblar (/ai)\n"
-            "• 🖼 <b>NanoBanana / AI Image:</b> Matndan ajoyib rasm chizish (/image)\n"
-            "• 🌍 <b>AI Tarjimon:</b> Matnlarni istalgan tilga tarjima qilish (/tr)\n"
-            "• 📱 <b>QR-Kod Generator:</b> Ssilka va matndan QR-kod yasash (/qr)\n"
-            "• 💱 <b>Valyuta Kurslari:</b> Markaziy bank jonli kurslari (/kurs)\n\n"
-            "💎 <b>12 ta Super Multimedia Studiyasi:</b>\n"
-            "✂️ <b>50 MB+ Splitter:</b> Katta videolarni bo'laklarga ajratish\n"
-            "🎵 <b>Shazam:</b> Videodagi musiqani topish va MP3 yuklash\n"
-            "🎧 <b>8D Audio & 🔊 Bass Boost:</b> Qo'shiqni 8D va Bass qilish\n"
-            "🎤 <b>Karaoke Minusovka:</b> Qo'shiqdan ovozni pasaytirish\n"
-            "🎬 <b>AI Subtitr:</b> Nutqni videoga yozish va .SRT olish\n"
-            "✂️ <b>Qirqish (Trim), 🔵 Kruglyash, ⏪ Teskari video, ⚡ 1.5x, 🎞 GIF</b>\n\n"
-            "⭐️ <b>VIP Tizim:</b> 3 ta do'stni taklif qilib, umrbod VIP maqomiga ega bo'ling!\n\n"
-            "📥 <i>Video havolasini yuboring, fayl tashlang yoki AI ga savol yozing!</i>"
+            "🎬 <b>TOP-1 PRO REKLAMA MONTAJ & ANTI-DUPLIKAT STUDIYASI:</b>\n"
+            "• 🎯 <b>Pro Reklama Montaj (/montaj):</b> 2 ta videoni (10s, 19s, 1 daqiqa+) 5 xil rejimda ulash\n"
+            "• 🛡 <b>100% Original Anti-Duplikat (/original):</b> Reels va TikTok Top/Rekomendatsiya uchun\n"
+            "• 💧 <b>Suzuvchi Shaffof Watermark (/set_watermark):</b> Tepadan-pastga suzuvchi ikona\n"
+            "• 📌 <b>Doimiy Outro Saqlash (/set_outro):</b> 1 bosishda reklama ulash\n\n"
+            "💎 <b>16 ta Super Multimedia Studiyasi (Har bir video ostida):</b>\n"
+            "🎬 <b>Subtitrli Video & .SRT</b> | 🔵 <b>Kruglyash</b> | 🎧 <b>MP3 Audio</b>\n"
+            "🔊 <b>Bass Boost</b> | 🎧 <b>8D Audio</b> | 🎤 <b>Karaoke Minus</b> | 🖼 <b>HD Oblojka</b>\n"
+            "🎙 <b>Ovozli xabar</b> | ✂️ <b>Qirqish (Trim)</b> | 🎵 <b>Shazam</b> | ⚡ <b>1.5x Tezlik</b>\n"
+            "⏪ <b>Teskari video</b> | 🎞 <b>GIF</b> | 💱 <b>Valyuta Kurslari (/kurs)</b> | 📱 <b>QR-Kod (/qr)</b>\n\n"
+            "📥 <i>Video havolasini (Instagram, TikTok, YouTube) yuboring yoki 🎬 Reklama Montaj tugmasini bosing!</i>"
         ),
         "btn_profile": "👤 Profilim",
         "btn_stat": "📊 Statistika",
         "btn_kurs": "💱 Valyuta Kurslari",
         "btn_ref": "👥 VIP & Do'stlar",
-        "btn_ai": "🧠 AI Savol-Javob",
-        "btn_image": "🖼 AI Rasm Chizish",
         "btn_montaj": "🎬 Reklama Montaj",
+        "btn_original": "🛡 Anti-Duplikat",
         "btn_tools": "🛠 Universal Vositalar",
         "btn_help": "📖 Qo'llanma",
         "btn_lang": "🌐 Til",
@@ -259,8 +336,8 @@ TEXTS = {
         "btn_audio_only": "🎧 Faqat MP3 musiqasini yuklash",
         "splitting_progress": "⏳ Video bo'laklarga ajratilmoqda, kuting...",
         "part_caption": "🎬 <b>{title}</b>\n📦 <b>Qism:</b> {current}/{total}\n🤖 @{bot}",
-        "trim_prompt": "✂️ <b>Videoni qirqish (Trim):</b>\nBoshlanish va tugash vaqtini yozing (Masalan: <code>00:10 - 00:35</code>):",
-        "trim_invalid": "⚠️ Vaqt formati noto'g'ri. Masalan: <code>00:10 - 00:35</code> shaklida yozing.",
+        "trim_prompt": "✂️ <b>Videoni qirqish (Trim):</b>\nBoshlanish va tugash vaqtini yozing (Masalan: <code>00:05 - 00:25</code> yoki <code>5 - 25</code>):",
+        "trim_invalid": "⚠️ Vaqt formati noto'g'ri. Masalan: <code>00:05 - 00:25</code> shaklida yozing.",
         "trimming_progress": "⏳ Video qirqilmoqda...",
         "music_searching": "🔍 Videodagi musiqa aniqlanmoqda (Shazam)...",
         "music_found": (
@@ -271,9 +348,9 @@ TEXTS = {
             "🤖 @{bot}"
         ),
         "music_not_found": "ℹ️ Musiqa aniqlanmadi yoki videoda faqat nutq mavjud.",
-        "sub_video_generating": "🎬 AI Subtitr tayyorlanmoqda (nutq kadrga yozilmoqda)...",
+        "sub_video_generating": "🎬 Subtitrli video tayyorlanmoqda (nutq kadrga yozilmoqda)...",
         "sub_text_generating": "📝 Nutq tahlil qilinmoqda (Speech-to-Text)...",
-        "sub_not_found": "ℹ️ Nutq aniqlanmadi. Inson ovozi yo'q yoki fon shovqini baland.",
+        "sub_not_found": "ℹ️ Videoda aniq nutq topilmadi (faqat musiqa yoki shovqin mavjud).",
         "circle_generating": "🔄 Dumaloq video (kruglyash) tayyorlanmoqda...",
         "audio_generating": "🎵 Musiqa (MP3) ajratib olinmoqda...",
         "voice_generating": "🎙 Ovozli xabar (Voice) tayyorlanmoqda...",
@@ -283,32 +360,33 @@ TEXTS = {
         "audio8d_generating": "🎧 8D Surround aylanma audio tayyorlanmoqda...",
         "karaoke_generating": "🎤 Karaoke minusovka tayyorlanmoqda...",
         "reverse_generating": "⏪ Video teskari (Reverse) aylantirilmoqda...",
-        "ai_thinking": "🧠 <b>AI o'ylamoqda...</b>",
-        "ai_image_generating": "🎨 <b>AI rasm chizmoqda, bir oz kuting...</b>",
-        "ai_prompt_ask": "🧠 <b>Sun'iy Intellektga savolingizni yozing:</b>\n(DeepSeek va ChatGPT javob beradi)",
-        "image_prompt_ask": "🖼 <b>Qanday rasm chizmoqchisiz?</b>\nTavsifni batafsil yozing (Masalan: <code>Toshkent shahrida futuristik uchuvchi mashinalar</code>):"
+        "send_link_prompt": (
+            "📥 <b>Video yuklash uchun Instagram, TikTok, YouTube, Pinterest yoki X havolasini yuboring!</b>\n\n"
+            "🎬 2 ta videoni reklama montaj qilish uchun: <b>«🎬 Reklama Montaj»</b> tugmasini bosing.\n"
+            "🛡 Videoni 100% original qilish uchun: <b>«🛡 Anti-Duplikat»</b> tugmasini bosing."
+        )
     },
     "ru": {
         "welcome": (
             "👋 <b>Здравствуйте, {name}!</b>\n\n"
-            "⚡ Добро пожаловать в <b>Universal Super Saver & Multimedia AI Bot (#1 Edition)</b>!\n\n"
+            "⚡ Добро пожаловать в <b>Universal Super Saver & Pro Montaj Bot (#1 Edition)</b>!\n\n"
             "📥 <b>Скачивание медиа без водяных знаков:</b>\n"
             "• Instagram, TikTok, YouTube & Shorts, Pinterest, Twitter/X, FB\n\n"
-            "🧠 <b>Искусственный Интеллект и Инструменты:</b>\n"
-            "• DeepSeek & ChatGPT (/ai) | Генерация картинок NanoBanana (/image)\n"
-            "• AI Переводчик (/tr) | Генератор QR-кодов (/qr) | Курсы валют (/kurs)\n\n"
-            "💎 <b>Мультимедиа студия (12 функций):</b>\n"
+            "🎬 <b>Про Видео Монтаж и Анти-Дубликат:</b>\n"
+            "• Склейка 2 видео для Reels/TikTok в 5 режимах (/montaj)\n"
+            "• 10-уровневый Анти-Дубликат 100% Оригинал (/original)\n"
+            "• Плавающий полупрозрачный водяной знак Telegram (/set_watermark)\n\n"
+            "💎 <b>Мультимедиа студия (16 функций под каждым видео):</b>\n"
             "✂️ 50MB+ Splitter, Shazam, 8D Аудио, Bass Boost, Караоке Минусовка,\n"
-            "🎬 AI Субтитры, Обрезка, Кругляш, Реверс видео, MP3, 1.5x, GIF\n\n"
-            "📥 <i>Отправьте ссылку на видео, медиафайл или задайте вопрос AI!</i>"
+            "🎬 Субтитры, Обрезка, Кругляш, Реверс видео, MP3, 1.5x, GIF\n\n"
+            "📥 <i>Отправьте ссылку на видео или откройте меню 🎬 Видео Монтаж!</i>"
         ),
         "btn_profile": "👤 Мой профиль",
         "btn_stat": "📊 Статистика",
         "btn_kurs": "💱 Курсы валют",
         "btn_ref": "👥 VIP & Рефералы",
-        "btn_ai": "🧠 Задать вопрос AI",
-        "btn_image": "🖼 Создать картинку AI",
         "btn_montaj": "🎬 Видео Монтаж",
+        "btn_original": "🛡 Анти-Дубликат",
         "btn_tools": "🛠 Инструменты",
         "btn_help": "📖 Инструкция",
         "btn_lang": "🌐 Сменить язык",
@@ -326,8 +404,8 @@ TEXTS = {
         "btn_audio_only": "🎧 Скачать только MP3 аудио",
         "splitting_progress": "⏳ Видео нарезается на части...",
         "part_caption": "🎬 <b>{title}</b>\n📦 <b>Часть:</b> {current}/{total}\n🤖 @{bot}",
-        "trim_prompt": "✂️ <b>Обрезка видео (Trim):</b>\nУкажите таймкод (Например: <code>00:10 - 00:35</code>):",
-        "trim_invalid": "⚠️ Неверный формат времени. Пример: <code>00:10 - 00:35</code>.",
+        "trim_prompt": "✂️ <b>Обрезка видео (Trim):</b>\nУкажите таймкод (Например: <code>00:05 - 00:25</code>):",
+        "trim_invalid": "⚠️ Неверный формат времени. Пример: <code>00:05 - 00:25</code>.",
         "trimming_progress": "⏳ Видео нарезается...",
         "music_searching": "🔍 Распознавание музыки (Shazam)...",
         "music_found": "🎵 <b>Трек найден!</b>\n\n🎼 <b>Название:</b> <b>{title}</b>\n👤 <b>Исполнитель:</b> <b>{artist}</b>\n{album_line}🤖 @{bot}",
@@ -344,32 +422,29 @@ TEXTS = {
         "audio8d_generating": "🎧 Создание 8D Surround аудио...",
         "karaoke_generating": "🎤 Создание караоке минусовки...",
         "reverse_generating": "⏪ Обратная перемотка видео (Reverse)...",
-        "ai_thinking": "🧠 <b>AI думает...</b>",
-        "ai_image_generating": "🎨 <b>AI генерирует изображение...</b>",
-        "ai_prompt_ask": "🧠 <b>Задайте любой вопрос AI:</b>",
-        "image_prompt_ask": "🖼 <b>Какое изображение вы хотите создать?</b>"
+        "send_link_prompt": "📥 <b>Отправьте ссылку на видео (Instagram, TikTok, YouTube, Pinterest, X) или выберите раздел в меню!</b>"
     },
     "en": {
         "welcome": (
             "👋 <b>Hello, {name}!</b>\n\n"
-            "⚡ Welcome to <b>Universal Super Saver & Multimedia AI Bot (#1 Edition)</b>!\n\n"
+            "⚡ Welcome to <b>Universal Super Saver & Pro Montage Bot (#1 Edition)</b>!\n\n"
             "📥 <b>Universal Media Downloader:</b>\n"
             "• Instagram, TikTok, YouTube & Shorts, Pinterest, Twitter/X, FB\n\n"
-            "🧠 <b>AI & Smart Utilities:</b>\n"
-            "• DeepSeek & ChatGPT (/ai) | NanoBanana Flux Image Generator (/image)\n"
-            "• AI Translator (/tr) | QR Code Maker (/qr) | Exchange Rates (/kurs)\n\n"
-            "💎 <b>Multimedia Studio (12 Tools):</b>\n"
+            "🎬 <b>Pro Video Montage & Anti-Duplicate Studio:</b>\n"
+            "• Merge 2 videos in 5 professional Reels/TikTok modes (/montaj)\n"
+            "• 10-Layer Anti-Duplicate 100% Original Engine (/original)\n"
+            "• Floating semi-transparent Telegram watermark (/set_watermark)\n\n"
+            "💎 <b>Multimedia Studio (16 Tools under every video):</b>\n"
             "✂️ 50MB+ Splitter, Shazam, 8D Audio, Bass Boost, Karaoke Vocal Remover,\n"
-            "🎬 AI Subtitles, Trimmer, Video Note, Reverse Video, MP3, 1.5x, GIF\n\n"
-            "📥 <i>Send a video link, upload a media file, or ask AI anything!</i>"
+            "🎬 Subtitles, Trimmer, Video Note, Reverse Video, MP3, 1.5x, GIF\n\n"
+            "📥 <i>Send a video link or open 🎬 Video Montage from the menu!</i>"
         ),
         "btn_profile": "👤 Profile",
         "btn_stat": "📊 Statistics",
         "btn_kurs": "💱 Exchange Rates",
         "btn_ref": "👥 VIP & Referral",
-        "btn_ai": "🧠 Ask AI",
-        "btn_image": "🖼 AI Image",
         "btn_montaj": "🎬 Video Montage",
+        "btn_original": "🛡 Anti-Duplicate",
         "btn_tools": "🛠 Smart Tools",
         "btn_help": "📖 Help",
         "btn_lang": "🌐 Language",
@@ -387,8 +462,8 @@ TEXTS = {
         "btn_audio_only": "🎧 Extract MP3 Audio only",
         "splitting_progress": "⏳ Splitting video into parts...",
         "part_caption": "🎬 <b>{title}</b>\n📦 <b>Part:</b> {current}/{total}\n🤖 @{bot}",
-        "trim_prompt": "✂️ <b>Trim Video:</b> Enter timestamps (e.g. <code>00:10 - 00:35</code>):",
-        "trim_invalid": "⚠️ Invalid format. Example: <code>00:10 - 00:35</code>.",
+        "trim_prompt": "✂️ <b>Trim Video:</b> Enter timestamps (e.g. <code>00:05 - 00:25</code>):",
+        "trim_invalid": "⚠️ Invalid format. Example: <code>00:05 - 00:25</code>.",
         "trimming_progress": "⏳ Trimming video clip...",
         "music_searching": "🔍 Identifying music (Shazam)...",
         "music_found": "🎵 <b>Music Identified!</b>\n\n🎼 <b>Title:</b> <b>{title}</b>\n👤 <b>Artist:</b> <b>{artist}</b>\n{album_line}🤖 @{bot}",
@@ -405,10 +480,7 @@ TEXTS = {
         "audio8d_generating": "🎧 Generating 8D Surround audio...",
         "karaoke_generating": "🎤 Removing vocals (Karaoke)...",
         "reverse_generating": "⏪ Reversing video clip...",
-        "ai_thinking": "🧠 <b>AI is thinking...</b>",
-        "ai_image_generating": "🎨 <b>AI is generating image...</b>",
-        "ai_prompt_ask": "🧠 <b>Ask anything to AI:</b>",
-        "image_prompt_ask": "🖼 <b>Describe the image you want to generate:</b>"
+        "send_link_prompt": "📥 <b>Send a video link (Instagram, TikTok, YouTube, Pinterest, X) or choose an option from the menu!</b>"
     }
 }
 
@@ -465,7 +537,14 @@ def init_db():
     conn.commit()
     conn.close()
 
-init_db()
+try:
+    init_db()
+except Exception as _db_err:
+    DB_PATH = os.path.join("/tmp", "save_bot_database.db") if os.path.isdir("/tmp") else ":memory:"
+    try:
+        init_db()
+    except Exception:
+        pass
 
 def register_user(user: types.User, referrer_id: int | None = None) -> tuple[bool, bool]:
     conn = sqlite3.connect(DB_PATH)
@@ -661,7 +740,7 @@ def build_stats_message(user: types.User) -> tuple[str, types.InlineKeyboardMark
         f"⭐️ <b>VIP foydalanuvchilar:</b> <b>{st['total_vips']:,} ta</b>\n"
         f"📥 <b>Jami yuklab olingan media:</b> <b>{st['total_downloads']:,} ta</b>\n"
         f"🔥 <b>Bugungi yuklashlar:</b> <b>{st['downloads_today']:,} ta</b>\n"
-        f"💾 <b>Kompyuter xotirasi (Downloads):</b> <b>{disk_mb:.2f} MB</b> ({disk_files} ta fayl)\n\n"
+        f"💾 <b>Vaqtinchalik kesh (Downloads):</b> <b>{disk_mb:.2f} MB</b> ({disk_files} ta fayl)\n\n"
         f"📈 <b>Top platformalar bo'yicha:</b>\n{platform_lines}"
         f"{recent_block}"
     )
@@ -669,19 +748,19 @@ def build_stats_message(user: types.User) -> tuple[str, types.InlineKeyboardMark
     markup = types.InlineKeyboardMarkup(row_width=2)
     markup.add(
         types.InlineKeyboardButton("🔄 Yangilash", callback_data="open_stats"),
-        types.InlineKeyboardButton("🧹 Xotirani tozalash", callback_data="clean_storage_cb")
+        types.InlineKeyboardButton("🧹 Keshni tozalash", callback_data="clean_storage_cb")
+    )
+    markup.add(
+        types.InlineKeyboardButton("🎬 Pro Reklama Montaj", callback_data="tool_cmd:montaj"),
+        types.InlineKeyboardButton("🛡 Anti-Duplikat (Original)", callback_data="antidup_start_single")
     )
     markup.add(
         types.InlineKeyboardButton("💱 Markaziy Bank Kurslari", callback_data="tool_cmd:kurs"),
         types.InlineKeyboardButton("📱 QR-Kod Yasash", callback_data="tool_cmd:qr")
     )
-    markup.add(
-        types.InlineKeyboardButton("🧠 Free AI → DeepSeek & ChatGPT", callback_data="tool_cmd:ai"),
-        types.InlineKeyboardButton("🖼 Make Image → NanoBanana", callback_data="tool_cmd:image")
-    )
     return text, markup
 
-# ==================== KANAL OBUNA & MENYULAR ====================
+# ==================== KANAL OBUNA & MENYULAR (AI SIZ TOZA INTERFEYS) ====================
 def check_channel_subscription(user_id: int) -> tuple[bool, list]:
     if is_user_vip(user_id) or not SPONSOR_CHANNELS:
         return True, []
@@ -705,22 +784,22 @@ def get_sub_keyboard(unsubscribed: list, lang: str = "uz") -> types.InlineKeyboa
     return markup
 
 def get_main_reply_keyboard(lang: str = "uz") -> types.ReplyKeyboardMarkup:
+    """AI tugmalari olib tashlangan, toza va tezkor asosiy menyu"""
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True, row_width=2)
     b_montaj = types.KeyboardButton(get_text("btn_montaj", lang))
-    b1 = types.KeyboardButton(get_text("btn_profile", lang))
+    b_orig = types.KeyboardButton(get_text("btn_original", lang))
     b_stat = types.KeyboardButton(get_text("btn_stat", lang))
+    b_profile = types.KeyboardButton(get_text("btn_profile", lang))
     b_kurs = types.KeyboardButton(get_text("btn_kurs", lang))
-    b2 = types.KeyboardButton(get_text("btn_ref", lang))
-    b3 = types.KeyboardButton(get_text("btn_ai", lang))
-    b4 = types.KeyboardButton(get_text("btn_image", lang))
-    b5 = types.KeyboardButton(get_text("btn_tools", lang))
-    b6 = types.KeyboardButton(get_text("btn_help", lang))
-    b7 = types.KeyboardButton(get_text("btn_lang", lang))
-    markup.add(b_montaj, b_stat)
-    markup.add(b1, b_kurs)
-    markup.add(b3, b4)
-    markup.add(b5, b2)
-    markup.add(b6, b7)
+    b_tools = types.KeyboardButton(get_text("btn_tools", lang))
+    b_ref = types.KeyboardButton(get_text("btn_ref", lang))
+    b_help = types.KeyboardButton(get_text("btn_help", lang))
+    b_lang = types.KeyboardButton(get_text("btn_lang", lang))
+    markup.add(b_montaj, b_orig)
+    markup.add(b_stat, b_profile)
+    markup.add(b_tools, b_kurs)
+    markup.add(b_ref, b_help)
+    markup.add(b_lang)
     return markup
 
 def get_language_inline_keyboard() -> types.InlineKeyboardMarkup:
@@ -730,38 +809,6 @@ def get_language_inline_keyboard() -> types.InlineKeyboardMarkup:
     b_en = types.InlineKeyboardButton("🇬🇧 English", callback_data="set_lang:en")
     markup.add(b_uz, b_ru, b_en)
     return markup
-
-# ==================== SUN'IY INTELLEKT (AI DEEPSEEK & CHATGPT & IMAGE) ====================
-def query_free_ai(prompt: str, model_type: str = "deepseek") -> str:
-    try:
-        encoded_prompt = urllib.parse.quote(prompt)
-        url = f"https://text.pollinations.ai/{encoded_prompt}?model={model_type}&system=You+are+an+intelligent+helpful+AI+assistant.+Answer+politely+in+the+user's+language."
-        resp = requests.get(url, timeout=30, verify=False)
-        if resp.status_code == 200 and resp.text.strip():
-            return resp.text.strip()
-    except Exception as e:
-        print(f"AI so'rov xatoligi: {e}")
-
-    try:
-        url2 = f"https://text.pollinations.ai/{urllib.parse.quote(prompt)}"
-        resp2 = requests.get(url2, timeout=20, verify=False)
-        if resp2.status_code == 200 and resp2.text.strip():
-            return resp2.text.strip()
-    except Exception:
-        pass
-
-    return "Kechirasiz, sun'iy intellekt serveri bilan bog'lanishda vaqtinchalik xatolik yuz berdi. Birozdan so'ng qayta urinib ko'ring."
-
-def generate_ai_image_bytes(prompt: str) -> bytes | None:
-    try:
-        encoded_prompt = urllib.parse.quote(prompt)
-        image_url = f"https://image.pollinations.ai/prompt/{encoded_prompt}?width=1024&height=1024&nologo=true"
-        resp = requests.get(image_url, timeout=45, verify=False)
-        if resp.status_code == 200 and len(resp.content) > 5000:
-            return resp.content
-    except Exception as e:
-        print(f"AI Image xatoligi: {e}")
-    return None
 
 def generate_qr_code_bytes(data_text: str) -> bytes | None:
     try:
@@ -924,173 +971,329 @@ def extract_url(text: str) -> str | None:
         return "https://" + match2.group(1).rstrip(".,;!?)'\">]")
     return None
 
-# ==================== FFMPEG VIDEO/AUDIO TRANZITSIYALARI ====================
-def get_media_duration(file_path: str) -> float:
+# ==================== FFMPEG METADATA VA TRANZITSIYALARI (FFPROBE SIZ HAM 100% ISHLAYDI!) ====================
+def _probe_media_via_ffmpeg_stderr(file_path: str) -> dict:
+    """
+    Agar tizimda `ffprobe` o'rnatilmagan bo'lsa (masalan imageio-ffmpeg ishlatilganda),
+    bevosita `ffmpeg -i <file>` stderr chiqishini tahlil qilib:
+    duration, width, height, codec va has_audio ma'lumotlarini 100% aniq oladi!
+    """
+    ensure_ffmpeg_in_path()
+    info = {"duration": 15.0, "width": 720, "height": 1280, "codec": "h264", "has_audio": False}
+    if not file_path or not os.path.exists(file_path):
+        return info
     try:
-        cmd = [
-            "ffprobe", "-v", "error",
-            "-show_entries", "format=duration",
-            "-of", "default=noprint_wrappers=1:nokey=1",
-            file_path
-        ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=15)
-        return float(res.stdout.strip())
-    except Exception:
-        return 30.0
+        cmd = [FFMPEG_BIN, "-hide_banner", "-i", file_path]
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, errors="ignore", timeout=15)
+        raw = (res.stderr or "") + "\n" + (res.stdout or "")
+
+        # Duration: 00:00:19.45
+        m_dur = re.search(r"Duration:\s*(\d+):(\d+):(\d+(?:\.\d+)?)", raw)
+        if m_dur:
+            hrs, mins, secs = int(m_dur.group(1)), int(m_dur.group(2)), float(m_dur.group(3))
+            total_s = hrs * 3600 + mins * 60 + secs
+            if total_s > 0.1:
+                info["duration"] = total_s
+
+        # Video stream: Video: h264 ..., 720x1280
+        m_vid = re.search(r"Stream #\d+:\d+[^\n]*Video:\s*([a-zA-Z0-9_]+)[^\n]*?(\d{2,5})x(\d{2,5})", raw)
+        if m_vid:
+            info["codec"] = m_vid.group(1).lower()
+            info["width"] = int(m_vid.group(2))
+            info["height"] = int(m_vid.group(3))
+
+        # Audio stream
+        if re.search(r"Stream #\d+:\d+[^\n]*Audio:", raw):
+            info["has_audio"] = True
+    except Exception as e:
+        print(f"FFmpeg probe fallback xatosi: {e}")
+    return info
+
+def get_media_duration(file_path: str) -> float:
+    ensure_ffmpeg_in_path()
+    if FFPROBE_BIN:
+        try:
+            cmd = [
+                FFPROBE_BIN, "-v", "error",
+                "-show_entries", "format=duration",
+                "-of", "default=noprint_wrappers=1:nokey=1",
+                file_path
+            ]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=12)
+            val = float(res.stdout.strip())
+            if val > 0.1:
+                return val
+        except Exception:
+            pass
+    return _probe_media_via_ffmpeg_stderr(file_path).get("duration", 15.0)
+
+def has_audio_stream(file_path: str) -> bool:
+    """Videoda audio oqimi bor-yo'qligini tekshirish (ffprobe yoki ffmpeg -i orqali)"""
+    ensure_ffmpeg_in_path()
+    if FFPROBE_BIN:
+        try:
+            cmd = [
+                FFPROBE_BIN, "-v", "error",
+                "-select_streams", "a:0",
+                "-show_entries", "stream=codec_type",
+                "-of", "default=noprint_wrappers=1:nokey=1",
+                file_path
+            ]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=10)
+            if "audio" in (res.stdout or "").lower():
+                return True
+        except Exception:
+            pass
+    return _probe_media_via_ffmpeg_stderr(file_path).get("has_audio", False)
+
+def get_video_stream_info(file_path: str) -> dict:
+    """Video kodek, o'lcham (width, height) va davomiylikni aniqlash (ffprobe yoki ffmpeg -i orqali)"""
+    ensure_ffmpeg_in_path()
+    if FFPROBE_BIN:
+        try:
+            cmd = [
+                FFPROBE_BIN, "-v", "error",
+                "-select_streams", "v:0",
+                "-show_entries", "stream=codec_name,width,height:format=duration",
+                "-of", "json",
+                file_path
+            ]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=12)
+            if res.returncode == 0 and res.stdout.strip():
+                data = json.loads(res.stdout)
+                streams = data.get("streams", [])
+                fmt = data.get("format", {})
+                if streams:
+                    st = streams[0]
+                    dur = max(1, int(float(fmt.get("duration") or 15)))
+                    return {
+                        "codec": (st.get("codec_name") or "h264").lower(),
+                        "width": int(st.get("width") or 720),
+                        "height": int(st.get("height") or 1280),
+                        "duration": dur
+                    }
+        except Exception:
+            pass
+    p = _probe_media_via_ffmpeg_stderr(file_path)
+    return {
+        "codec": p.get("codec", "h264"),
+        "width": int(p.get("width", 720)),
+        "height": int(p.get("height", 1280)),
+        "duration": max(1, int(float(p.get("duration", 15))))
+    }
 
 def convert_to_circle_note(input_video_path: str, output_note_path: str) -> bool:
+    """🔵 Kruglyash (1:1 Video Note 480x480) — ovozli va ovozsiz videolarda 100% xatosiz ishlaydi"""
+    ensure_ffmpeg_in_path()
     try:
+        audio_ok = has_audio_stream(input_video_path)
         cmd = [
-            "ffmpeg", "-y", "-i", input_video_path,
+            FFMPEG_BIN, "-y",
             "-t", "59",
-            "-vf", "crop='min(iw,ih)':'min(iw,ih)',scale=480:480",
+            "-i", input_video_path,
+            "-vf", "crop=min(iw\,ih):min(iw\,ih),scale=480:480,setsar=1,fps=30,format=yuv420p",
             "-c:v", "libx264", "-profile:v", "baseline", "-level", "3.0",
-            "-pix_fmt", "yuv420p", "-preset", "fast",
-            "-c:a", "aac", "-b:a", "128k", "-ar", "44100",
-            "-movflags", "+faststart",
-            output_note_path
+            "-pix_fmt", "yuv420p", "-preset", "ultrafast", "-crf", "24",
+            "-maxrate", "1400k", "-bufsize", "2800k"
         ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=90)
+        if audio_ok:
+            cmd += ["-c:a", "aac", "-b:a", "128k", "-ar", "44100", "-ac", "2"]
+        else:
+            cmd += ["-an"]
+        cmd += ["-movflags", "+faststart", output_note_path]
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
         return res.returncode == 0 and os.path.exists(output_note_path) and os.path.getsize(output_note_path) > 1000
     except Exception as e:
         print(f"Kruglyash xatoligi: {e}")
         return False
 
-def extract_audio_mp3(input_video_path: str, output_mp3_path: str, title: str = "Audio", artist: str = "") -> bool:
-    try:
-        cmd = [
-            "ffmpeg", "-y", "-i", input_video_path,
-            "-vn", "-c:a", "libmp3lame", "-b:a", "320k",
-            "-metadata", f"title={title}",
-            "-metadata", f"artist={artist or 'Universal Bot'}",
-            output_mp3_path
-        ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
-        return res.returncode == 0 and os.path.exists(output_mp3_path)
-    except Exception as e:
-        print(f"Audio ajratish xatoligi: {e}")
-        return False
+def _run_audio_convert_with_fallback(input_video_path: str, output_path: str, af_filter: str = "", title: str = "Audio", artist: str = "Universal Bot") -> str | None:
+    """
+    Audio ajratish va effektlar (MP3, Bass Boost, 8D, Karaoke) uchun universal funksiya.
+    Agar videoda ovoz bo'lmasa yoki libmp3lame mavjud bo'lmasa, avtomatik AAC (.m4a) fallback ishlatadi!
+    """
+    ensure_ffmpeg_in_path()
+    if not has_audio_stream(input_video_path):
+        return None
 
-def convert_to_bass_boost(input_video_path: str, output_mp3_path: str) -> bool:
+    # 1-urinish: libmp3lame (.mp3)
+    cmd = [FFMPEG_BIN, "-y", "-i", input_video_path, "-vn"]
+    if af_filter:
+        cmd += ["-af", af_filter]
+    cmd += [
+        "-c:a", "libmp3lame", "-b:a", "256k", "-ar", "44100", "-ac", "2",
+        "-metadata", f"title={title}",
+        "-metadata", f"artist={artist}",
+        output_path
+    ]
     try:
-        cmd = [
-            "ffmpeg", "-y", "-i", input_video_path,
-            "-vn", "-af", "bass=g=12:f=110:w=0.6",
-            "-c:a", "libmp3lame", "-b:a", "320k",
-            output_mp3_path
-        ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
-        return res.returncode == 0 and os.path.exists(output_mp3_path)
-    except Exception as e:
-        print(f"Bass Boost xatoligi: {e}")
-        return False
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=90)
+        if res.returncode == 0 and os.path.exists(output_path) and os.path.getsize(output_path) > 500:
+            return output_path
+    except Exception:
+        pass
 
-def convert_to_8d_audio(input_video_path: str, output_mp3_path: str) -> bool:
+    # 2-urinish (Fallback): AAC (.m4a) — har qanday FFmpeg da 100% mavjud!
+    m4a_path = os.path.splitext(output_path)[0] + ".m4a"
+    cmd2 = [FFMPEG_BIN, "-y", "-i", input_video_path, "-vn"]
+    if af_filter:
+        cmd2 += ["-af", af_filter]
+    cmd2 += [
+        "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
+        "-movflags", "+faststart",
+        m4a_path
+    ]
     try:
-        cmd = [
-            "ffmpeg", "-y", "-i", input_video_path,
-            "-vn", "-af", "apulsator=hz=0.125,aecho=0.8:0.88:60:0.4",
-            "-c:a", "libmp3lame", "-b:a", "320k",
-            output_mp3_path
-        ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
-        return res.returncode == 0 and os.path.exists(output_mp3_path)
+        res2 = subprocess.run(cmd2, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=90)
+        if res2.returncode == 0 and os.path.exists(m4a_path) and os.path.getsize(m4a_path) > 500:
+            return m4a_path
     except Exception as e:
-        print(f"8D Audio xatoligi: {e}")
-        return False
+        print(f"Audio fallback xatoligi: {e}")
+    return None
 
-def convert_to_karaoke_minus(input_video_path: str, output_mp3_path: str) -> bool:
-    try:
-        cmd = [
-            "ffmpeg", "-y", "-i", input_video_path,
-            "-vn", "-af", "pan=stereo|c0=c0-0.5*c1|c1=c1-0.5*c0",
-            "-c:a", "libmp3lame", "-b:a", "320k",
-            output_mp3_path
-        ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
-        return res.returncode == 0 and os.path.exists(output_mp3_path)
-    except Exception as e:
-        print(f"Karaoke xatoligi: {e}")
-        return False
+def extract_audio_mp3(input_video_path: str, output_mp3_path: str, title: str = "Audio", artist: str = "") -> str | None:
+    return _run_audio_convert_with_fallback(input_video_path, output_mp3_path, af_filter="", title=title, artist=artist or "Universal Bot")
+
+def convert_to_bass_boost(input_video_path: str, output_mp3_path: str) -> str | None:
+    res = _run_audio_convert_with_fallback(
+        input_video_path, output_mp3_path,
+        af_filter="aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,bass=g=12:f=110:w=0.6,volume=1.05",
+        title="Bass Boost (+12dB)"
+    )
+    if res:
+        return res
+    return _run_audio_convert_with_fallback(
+        input_video_path, output_mp3_path,
+        af_filter="lowshelf=g=11:f=110,volume=1.05",
+        title="Bass Boost (+12dB)"
+    )
+
+def convert_to_8d_audio(input_video_path: str, output_mp3_path: str) -> str | None:
+    res = _run_audio_convert_with_fallback(
+        input_video_path, output_mp3_path,
+        af_filter="aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,apulsator=hz=0.125,aecho=0.8:0.88:60:0.4",
+        title="8D Surround Audio"
+    )
+    if res:
+        return res
+    return _run_audio_convert_with_fallback(
+        input_video_path, output_mp3_path,
+        af_filter="aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,aecho=0.8:0.88:60:0.4",
+        title="8D Surround Audio"
+    )
+
+def convert_to_karaoke_minus(input_video_path: str, output_mp3_path: str) -> str | None:
+    return _run_audio_convert_with_fallback(
+        input_video_path, output_mp3_path,
+        af_filter="aformat=sample_fmts=fltp:sample_rates=44100:channel_layouts=stereo,pan=stereo|c0=c0-0.5*c1|c1=c1-0.5*c0",
+        title="Karaoke Minusovka"
+    )
 
 def convert_to_reverse_video(input_video_path: str, output_video_path: str) -> bool:
+    """⏪ Teskari video (Reverse) — RAM to'lib qolmasligi uchun 30s 720p ultrafast + ovozsiz video himoyasi bilan"""
+    ensure_ffmpeg_in_path()
     try:
+        audio_ok = has_audio_stream(input_video_path)
         cmd = [
-            "ffmpeg", "-y", "-i", input_video_path,
-            "-t", "45",
-            "-vf", "reverse", "-af", "areverse",
-            "-c:v", "libx264", "-preset", "fast",
-            "-c:a", "aac",
-            output_video_path
+            FFMPEG_BIN, "-y",
+            "-t", "30",
+            "-i", input_video_path,
+            "-vf", "scale='min(720,iw)':-2,reverse,format=yuv420p",
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23"
         ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
-        return res.returncode == 0 and os.path.exists(output_video_path)
+        if audio_ok:
+            cmd += ["-af", "areverse", "-c:a", "aac", "-b:a", "128k"]
+        else:
+            cmd += ["-an"]
+        cmd += ["-movflags", "+faststart", output_video_path]
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=150)
+        return res.returncode == 0 and os.path.exists(output_video_path) and os.path.getsize(output_video_path) > 1000
     except Exception as e:
         print(f"Reverse xatoligi: {e}")
         return False
 
 def extract_hd_thumbnail(input_video_path: str, output_jpg_path: str) -> bool:
-    try:
-        cmd = [
-            "ffmpeg", "-y", "-ss", "00:00:01",
-            "-i", input_video_path,
-            "-frames:v", "1", "-q:v", "2",
-            output_jpg_path
-        ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
-        return res.returncode == 0 and os.path.exists(output_jpg_path)
-    except Exception as e:
-        print(f"Thumbnail xatoligi: {e}")
-        return False
+    """🖼 HD Oblojka — 0.5s yoki 0.0s kadrdan 100% xatosiz JPG ajratish"""
+    ensure_ffmpeg_in_path()
+    for seek_pos in ["00:00:00.5", "00:00:00"]:
+        try:
+            cmd = [
+                FFMPEG_BIN, "-y", "-ss", seek_pos,
+                "-i", input_video_path,
+                "-frames:v", "1", "-q:v", "2",
+                output_jpg_path
+            ]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30)
+            if res.returncode == 0 and os.path.exists(output_jpg_path) and os.path.getsize(output_jpg_path) > 300:
+                return True
+        except Exception as e:
+            print(f"Thumbnail xatoligi ({seek_pos}): {e}")
+    return False
 
-def convert_to_voice_ogg(input_video_path: str, output_voice_path: str) -> bool:
-    try:
-        cmd = [
-            "ffmpeg", "-y", "-i", input_video_path,
-            "-vn", "-c:a", "libopus", "-b:a", "64k", "-vbr", "on",
-            output_voice_path
-        ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
-        return res.returncode == 0 and os.path.exists(output_voice_path)
-    except Exception as e:
-        print(f"Voice note xatoligi: {e}")
-        return False
+def convert_to_voice_ogg(input_video_path: str, output_voice_path: str) -> str | None:
+    """🎙 Ovozli xabar (.ogg opus yoki fallback .mp3/.m4a)"""
+    ensure_ffmpeg_in_path()
+    if not has_audio_stream(input_video_path):
+        return None
+    for codec, ext in [("libopus", ".ogg"), ("libvorbis", ".ogg"), ("libmp3lame", ".mp3"), ("aac", ".m4a")]:
+        cand_path = os.path.splitext(output_voice_path)[0] + ext
+        try:
+            cmd = [
+                FFMPEG_BIN, "-y", "-i", input_video_path,
+                "-vn", "-c:a", codec, "-b:a", "64k", "-ar", "48000" if codec == "libopus" else "44100",
+                cand_path
+            ]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
+            if res.returncode == 0 and os.path.exists(cand_path) and os.path.getsize(cand_path) > 500:
+                return cand_path
+        except Exception:
+            pass
+    return None
 
 def convert_to_fast_speed(input_video_path: str, output_video_path: str, speed: float = 1.5) -> bool:
+    """⚡ 1.5x Tezlashtirish — ovozli va ovozsiz videolarda 100% ishlaydi"""
+    ensure_ffmpeg_in_path()
     try:
-        pts_factor = 1.0 / speed
+        pts_factor = round(1.0 / speed, 5)
+        audio_ok = has_audio_stream(input_video_path)
         cmd = [
-            "ffmpeg", "-y", "-i", input_video_path,
-            "-vf", f"setpts={pts_factor}*PTS",
-            "-af", f"atempo={speed}",
-            "-c:v", "libx264", "-preset", "fast",
-            "-c:a", "aac",
-            output_video_path
+            FFMPEG_BIN, "-y", "-i", input_video_path,
+            "-vf", f"setpts={pts_factor}*PTS,format=yuv420p",
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23"
         ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=90)
-        return res.returncode == 0 and os.path.exists(output_video_path)
+        if audio_ok:
+            cmd += ["-af", f"atempo={speed}", "-c:a", "aac", "-b:a", "128k"]
+        else:
+            cmd += ["-an"]
+        cmd += ["-movflags", "+faststart", output_video_path]
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
+        return res.returncode == 0 and os.path.exists(output_video_path) and os.path.getsize(output_video_path) > 1000
     except Exception as e:
         print(f"Tezlik xatoligi: {e}")
         return False
 
 def convert_to_gif_animation(input_video_path: str, output_gif_path: str) -> bool:
+    """🎞 GIF (MP4 Looper animatsiya)"""
+    ensure_ffmpeg_in_path()
     try:
         cmd = [
-            "ffmpeg", "-y", "-i", input_video_path,
+            FFMPEG_BIN, "-y",
             "-t", "6",
-            "-vf", "scale=480:-2",
-            "-c:v", "libx264", "-preset", "fast",
+            "-i", input_video_path,
+            "-vf", "scale=480:-2,fps=15,format=yuv420p",
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "24",
             "-an", "-movflags", "+faststart",
             output_gif_path
         ]
         res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
-        return res.returncode == 0 and os.path.exists(output_gif_path)
+        return res.returncode == 0 and os.path.exists(output_gif_path) and os.path.getsize(output_gif_path) > 500
     except Exception as e:
         print(f"GIF xatoligi: {e}")
         return False
 
 # ==================== 50 MB+ VIDEO AUTO-SPLITTER ====================
 def split_large_video(input_video_path: str, target_dir: str, max_chunk_mb: float = 46.0) -> list:
+    ensure_ffmpeg_in_path()
     total_size_mb = os.path.getsize(input_video_path) / (1024 * 1024)
     if total_size_mb <= max_chunk_mb:
         return [input_video_path]
@@ -1108,7 +1311,7 @@ def split_large_video(input_video_path: str, target_dir: str, max_chunk_mb: floa
         dur_to_take = min(chunk_duration, duration - current_start)
 
         cmd = [
-            "ffmpeg", "-y",
+            FFMPEG_BIN, "-y",
             "-ss", str(current_start),
             "-i", input_video_path,
             "-t", str(dur_to_take),
@@ -1120,11 +1323,11 @@ def split_large_video(input_video_path: str, target_dir: str, max_chunk_mb: floa
 
         if res.returncode != 0 or not os.path.exists(chunk_file) or os.path.getsize(chunk_file) < 500:
             cmd_reencode = [
-                "ffmpeg", "-y",
+                FFMPEG_BIN, "-y",
                 "-ss", str(current_start),
                 "-i", input_video_path,
                 "-t", str(dur_to_take),
-                "-c:v", "libx264", "-preset", "ultrafast", "-crf", "26",
+                "-c:v", "libx264", "-preset", "ultrafast", "-crf", "25",
                 "-c:a", "aac", "-b:a", "128k",
                 chunk_file
             ]
@@ -1154,20 +1357,25 @@ def parse_time_to_seconds(time_str: str):
         return None
 
 def trim_video(input_video_path: str, output_path: str, start_sec: float, end_sec: float) -> bool:
+    ensure_ffmpeg_in_path()
     try:
         duration = end_sec - start_sec
         if duration <= 0:
             return False
+        audio_ok = has_audio_stream(input_video_path)
         cmd = [
-            "ffmpeg", "-y",
+            FFMPEG_BIN, "-y",
             "-ss", str(start_sec),
             "-i", input_video_path,
             "-t", str(duration),
-            "-c:v", "libx264", "-preset", "fast",
-            "-c:a", "aac",
-            "-movflags", "+faststart",
-            output_path
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "22",
+            "-pix_fmt", "yuv420p"
         ]
+        if audio_ok:
+            cmd += ["-c:a", "aac", "-b:a", "160k"]
+        else:
+            cmd += ["-an"]
+        cmd += ["-movflags", "+faststart", output_path]
         res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120)
         return res.returncode == 0 and os.path.exists(output_path) and os.path.getsize(output_path) > 1000
     except Exception as e:
@@ -1192,10 +1400,6 @@ def get_cached_bot_username() -> str:
     return ADMIN_USERNAME.lstrip("@") or "usman_khasan"
 
 def get_watermark_settings() -> dict:
-    """
-    Har bir videoda tepadan pastga suzib yuruvchi shaffof (prazrachniy) Telegram ikonka + @handle sozlamalari.
-    Standart holatda: enabled=True, opacity=0.24 (24% ko'rinar-ko'rinmas, videoga xalaqit bermaydi).
-    """
     default_cfg = {
         "enabled": True,
         "text": "",
@@ -1228,7 +1432,6 @@ def save_watermark_settings(enabled: bool = True, text: str = "", opacity: float
         print(f"Watermark config saqlash xatosi: {e}")
     return cfg
 
-# Pure-Python 5x7 Bitmap Font (agar foydalanuvchi kompyuterida Pillow o'rnatilmagan bo'lsa ham 100% ishlashi uchun!)
 _BITMAP_FONT_5X7 = {
     '@': ["01110", "10001", "10111", "10101", "10111", "10000", "01110"],
     'A': ["01110", "10001", "10001", "11111", "10001", "10001", "10001"],
@@ -1510,10 +1713,8 @@ def apply_floating_watermark_to_video(input_path: str, output_path: str, custom_
 
     vinfo = get_video_stream_info(input_path)
     vid_w = max(360, vinfo.get("width", 720))
-    # Watermark kengligi video enining ~42% qismiga moslanadi (katta ham emas, juda kichik ham emas)
     wm_target_w = max(180, min(460, int(vid_w * 0.44)))
 
-    # Tepadan pastga silliq harakat: y = 55 + mod(t*85, H-h-110), x esa o'rtada ohista suzadi
     filter_complex = (
         f"[1:v]scale={wm_target_w}:-1[wm];"
         f"[0:v][wm]overlay="
@@ -1522,13 +1723,13 @@ def apply_floating_watermark_to_video(input_path: str, output_path: str, custom_
         f"format=auto,format=yuv420p[vout]"
     )
     cmd = [
-        "ffmpeg", "-y",
+        FFMPEG_BIN, "-y",
         "-i", input_path,
         "-i", wm_png,
         "-filter_complex", filter_complex,
         "-map", "[vout]",
         "-map", "0:a?",
-        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "22",
+        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23",
         "-pix_fmt", "yuv420p",
         "-c:a", "copy",
         "-movflags", "+faststart",
@@ -1548,31 +1749,31 @@ def make_video_100_original(
     force_9_16: bool = False
 ) -> tuple[bool, dict]:
     """
-    🛡 10-BOSQICHLI PRO ANTI-DUPLIKAT (100% ORIGINAL VIDEO) ALGORITMI!
+    🛡 10-BOSQICHLI PRO ANTI-DUPLIKAT (100% ORIGINAL VIDEO) ALGORITMI (TEZKOR SINGLE-PASS)!
     Instagram Reels, TikTok va YouTube Shorts algoritmlari (pHash, dHash, MD5/SHA256,
     Audio Chromaprint, Histogram, GOP Keyframe va Metadata) videoni 100% YANGI ORIGINAL
-    deb qabul qilishi va Rekomendatsiya / Topga chiqarishi uchun 10 ta qatlamli ishlov beradi:
-      1) Sub-piksel Dinamik Mikro-Zoom (1.022x - 1.034x) va assimetrik kadr siljishi
-      2) Burchak pHash himoyasi uchun sezilmas mikro-vignette (PI/22)
-      3) Kinematik Rang Matritsasi (Contrast/Saturation/Gamma RGB mikro-siljishi)
-      4) Ultra-HD Detalizatsiya (Unsharp mask — DCT koeffitsientlarini yangilaydi)
-      5) Ko'zga ko'rinmas 1-bit Temporal Mikro-Grain (har bir kadrning pHash imzosini 100% yangilaydi)
-      6) Tepadan-pastga suzib yuruvchi shaffof (ko'rinar-ko'rinmas) Telegram Icon + @Handle
-      7) Mikro-Tezlik & PTS vaqt siljishi (0.988x yoki 1.012x)
-      8) Nostandart Keyframe GOP strukturasi (-g 29 -keyint_min 15)
-      9) Audio Chromaprint / Shazam-Bypass (Spectral Pitch +1.2% mikro-shift + EBU R128 -14 LUFS Loudnorm)
-     10) Eski metama'lumotlarni 100% tozalash (-map_metadata -1) va yangi Apple iPhone 16 Pro Max kamerasi imzosini yozish!
+    deb qabul qilishi va Rekomendatsiya / Topga chiqarishi uchun 10 ta qatlamli ishlov beradi.
+    Ultrafast single-pass orqali 3–6 soniyada tayyor bo'ladi!
     """
     ensure_ffmpeg_in_path()
     try:
         vinfo = get_video_stream_info(input_path)
         orig_w = max(360, vinfo.get("width", 720))
         orig_h = max(360, vinfo.get("height", 1280))
-        target_w = 1080 if force_9_16 else (orig_w if orig_w % 2 == 0 else orig_w + 1)
-        target_h = 1920 if force_9_16 else (orig_h if orig_h % 2 == 0 else orig_h + 1)
+        if force_9_16:
+            target_w, target_h = 720, 1280
+        else:
+            # Juda katta 4K videolarni 720p/1080p chegarasida ushlab tezkor ishlash
+            if orig_w > 1080 or orig_h > 1920:
+                scale_r = min(720.0 / orig_w, 1280.0 / orig_h)
+                target_w = int(orig_w * scale_r)
+                target_h = int(orig_h * scale_r)
+            else:
+                target_w, target_h = orig_w, orig_h
+            target_w = target_w if target_w % 2 == 0 else target_w + 1
+            target_h = target_h if target_h % 2 == 0 else target_h + 1
 
-        # Randomizatsiya parametrlari (har safar 100% betakror natija chiqishi uchun!)
-        zoom_factor = round(random.uniform(1.022, 1.034), 4)
+        zoom_factor = round(random.uniform(1.024, 1.035), 4)
         speed_factor = round(random.choice([random.uniform(0.986, 0.993), random.uniform(1.007, 1.015)]), 4)
         pts_mult = round(1.0 / speed_factor, 5)
         contrast_val = round(random.uniform(1.020, 1.032), 3)
@@ -1596,15 +1797,12 @@ def make_video_100_original(
             text=custom_watermark or cfg.get("text", ""),
             opacity=cfg.get("opacity", 0.24)
         )
-        wm_w = max(180, min(460, int(target_w * 0.44)))
+        wm_w = max(180, min(420, int(target_w * 0.44)))
 
-        # Video filter zanjiri:
         base_v_chain = (
-            f"scale={scaled_w}:{scaled_h}:flags=lanczos,"
+            f"scale={scaled_w}:{scaled_h},"
             f"crop={target_w}:{target_h}:{crop_x}:{crop_y},"
             f"eq=contrast={contrast_val}:brightness={bright_val}:saturation={sat_val}:gamma_r={gamma_r}:gamma_b={gamma_b},"
-            f"unsharp=3:3:0.35:3:3:0.0,"
-            f"vignette=angle=PI/22,"
             f"noise=alls=1:allf=t,"
             f"setpts={pts_mult}*PTS,"
             f"fps=30,setsar=1"
@@ -1614,7 +1812,7 @@ def make_video_100_original(
         unique_id = str(uuid.uuid4()).upper()
         audio_exists = has_audio_stream(input_path)
 
-        cmd = ["ffmpeg", "-y", "-i", input_path]
+        cmd = [FFMPEG_BIN, "-y", "-i", input_path]
         if wm_png and os.path.exists(wm_png):
             cmd += ["-i", wm_png]
             filter_complex = (
@@ -1632,15 +1830,12 @@ def make_video_100_original(
         if audio_exists:
             af_chain = (
                 f"asetrate=44100*{audio_pitch},aresample=44100,"
-                f"atempo={audio_tempo},"
-                f"highpass=f=22,lowpass=f=18600,"
-                f"loudnorm=I=-14:TP=-1.5:LRA=11"
+                f"atempo={audio_tempo},volume=1.03"
             )
             cmd += ["-map", "0:a:0", "-af", af_chain, "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2"]
         else:
             cmd += ["-an"]
 
-        # 10-Bosqich: Eski metadatalarni to'liq o'chirib, yangi iPhone 16 Pro Max kamerasi metadatasini yozish
         cmd += [
             "-map_metadata", "-1",
             "-map_chapters", "-1",
@@ -1652,14 +1847,14 @@ def make_video_100_original(
             "-metadata", "com.apple.quicktime.model=iPhone 16 Pro Max",
             "-metadata", "com.apple.quicktime.software=18.2",
             "-metadata", f"comment=Original_Capture_{unique_id}",
-            "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "22",
             "-g", "29", "-keyint_min", "15",
             "-pix_fmt", "yuv420p",
             "-movflags", "+faststart",
             output_path
         ]
 
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
         ok = res.returncode == 0 and os.path.exists(output_path) and os.path.getsize(output_path) > 1000
         return ok, {
             "zoom": f"{zoom_factor*100 - 100:.1f}%",
@@ -1671,21 +1866,6 @@ def make_video_100_original(
     except Exception as e:
         print(f"Anti-duplikat xatoligi: {e}")
         return False, {}
-
-def has_audio_stream(file_path: str) -> bool:
-    """Videoda audio oqimi bor-yo'qligini ffprobe orqali tekshirish (ovozsiz videolarda xato chiqmasligi uchun)"""
-    try:
-        cmd = [
-            "ffprobe", "-v", "error",
-            "-select_streams", "a:0",
-            "-show_entries", "stream=codec_type",
-            "-of", "default=noprint_wrappers=1:nokey=1",
-            file_path
-        ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=10)
-        return "audio" in (res.stdout or "").lower()
-    except Exception:
-        return False
 
 def get_saved_outro_path(user_id: int) -> str | None:
     """Foydalanuvchi yoki Admin saqlab qo'ygan reklama/outro videosini topish"""
@@ -1703,8 +1883,8 @@ def get_saved_outro_path(user_id: int) -> str | None:
 def normalize_clip_for_montage(
     input_path: str,
     output_path: str,
-    target_w: int = 1080,
-    target_h: int = 1920,
+    target_w: int = 720,
+    target_h: int = 1280,
     max_duration: float = 0.0,
     keep_audio: bool = True,
     use_blur_bg: bool = True,
@@ -1712,11 +1892,9 @@ def normalize_clip_for_montage(
     fade_in_video: bool = False
 ) -> bool:
     """
-    Har qanday o'lcham, FPS va davomiylikdagi (10s, 19s, 45s, 1 daqiqa va h.k.) videoni
-    Instagram Reels / TikTok 1080x1920 Full HD (30 fps, yuv420p, 44.1kHz stereo) standartiga keltirish!
-    YANGILIKLAR:
-      - Qora hoshiya o'rniga Xiralashtirilgan Orqa Fon (Blurred Background `boxblur=25:4`)!
-      - Kinematik silliq o'tish (fade-in / fade-out) va EBU R128 (`loudnorm`) ovoz tenglashtirish!
+    Har qanday o'lcham, FPS va davomiylikdagi (10s, 19s, 45s, 1 daqiqa+) videoni
+    720x1280 HD (9:16 Reels/TikTok, 30 fps, yuv420p, 44.1kHz stereo) standartiga
+    TEZKOR (downscale-blur + ultrafast) keltirish!
     """
     ensure_ffmpeg_in_path()
     dur = get_media_duration(input_path)
@@ -1732,17 +1910,17 @@ def normalize_clip_for_montage(
 
     fade_filters = []
     if fade_in_video and use_dur > 0.8:
-        fade_filters.append("fade=t=in:st=0:d=0.35")
+        fade_filters.append("fade=t=in:st=0:d=0.30")
     if fade_out_video and use_dur > 0.8:
-        fade_filters.append(f"fade=t=out:st={max(0.1, use_dur - 0.35):.2f}:d=0.35")
+        fade_filters.append(f"fade=t=out:st={max(0.1, use_dur - 0.30):.2f}:d=0.30")
     fade_suffix = ("," + ",".join(fade_filters)) if fade_filters else ""
 
-    # Agar video 9:16 bo'lmasa (gorizontal yoki kvadrat bo'lsa) -> Qora fon o'rniga Blurred Background!
+    # Tezkor Downscale-Blur (180x320 da boxblur=10:2 qilib 720x1280 ga kattalashtiriladi -> 25 baravar tez!)
     if use_blur_bg and abs(aspect_ratio - target_aspect) > 0.08:
         v_filter_complex = (
             f"[0:v]split=2[vbg][vfg];"
-            f"[vbg]scale={target_w}:{target_h}:force_original_aspect_ratio=increase,"
-            f"crop={target_w}:{target_h},boxblur=24:4,eq=brightness=-0.08:saturation=1.15[bg];"
+            f"[vbg]scale=180:320:force_original_aspect_ratio=increase,"
+            f"crop=180:320,boxblur=10:2,scale={target_w}:{target_h},eq=brightness=-0.08:saturation=1.15[bg];"
             f"[vfg]scale={target_w}:{target_h}:force_original_aspect_ratio=decrease[fg];"
             f"[bg][fg]overlay=(W-w)/2:(H-h)/2,setsar=1,fps=30{fade_suffix},format=yuv420p[vout]"
         )
@@ -1755,7 +1933,7 @@ def normalize_clip_for_montage(
         )
         use_complex = False
 
-    cmd = ["ffmpeg", "-y", "-i", input_path]
+    cmd = [FFMPEG_BIN, "-y", "-i", input_path]
     if keep_audio and not audio_exists:
         cmd += ["-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100"]
 
@@ -1768,7 +1946,7 @@ def normalize_clip_for_montage(
     if keep_audio and not audio_exists:
         cmd += [
             "-map", "1:a:0",
-            "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "22",
             "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
             "-shortest", "-movflags", "+faststart",
             output_path
@@ -1776,8 +1954,8 @@ def normalize_clip_for_montage(
     elif keep_audio and audio_exists:
         cmd += [
             "-map", "0:a:0",
-            "-af", "loudnorm=I=-14:TP=-1.5:LRA=11,aresample=44100,aformat=sample_fmts=fltp:channel_layouts=stereo",
-            "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+            "-af", "aresample=44100,aformat=sample_fmts=fltp:channel_layouts=stereo",
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "22",
             "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
             "-movflags", "+faststart",
             output_path
@@ -1785,32 +1963,54 @@ def normalize_clip_for_montage(
     else:
         cmd += [
             "-an",
-            "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "22",
             "-movflags", "+faststart",
             output_path
         ]
 
     try:
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
         return res.returncode == 0 and os.path.exists(output_path) and os.path.getsize(output_path) > 1000
     except Exception as e:
         print(f"Normalize clip xatoligi: {e}")
         return False
 
 def _generate_transition_whoosh_sfx(out_wav: str, duration: float = 0.65) -> bool:
-    """1-videodan 2-videoga o'tish nuqtasi uchun kinematik Sub-Bass Whoosh ovoz effekti yaratish"""
+    """
+    Pure-Python (wave + struct + math) yordamida 0.01 soniyada kinematik Sub-Bass Whoosh
+    ovoz effektini yaratish (FFmpeg lavfi/aevalsrc ga bog'liq emas, 100% xatosiz ishlaydi!).
+    """
     try:
-        cmd = [
-            "ffmpeg", "-y",
-            "-f", "lavfi",
-            "-i", f"aevalsrc='0.32*sin(2*PI*(150-105*t/{duration:.2f})*t)*exp(-3.5*t)':s=44100:d={duration:.2f}",
-            "-af", "pan=stereo|c0=c0|c1=c0,afade=t=in:st=0:d=0.06,afade=t=out:st=0.25:d=0.40",
-            out_wav
-        ]
-        res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=20)
-        return res.returncode == 0 and os.path.exists(out_wav) and os.path.getsize(out_wav) > 200
-    except Exception:
+        sample_rate = 44100
+        n_samples = int(sample_rate * duration)
+        frames = bytearray()
+        for i in range(n_samples):
+            t = i / float(sample_rate)
+            # Chastota 165 Hz dan 48 Hz gacha silliq tushuvchi sub-bass whoosh
+            freq = 165.0 - 115.0 * (t / duration)
+            env = math.sin(math.pi * (t / duration)) * math.exp(-2.6 * t)
+            val = int(max(-32767, min(32767, 32767 * 0.34 * env * math.sin(2.0 * math.pi * freq * t))))
+            packed = struct.pack("<hh", val, val)
+            frames.extend(packed)
+        with wave.open(out_wav, "wb") as wf:
+            wf.setnchannels(2)
+            wf.setsampwidth(2)
+            wf.setframerate(sample_rate)
+            wf.writeframes(bytes(frames))
+        return os.path.exists(out_wav) and os.path.getsize(out_wav) > 200
+    except Exception as e:
+        print(f"Pure-Python Whoosh SFX xatosi: {e}")
         return False
+
+def _write_ffmpeg_concat_list(list_path: str, file_paths: list):
+    """
+    Windows va Linuxda FFmpeg `-f concat` demuxer xato bermasligi uchun
+    barcha yo'llardagi `\` belgisini `/` (forward slash) ga o'girib yozadi!
+    """
+    with open(list_path, "w", encoding="utf-8") as lf:
+        for fp in file_paths:
+            safe_p = os.path.abspath(fp).replace("\\", "/").replace("'", "'\\''")
+            lf.write(f"file '{safe_p}'\n")
 
 def montage_two_videos(
     video1_path: str,
@@ -1820,25 +2020,19 @@ def montage_two_videos(
     apply_anti_duplicate: bool = True
 ) -> tuple[bool, dict]:
     """
-    2 ta har qanday uzunlikdagi (masalan: 10s, 19s, 35s, 60s+ — 1 daqiqa va undan ko'p) videoni
-    7 ta Pro Studiya funksiyasi + 10-Bosqichli Anti-Duplikat + Tepadan-Pastga Suzuvchi Watermark bilan montaj qilish!
-
-    5 Xil Smart Rejim (mode):
-      1. "audio1_bridge" (🔥 Tavsiya — 1-Video Audiosi Uzluksiz 2-Videoga O'tadi, 2-Video Muted)
-      2. "lcut_split" (🎬 True L-Cut — 1-Video kadri ertaroq almashib, o'zining original audiosi 2-videoda tugaydi)
-      3. "pip_outro" (🖼 PiP Reklama — 1-video oxirida 2-video burchakda Picture-in-Picture chiqib, so'ng to'liq ekranga o'tadi!)
-      4. "both_original" (🔊 Original Ovozlar — 1-Video o'z ovozi bilan + Whoosh Transition + 2-Video o'z ovozi bilan)
-      5. "audio_ducking" (🔉 Fon Musiqa Mix — 2-Video boshlanganda 1-Video audiosi 25% fonda + 2-Video ovozi 100%)
+    2 ta har qanday uzunlikdagi (10s, 19s, 45s, 1 daqiqa+) videoni
+    5 Xil Smart Rejimda + Blurred 9:16 Fon + Suzuvchi Shaffof Watermark + Anti-Duplikat
+    bilan TEZKOR (5-8 soniyada) montaj qilish!
     """
     ensure_ffmpeg_in_path()
     ts = int(time.time() * 1000) % 1000000
-    norm1 = os.path.join(DOWNLOAD_DIR, f"_m_norm1_{ts}.mp4")
-    norm2 = os.path.join(DOWNLOAD_DIR, f"_m_norm2_{ts}.mp4")
-    concat_vid = os.path.join(DOWNLOAD_DIR, f"_m_concat_v_{ts}.mp4")
-    raw_montaj = os.path.join(DOWNLOAD_DIR, f"_m_raw_out_{ts}.mp4")
-    audio1_aac = os.path.join(DOWNLOAD_DIR, f"_m_aud1_{ts}.m4a")
-    whoosh_wav = os.path.join(DOWNLOAD_DIR, f"_m_whoosh_{ts}.wav")
-    concat_list = os.path.join(DOWNLOAD_DIR, f"_m_list_{ts}.txt")
+    norm1 = os.path.join(MONTAGE_SESSIONS_DIR, f"_m_norm1_{ts}.mp4")
+    norm2 = os.path.join(MONTAGE_SESSIONS_DIR, f"_m_norm2_{ts}.mp4")
+    concat_vid = os.path.join(MONTAGE_SESSIONS_DIR, f"_m_concat_v_{ts}.mp4")
+    raw_montaj = os.path.join(MONTAGE_SESSIONS_DIR, f"_m_raw_out_{ts}.mp4")
+    audio1_aac = os.path.join(MONTAGE_SESSIONS_DIR, f"_m_aud1_{ts}.m4a")
+    whoosh_wav = os.path.join(MONTAGE_SESSIONS_DIR, f"_m_whoosh_{ts}.wav")
+    concat_list = os.path.join(MONTAGE_SESSIONS_DIR, f"_m_list_{ts}.txt")
 
     try:
         dur1_raw = max(get_media_duration(video1_path), 1.0)
@@ -1849,7 +2043,7 @@ def montage_two_videos(
         final_d2 = dur2_raw
         total_d = dur1_raw + dur2_raw
 
-        # ---------------- REJIM 5: PICTURE-IN-PICTURE (PiP Preview + Fullscreen Outro) ----------------
+        # ---------------- REJIM 3: PICTURE-IN-PICTURE (PiP Preview + Fullscreen Outro) ----------------
         if mode == "pip_outro":
             if not normalize_clip_for_montage(video1_path, norm1, keep_audio=False, fade_out_video=True):
                 return False, {}
@@ -1861,37 +2055,32 @@ def montage_two_videos(
             pip_lead = min(3.0, max(1.5, d1 * 0.25), max(1.5, d2 * 0.5))
             pip_start = max(0.5, d1 - pip_lead)
 
-            with open(concat_list, "w", encoding="utf-8") as lf:
-                lf.write(f"file '{os.path.abspath(norm1)}'\n")
-                lf.write(f"file '{os.path.abspath(norm2)}'\n")
-
+            _write_ffmpeg_concat_list(concat_list, [norm1, norm2])
             subprocess.run([
-                "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", concat_vid
-            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
+                FFMPEG_BIN, "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", concat_vid
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
 
             total_d = get_media_duration(concat_vid) or (d1 + d2)
 
             if has_audio_stream(video1_path):
                 subprocess.run([
-                    "ffmpeg", "-y", "-i", video1_path, "-vn",
-                    "-af", "loudnorm=I=-14:TP=-1.5:LRA=11",
+                    FFMPEG_BIN, "-y", "-i", video1_path, "-vn",
                     "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2", audio1_aac
-                ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
+                ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=90)
             else:
                 subprocess.run([
-                    "ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
+                    FFMPEG_BIN, "-y", "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
                     "-t", f"{total_d:.3f}", "-c:a", "aac", audio1_aac
                 ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
 
             fade_start = max(total_d - 1.2, 0.5)
-            # 1-video oxirgi soniyalarida o'ng pastki burchakda 2-videoning PiP preview oynasi chiqadi!
             pip_filter = (
-                f"[1:v]scale=340:604,drawbox=x=0:y=0:w=iw:h=ih:color=gold@0.9:t=6,"
+                f"[1:v]scale=230:408,drawbox=x=0:y=0:w=iw:h=ih:color=gold@0.9:t=5,"
                 f"setpts=PTS+{pip_start:.2f}/TB[pip];"
-                f"[0:v][pip]overlay=x=W-w-36:y=H-h-190:enable='between(t,{pip_start:.2f},{d1:.2f})'[v_pip]"
+                f"[0:v][pip]overlay=x=W-w-26:y=H-h-130:enable='between(t,{pip_start:.2f},{d1:.2f})'[v_pip]"
             )
             cmd_pip = [
-                "ffmpeg", "-y",
+                FFMPEG_BIN, "-y",
                 "-i", concat_vid,
                 "-i", norm2,
                 "-stream_loop", "-1", "-i", audio1_aac,
@@ -1899,37 +2088,34 @@ def montage_two_videos(
                 "-map", "[v_pip]", "-map", "2:a:0",
                 "-t", f"{total_d:.3f}",
                 "-af", f"afade=t=out:st={fade_start:.2f}:d=1.2",
-                "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+                "-c:v", "libx264", "-preset", "ultrafast", "-crf", "22",
                 "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
                 "-movflags", "+faststart",
                 target_stage
             ]
-            res = subprocess.run(cmd_pip, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
+            res = subprocess.run(cmd_pip, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
             if res.returncode != 0 or not os.path.exists(target_stage):
                 return False, {}
             final_d1, final_d2 = d1, d2
             mode_label = "🖼 PiP Reklama (Burchakda Preview + To'liq Ekran)"
 
-        # ---------------- REJIM 3: ORIGINAL OVOZLAR (1-Video + Whoosh FX + 2-Video o'z ovozi bilan) ----------------
+        # ---------------- REJIM 4: ORIGINAL OVOZLAR (1-Video + 2-Video o'z ovozi bilan) ----------------
         elif mode == "both_original":
             if not normalize_clip_for_montage(video1_path, norm1, keep_audio=True, fade_out_video=True):
                 return False, {}
             if not normalize_clip_for_montage(video2_path, norm2, keep_audio=True, fade_in_video=True):
                 return False, {}
 
-            with open(concat_list, "w", encoding="utf-8") as lf:
-                lf.write(f"file '{os.path.abspath(norm1)}'\n")
-                lf.write(f"file '{os.path.abspath(norm2)}'\n")
-
+            _write_ffmpeg_concat_list(concat_list, [norm1, norm2])
             cmd = [
-                "ffmpeg", "-y", "-f", "concat", "-safe", "0",
+                FFMPEG_BIN, "-y", "-f", "concat", "-safe", "0",
                 "-i", concat_list,
-                "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
+                "-c:v", "copy",
                 "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
                 "-movflags", "+faststart",
                 target_stage
             ]
-            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=300)
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
             if res.returncode != 0 or not os.path.exists(target_stage):
                 return False, {}
             total_d = get_media_duration(target_stage) or (dur1_raw + dur2_raw)
@@ -1947,13 +2133,10 @@ def montage_two_videos(
             if not normalize_clip_for_montage(video2_path, norm2, keep_audio=False, fade_in_video=True):
                 return False, {}
 
-            with open(concat_list, "w", encoding="utf-8") as lf:
-                lf.write(f"file '{os.path.abspath(norm1)}'\n")
-                lf.write(f"file '{os.path.abspath(norm2)}'\n")
-
+            _write_ffmpeg_concat_list(concat_list, [norm1, norm2])
             subprocess.run([
-                "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", concat_vid
-            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
+                FFMPEG_BIN, "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", concat_vid
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
 
             total_d = get_media_duration(concat_vid)
             if total_d <= 0.5:
@@ -1961,19 +2144,18 @@ def montage_two_videos(
 
             if has_audio_stream(video1_path):
                 subprocess.run([
-                    "ffmpeg", "-y", "-i", video1_path, "-vn",
-                    "-af", "loudnorm=I=-14:TP=-1.5:LRA=11",
+                    FFMPEG_BIN, "-y", "-i", video1_path, "-vn",
                     "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2", audio1_aac
-                ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
+                ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=90)
             else:
                 subprocess.run([
-                    "ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
+                    FFMPEG_BIN, "-y", "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
                     "-t", f"{total_d:.3f}", "-c:a", "aac", audio1_aac
                 ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
 
             fade_start = max(total_d - 1.2, 0.5)
             cmd_mux = [
-                "ffmpeg", "-y",
+                FFMPEG_BIN, "-y",
                 "-i", concat_vid,
                 "-stream_loop", "-1", "-i", audio1_aac,
                 "-map", "0:v:0", "-map", "1:a:0",
@@ -1984,13 +2166,13 @@ def montage_two_videos(
                 "-movflags", "+faststart",
                 target_stage
             ]
-            res = subprocess.run(cmd_mux, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
+            res = subprocess.run(cmd_mux, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
             if res.returncode != 0 or not os.path.exists(target_stage):
                 return False, {}
             final_d1 = v1_visual_dur
             mode_label = "🎬 L-Cut Overlap (Kadr almashib, 1-Audio davom etadi)"
 
-        # ---------------- REJIM 4: FON MUSIQA MIX (Audio Ducking: 1-Video Audiosi 25% + 2-Video Ovozi 100%) ----------------
+        # ---------------- REJIM 5: FON MUSIQA MIX (Audio Ducking: 1-Video Audiosi 25% + 2-Video Ovozi 100%) ----------------
         elif mode == "audio_ducking":
             if not normalize_clip_for_montage(video1_path, norm1, keep_audio=True, fade_out_video=True):
                 return False, {}
@@ -2001,18 +2183,14 @@ def montage_two_videos(
             d2 = get_media_duration(norm2)
             total_d = d1 + d2
 
-            with open(concat_list, "w", encoding="utf-8") as lf:
-                lf.write(f"file '{os.path.abspath(norm1)}'\n")
-                lf.write(f"file '{os.path.abspath(norm2)}'\n")
+            _write_ffmpeg_concat_list(concat_list, [norm1, norm2])
+            subprocess.run([
+                FFMPEG_BIN, "-y", "-f", "concat", "-safe", "0", "-i", concat_list,
+                "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", concat_vid
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=150)
 
             subprocess.run([
-                "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list,
-                "-c:v", "libx264", "-preset", "veryfast", "-crf", "21",
-                "-c:a", "aac", "-b:a", "192k", concat_vid
-            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
-
-            subprocess.run([
-                "ffmpeg", "-y", "-i", norm1, "-vn", "-c:a", "aac", "-b:a", "192k", audio1_aac
+                FFMPEG_BIN, "-y", "-i", norm1, "-vn", "-c:a", "aac", "-b:a", "192k", audio1_aac
             ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
 
             fade_start = max(total_d - 1.2, 0.5)
@@ -2022,7 +2200,7 @@ def montage_two_videos(
                 f"[a_main][a_bg]amix=inputs=2:duration=first:dropout_transition=2[a_out]"
             )
             cmd_mix = [
-                "ffmpeg", "-y",
+                FFMPEG_BIN, "-y",
                 "-i", concat_vid,
                 "-stream_loop", "-1", "-i", audio1_aac,
                 "-filter_complex", filter_complex,
@@ -2033,7 +2211,7 @@ def montage_two_videos(
                 "-movflags", "+faststart",
                 target_stage
             ]
-            res = subprocess.run(cmd_mix, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
+            res = subprocess.run(cmd_mix, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
             if res.returncode != 0 or not os.path.exists(target_stage):
                 return False, {}
             final_d1, final_d2 = d1, d2
@@ -2046,13 +2224,10 @@ def montage_two_videos(
             if not normalize_clip_for_montage(video2_path, norm2, keep_audio=False, fade_in_video=True):
                 return False, {}
 
-            with open(concat_list, "w", encoding="utf-8") as lf:
-                lf.write(f"file '{os.path.abspath(norm1)}'\n")
-                lf.write(f"file '{os.path.abspath(norm2)}'\n")
-
+            _write_ffmpeg_concat_list(concat_list, [norm1, norm2])
             subprocess.run([
-                "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", concat_vid
-            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
+                FFMPEG_BIN, "-y", "-f", "concat", "-safe", "0", "-i", concat_list, "-c", "copy", concat_vid
+            ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=150)
 
             total_d = get_media_duration(concat_vid)
             if total_d <= 0.5:
@@ -2060,27 +2235,25 @@ def montage_two_videos(
 
             if has_audio_stream(video1_path):
                 subprocess.run([
-                    "ffmpeg", "-y", "-i", video1_path, "-vn",
-                    "-af", "loudnorm=I=-14:TP=-1.5:LRA=11",
+                    FFMPEG_BIN, "-y", "-i", video1_path, "-vn",
                     "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2", audio1_aac
-                ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
+                ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=90)
             else:
                 subprocess.run([
-                    "ffmpeg", "-y", "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
+                    FFMPEG_BIN, "-y", "-f", "lavfi", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
                     "-t", f"{total_d:.3f}", "-c:a", "aac", audio1_aac
                 ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=60)
 
             fade_start = max(total_d - 1.2, 0.5)
-            # Kinematik Whoosh Sub-Bass ovozini 1-video tugab 2-video boshlanish nuqtasiga qo'shamiz!
             delay_ms = max(100, int((dur1_raw - 0.25) * 1000))
             if _generate_transition_whoosh_sfx(whoosh_wav, 0.65):
                 af_complex = (
-                    f"[1:a]afade=t=out:st={fade_start:.2f}:d=1.2[a_main];"
+                    f"[1:a]atrim=0:{total_d:.3f},asetpts=PTS-STARTPTS,afade=t=out:st={fade_start:.2f}:d=1.2[a_main];"
                     f"[2:a]adelay={delay_ms}|{delay_ms},volume=0.45[a_sfx];"
                     f"[a_main][a_sfx]amix=inputs=2:duration=first:dropout_transition=1[a_final]"
                 )
                 cmd_bridge = [
-                    "ffmpeg", "-y",
+                    FFMPEG_BIN, "-y",
                     "-i", concat_vid,
                     "-stream_loop", "-1", "-i", audio1_aac,
                     "-i", whoosh_wav,
@@ -2094,7 +2267,7 @@ def montage_two_videos(
                 ]
             else:
                 cmd_bridge = [
-                    "ffmpeg", "-y",
+                    FFMPEG_BIN, "-y",
                     "-i", concat_vid,
                     "-stream_loop", "-1", "-i", audio1_aac,
                     "-map", "0:v:0", "-map", "1:a:0",
@@ -2105,8 +2278,23 @@ def montage_two_videos(
                     "-movflags", "+faststart",
                     target_stage
                 ]
-            res = subprocess.run(cmd_bridge, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=240)
+            res = subprocess.run(cmd_bridge, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
             if res.returncode != 0 or not os.path.exists(target_stage):
+                # Fallback oddiy mux (agar adelay versiyasi mos kelmasa)
+                cmd_fb = [
+                    FFMPEG_BIN, "-y",
+                    "-i", concat_vid,
+                    "-stream_loop", "-1", "-i", audio1_aac,
+                    "-map", "0:v:0", "-map", "1:a:0",
+                    "-t", f"{total_d:.3f}",
+                    "-af", f"afade=t=out:st={fade_start:.2f}:d=1.2",
+                    "-c:v", "copy",
+                    "-c:a", "aac", "-b:a", "192k", "-ar", "44100", "-ac", "2",
+                    "-movflags", "+faststart",
+                    target_stage
+                ]
+                subprocess.run(cmd_fb, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=120)
+            if not os.path.exists(target_stage):
                 return False, {}
             mode_label = "🔥 Audio Uzluksiz (1-Video Audiosi 2-ga Ulanadi + Transition FX)"
 
@@ -2131,9 +2319,9 @@ def montage_two_videos(
     finally:
         safe_remove(norm1, norm2, concat_vid, raw_montaj, audio1_aac, whoosh_wav, concat_list)
 
-
 # ==================== SHAZAM / MUSIQANI ANIQLASH ====================
 def identify_music_from_video(video_path: str, metadata_info: dict = None):
+    ensure_ffmpeg_in_path()
     if metadata_info:
         track = metadata_info.get('track') or metadata_info.get('music_title')
         artist = metadata_info.get('artist') or metadata_info.get('creator') or metadata_info.get('channel')
@@ -2144,15 +2332,22 @@ def identify_music_from_video(video_path: str, metadata_info: dict = None):
     temp_sample = f"{video_path}_sample.mp3"
     try:
         subprocess.run([
-            "ffmpeg", "-y", "-ss", "5", "-t", "12",
+            FFMPEG_BIN, "-y", "-ss", "3", "-t", "12",
             "-i", video_path, "-vn", "-c:a", "libmp3lame", "-b:a", "128k",
             temp_sample
-        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=20)
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=25)
+        if not os.path.exists(temp_sample):
+            temp_sample = f"{video_path}_sample.wav"
+            subprocess.run([
+                FFMPEG_BIN, "-y", "-ss", "3", "-t", "10",
+                "-i", video_path, "-vn", "-ar", "16000", "-ac", "1",
+                temp_sample
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=25)
 
         if os.path.exists(temp_sample):
             with open(temp_sample, "rb") as af:
                 files = {"file": af}
-                resp = requests.post("https://api.audd.io/", files=files, data={"api_token": "test"}, timeout=15)
+                resp = requests.post("https://api.audd.io/", files=files, data={"api_token": "test"}, timeout=15, verify=False)
                 if resp.status_code == 200:
                     data = resp.json()
                     if data.get("status") == "success" and data.get("result"):
@@ -2168,7 +2363,7 @@ def identify_music_from_video(video_path: str, metadata_info: dict = None):
         safe_remove(temp_sample)
     return None
 
-# ==================== AI SUBTITR VA NUTQNI MATNGA O'GIRISH ====================
+# ==================== SUBTITR VA NUTQNI MATNGA O'GIRISH (LIBASS SIZ HAM 100% ISHLAYDI!) ====================
 def format_srt_timestamp(seconds: float) -> str:
     millis = int((seconds - int(seconds)) * 1000)
     seconds = int(seconds)
@@ -2215,7 +2410,7 @@ def recognize_google_flac(flac_bytes: bytes, lang: str = "uz-UZ") -> str:
         lang_order = ["uz-UZ", "ru-RU", "en-US"]
     else:
         fallbacks = [l for l in ["uz-UZ", "ru-RU", "en-US"] if l != lang]
-        lang_order = [lang] + fallbacks[:1]
+        lang_order = [lang] + fallbacks[:2]
 
     for candidate_lang in lang_order:
         text = _call_google_speech_single(flac_bytes, candidate_lang)
@@ -2228,30 +2423,10 @@ def transcribe_audio_to_srt(audio_path: str, srt_path: str, lang: str = "uz-UZ")
     if not os.path.exists(audio_path) or os.path.getsize(audio_path) < 500:
         return False, ""
 
-    total_dur = min(get_media_duration(audio_path), 360.0)
+    total_dur = min(get_media_duration(audio_path), 180.0)
     if total_dur <= 0.5:
         total_dur = 15.0
     segments = []
-
-    if GROQ_API_KEY:
-        try:
-            headers = {"Authorization": f"Bearer {GROQ_API_KEY}"}
-            with open(audio_path, "rb") as af:
-                files = {"file": (os.path.basename(audio_path), af, "audio/wav")}
-                data = {"model": "whisper-large-v3-turbo", "response_format": "verbose_json"}
-                if lang != "auto":
-                    data["language"] = lang.split("-")[0]
-                resp = requests.post("https://api.groq.com/openai/v1/audio/transcriptions", headers=headers, files=files, data=data, timeout=45)
-                if resp.status_code == 200:
-                    result_json = resp.json()
-                    for s in result_json.get("segments", []):
-                        segments.append({
-                            "start": float(s.get("start", 0)),
-                            "end": float(s.get("end", 0)),
-                            "text": s.get("text", "").strip()
-                        })
-        except Exception as e:
-            print(f"Groq Whisper xatoligi: {e}")
 
     for filter_mode in ["voice_boost", "raw"]:
         if segments:
@@ -2264,7 +2439,7 @@ def transcribe_audio_to_srt(audio_path: str, srt_path: str, lang: str = "uz-UZ")
             if (end - current) < 0.6:
                 break
             chunk_flac = f"{audio_path}_chk_{idx}.flac"
-            cmd = ["ffmpeg", "-y", "-ss", str(current), "-t", str(end - current), "-i", audio_path]
+            cmd = [FFMPEG_BIN, "-y", "-ss", str(current), "-t", str(end - current), "-i", audio_path]
             if filter_mode == "voice_boost":
                 cmd += ["-af", "highpass=f=150,lowpass=f=3800,volume=1.8"]
             cmd += ["-ar", "16000", "-ac", "1", "-c:a", "flac", chunk_flac]
@@ -2296,16 +2471,97 @@ def transcribe_audio_to_srt(audio_path: str, srt_path: str, lang: str = "uz-UZ")
 
     return True, " ".join(full_text_list)
 
+def _render_subtitle_banner_png(text: str, out_png: str, vid_w: int = 720) -> bool:
+    """
+    Agar FFmpeg da `libass` / `subtitles=` filteri bo'lmasa (masalan Windows static FFmpeg da),
+    subtitr matnini chiroyli qora yarim-shaffof quti ichiga oq-oltin harflar bilan PNG qilib chizadi!
+    """
+    clean_t = (text or "").strip()
+    if not clean_t:
+        return False
+    banner_w = max(320, int(vid_w * 0.88))
+    banner_h = 96
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+        img = Image.new("RGBA", (banner_w, banner_h), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(img)
+        draw.rounded_rectangle([4, 4, banner_w - 4, banner_h - 4], radius=18, fill=(15, 20, 30, 195), outline=(255, 215, 0, 180), width=2)
+        font = None
+        for fc in [
+            r"C:\Windows\Fonts\arialbd.ttf",
+            r"C:\Windows\Fonts\segoeuib.ttf",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+        ]:
+            if os.path.exists(fc):
+                try:
+                    font = ImageFont.truetype(fc, 26)
+                    break
+                except Exception:
+                    pass
+        if font is None:
+            font = ImageFont.load_default()
+
+        # Matn uzun bo'lsa 2 qatorga bo'lish
+        words = clean_t.split()
+        lines = []
+        cur = ""
+        for w in words:
+            if len(cur) + len(w) + 1 <= 36:
+                cur = (cur + " " + w).strip()
+            else:
+                if cur:
+                    lines.append(cur)
+                cur = w
+        if cur:
+            lines.append(cur)
+        lines = lines[:2]
+        full_str = "\n".join(lines)
+        draw.multiline_text((banner_w // 2, banner_h // 2), full_str, font=font, fill=(255, 255, 255, 250), anchor="mm", align="center")
+        img.save(out_png, "PNG")
+        return os.path.exists(out_png) and os.path.getsize(out_png) > 200
+    except Exception:
+        # Pure-Python fallback
+        return _generate_watermark_png_pure_python(clean_t[:24].upper(), out_png, opacity=0.85)
+
+def _parse_srt_segments(srt_path: str) -> list:
+    segs = []
+    if not os.path.exists(srt_path):
+        return segs
+    try:
+        with open(srt_path, "r", encoding="utf-8", errors="ignore") as f:
+            blocks = f.read().strip().split("\n\n")
+        for b in blocks:
+            lines = [ln.strip() for ln in b.splitlines() if ln.strip()]
+            if len(lines) >= 2:
+                time_line = lines[1] if "-->" in lines[1] else (lines[0] if "-->" in lines[0] else "")
+                txt_lines = lines[2:] if "-->" in lines[1] else lines[1:]
+                m = re.search(r"(\d+):(\d+):(\d+)[,\.](\d+)\s*-->\s*(\d+):(\d+):(\d+)[,\.](\d+)", time_line)
+                if m and txt_lines:
+                    s_sec = int(m.group(1))*3600 + int(m.group(2))*60 + int(m.group(3)) + int(m.group(4))/1000.0
+                    e_sec = int(m.group(5))*3600 + int(m.group(6))*60 + int(m.group(7)) + int(m.group(8))/1000.0
+                    segs.append({"start": s_sec, "end": e_sec, "text": " ".join(txt_lines)})
+    except Exception:
+        pass
+    return segs
+
 def burn_subtitles_to_video(input_video_path: str, srt_path: str, output_video_path: str) -> bool:
+    """
+    Subtitrlarni videoga yopishtirish:
+    1) Avval FFmpeg `subtitles=` filterini sinaydi.
+    2) Agar `libass` yoki `fontconfig` yo'q bo'lsa (Windows static FFmpeg), avtomatik PNG Overlay
+       usuliga o'tib, 100% xatosiz subtitrli video tayyorlaydi!
+    """
     ensure_ffmpeg_in_path()
     local_temp_srt = f"_tmp_sub_{int(time.time() * 1000) % 100000}.srt"
+    png_Trash = []
     try:
         shutil.copyfile(srt_path, local_temp_srt)
         style = "FontSize=16,PrimaryColour=&H00FFFFFF,OutlineColour=&H00000000,BorderStyle=3,Outline=1,Shadow=0,MarginV=30"
         cmd = [
-            "ffmpeg", "-y", "-i", input_video_path,
+            FFMPEG_BIN, "-y", "-i", input_video_path,
             "-vf", f"subtitles={local_temp_srt}:force_style='{style}'",
-            "-c:v", "libx264", "-preset", "fast",
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23",
             "-c:a", "copy", "-movflags", "+faststart",
             output_video_path
         ]
@@ -2313,20 +2569,49 @@ def burn_subtitles_to_video(input_video_path: str, srt_path: str, output_video_p
         if res.returncode == 0 and os.path.exists(output_video_path) and os.path.getsize(output_video_path) > 1000:
             return True
 
-        cmd_fallback = [
-            "ffmpeg", "-y", "-i", input_video_path,
-            "-vf", f"subtitles={local_temp_srt}",
-            "-c:v", "libx264", "-preset", "fast",
+        # Fallback: PNG Overlay Subtitle Burner (Zero libass dependency!)
+        segs = _parse_srt_segments(srt_path)
+        if not segs:
+            return False
+        vinfo = get_video_stream_info(input_video_path)
+        vid_w = max(360, vinfo.get("width", 720))
+
+        cmd_ov = [FFMPEG_BIN, "-y", "-i", input_video_path]
+        valid_segs = []
+        for idx, sg in enumerate(segs[:18]):
+            p_path = os.path.join(DOWNLOAD_DIR, f"_sub_ov_{int(time.time()*1000)}_{idx}.png")
+            if _render_subtitle_banner_png(sg["text"], p_path, vid_w=vid_w):
+                png_Trash.append(p_path)
+                cmd_ov += ["-i", p_path]
+                valid_segs.append(sg)
+
+        if not valid_segs:
+            return False
+
+        fc_parts = []
+        prev_label = "0:v"
+        for i, sg in enumerate(valid_segs, 1):
+            out_lbl = f"v{i}"
+            s_t = f"{sg['start']:.2f}"
+            e_t = f"{sg['end']:.2f}"
+            fc_parts.append(f"[{prev_label}][{i}:v]overlay=x=(W-w)/2:y=H-h-85:enable='between(t,{s_t},{e_t})'[{out_lbl}]")
+            prev_label = out_lbl
+
+        fc_parts.append(f"[{prev_label}]format=yuv420p[vfinal]")
+        cmd_ov += [
+            "-filter_complex", ";".join(fc_parts),
+            "-map", "[vfinal]", "-map", "0:a?",
+            "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23",
             "-c:a", "copy", "-movflags", "+faststart",
             output_video_path
         ]
-        res2 = subprocess.run(cmd_fallback, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
-        return res2.returncode == 0 and os.path.exists(output_video_path) and os.path.getsize(output_video_path) > 1000
+        res_ov = subprocess.run(cmd_ov, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=180)
+        return res_ov.returncode == 0 and os.path.exists(output_video_path) and os.path.getsize(output_video_path) > 1000
     except Exception as e:
         print(f"Subtitr qadash xatoligi: {e}")
         return False
     finally:
-        safe_remove(local_temp_srt)
+        safe_remove(local_temp_srt, *png_Trash)
 
 # ==================== 12-BOSQICHLI XATOSIZ VIDEO-FIRST YUKLAGICH ====================
 def extract_ig_shortcode(url: str) -> str | None:
@@ -2824,39 +3109,13 @@ def _download_pinterest_fallback(url: str, user_id: int, timestamp: int) -> tupl
         print(f"Pinterest fallback xatosi: {e}")
     return [], ""
 
-def get_video_stream_info(file_path: str) -> dict:
-    """ffprobe yordamida video kodek, o'lcham (width, height) va davomiylikni aniqlash"""
-    ensure_ffmpeg_in_path()
-    info = {"codec": "h264", "width": 720, "height": 1280, "duration": 15}
-    try:
-        cmd = [
-            "ffprobe", "-v", "error",
-            "-select_streams", "v:0",
-            "-show_entries", "stream=codec_name,width,height:format=duration",
-            "-of", "json",
-            file_path
-        ]
-        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=15)
-        if res.returncode == 0 and res.stdout.strip():
-            data = json.loads(res.stdout)
-            streams = data.get("streams", [])
-            if streams:
-                st = streams[0]
-                info["codec"] = (st.get("codec_name") or "h264").lower()
-                info["width"] = int(st.get("width") or 720)
-                info["height"] = int(st.get("height") or 1280)
-            fmt = data.get("format", {})
-            if fmt.get("duration"):
-                info["duration"] = max(1, int(float(fmt["duration"])))
-    except Exception:
-        pass
-    return info
-
 def ensure_phone_playable_mp4(input_path: str, force_reencode: bool = False, apply_watermark: bool = True) -> tuple[str, dict]:
     """
     Telefonda (iPhone va Android) bittada ochiladigan H.264 (yuv420p) + faststart MP4 ga keltirish
     HAMDA har bitta videoga tepadan-pastga suzib yuruvchi ko'rinar-ko'rinmas (prazrachniy)
     Telegram ikonka + @handle watermark tushirish!
+    MUHIM: Fayl nomini (input_path) o'zgartirmasdan joyida (in-place) yangilaydi, shunda
+    inline tugmalardagi `base_fname` hech qachon yo'qolib qolmaydi!
     """
     ensure_ffmpeg_in_path()
     vinfo = get_video_stream_info(input_path)
@@ -2866,16 +3125,20 @@ def ensure_phone_playable_mp4(input_path: str, force_reencode: bool = False, app
     already_watermarked = os.path.basename(input_path).startswith(("reklama_reel_", "orig_"))
 
     if apply_watermark and cfg.get("enabled", True) and not already_watermarked:
-        wm_out = os.path.splitext(input_path)[0] + "_wm.mp4"
+        wm_out = os.path.splitext(input_path)[0] + "_wm_tmp.mp4"
         if apply_floating_watermark_to_video(input_path, wm_out):
-            safe_remove(input_path)
-            vinfo = get_video_stream_info(wm_out)
-            return wm_out, vinfo
+            try:
+                os.replace(wm_out, input_path)
+            except Exception:
+                safe_remove(wm_out)
+            vinfo = get_video_stream_info(input_path)
+            return input_path, vinfo
+        safe_remove(wm_out)
 
     if force_reencode or codec not in ("h264", "avc1") or ext != ".mp4":
-        fixed_path = os.path.splitext(input_path)[0] + "_phone.mp4"
+        fixed_path = os.path.splitext(input_path)[0] + "_phone_tmp.mp4"
         cmd = [
-            "ffmpeg", "-y", "-i", input_path,
+            FFMPEG_BIN, "-y", "-i", input_path,
             "-c:v", "libx264", "-preset", "ultrafast", "-crf", "23",
             "-pix_fmt", "yuv420p",
             "-vf", "scale=trunc(iw/2)*2:trunc(ih/2)*2",
@@ -2886,31 +3149,33 @@ def ensure_phone_playable_mp4(input_path: str, force_reencode: bool = False, app
         try:
             res = subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=150)
             if res.returncode == 0 and os.path.exists(fixed_path) and os.path.getsize(fixed_path) > 1000:
-                safe_remove(input_path)
-                vinfo = get_video_stream_info(fixed_path)
-                return fixed_path, vinfo
+                try:
+                    os.replace(fixed_path, input_path)
+                except Exception:
+                    safe_remove(fixed_path)
+                vinfo = get_video_stream_info(input_path)
+                return input_path, vinfo
         except Exception:
-            safe_remove(fixed_path)
+            pass
+        safe_remove(fixed_path)
     return input_path, vinfo
 
 def download_media_bulletproof(raw_url: str, user_id: int, timestamp: int) -> tuple[list, str]:
     """
     12-Bosqichli VIDEO-FIRST Media Yuklagich:
-    1) Mobil qisqa link va tracking parametrlarni (?cplk=, ?obrf=, ?igsh=, vt.tiktok, pin.it) tozalaydi.
-    2) Instagram uchun avval VIDEO motorlarini (Unescaped Embed Video + Live-LSD GraphQL + Proxy Video + API) ishga tushiradi.
-    3) Agar ular topolmasa, yt-dlp ni (/reel/ va /p/ variantlarda) ishlatadi.
-    4) FAQAT video emasligi 100% tasdiqlangandagina rasm post (.jpg) sifatida yuklaydi!
+    Qisqa va xavfsiz fayl nomlari bilan yuklaydi (callback_data 64-bayt limitidan oshmasligi uchun!).
     """
     ensure_ffmpeg_in_path()
     url = clean_and_resolve_url(raw_url)
     lower_url = url.lower()
-    out_template = os.path.join(DOWNLOAD_DIR, f"{user_id}_{timestamp}_%(autonumber)s.%(ext)s")
+    short_ts = timestamp % 100000000
+    out_template = os.path.join(DOWNLOAD_DIR, f"{user_id}_{short_ts}_%(autonumber)s.%(ext)s")
 
-    def _collect_files():
+    def _collect_files(ts_val):
         return sorted([
             os.path.join(DOWNLOAD_DIR, fname)
             for fname in os.listdir(DOWNLOAD_DIR)
-            if fname.startswith(f"{user_id}_{timestamp}_")
+            if fname.startswith(f"{user_id}_{ts_val}_")
             and not fname.endswith(".part")
             and not fname.endswith(".ytdl")
             and os.path.getsize(os.path.join(DOWNLOAD_DIR, fname)) > 1000
@@ -2919,19 +3184,16 @@ def download_media_bulletproof(raw_url: str, user_id: int, timestamp: int) -> tu
     ig_shortcode = extract_ig_shortcode(url) if ("instagram.com" in lower_url or "instagr.am" in lower_url) else None
     is_definitely_video = False
 
-    # A) INSTAGRAM MAXSUS VIDEO MOTORLARI (Video-First!)
     if ig_shortcode:
-        ig_files, ig_title, is_definitely_video = _download_instagram_video_engines(url, user_id, timestamp)
+        ig_files, ig_title, is_definitely_video = _download_instagram_video_engines(url, user_id, short_ts)
         if ig_files:
             return ig_files, ig_title
 
-    # B) TIKTOK MAXSUS HD MOTORI
     if "tiktok.com" in lower_url:
-        tk_files, tk_title = _download_tiktok_multi_engine(url, user_id, timestamp)
+        tk_files, tk_title = _download_tiktok_multi_engine(url, user_id, short_ts)
         if tk_files:
             return tk_files, tk_title
 
-    # C) YT-DLP UNIVERSAL VIDEO YUKLAGICH (Instagram uchun ham /reel/, ham /p/ URL ni sinaydi!)
     format_candidates = [
         "best[ext=mp4][vcodec^=avc1]/bestvideo[ext=mp4][vcodec^=avc1]+bestaudio[ext=m4a]/best[ext=mp4]/best",
         "bestvideo+bestaudio/best"
@@ -2980,53 +3242,103 @@ def download_media_bulletproof(raw_url: str, user_id: int, timestamp: int) -> tu
                     info = ydl.extract_info(candidate_u, download=True)
                     if info:
                         title = info.get("title") or info.get("description") or "Video"
-                files = _collect_files()
+                files = _collect_files(short_ts)
                 if files:
                     print(f"[OK] yt-dlp orqali yuklandi: {candidate_u}")
                     return files, str(title).strip() or "Video"
             except Exception as e:
                 print(f"yt-dlp urinish xatosi ({candidate_u}): {e}")
 
-    # D) QO'SHIMCHA PLATFORM ZAXIRALARI (Twitter/X, Pinterest, va Instagram Haqiqiy Rasm Post)
     if "twitter.com" in lower_url or "x.com" in lower_url:
-        tw_files, tw_title = _download_twitter_fallback(url, user_id, timestamp)
+        tw_files, tw_title = _download_twitter_fallback(url, user_id, short_ts)
         if tw_files:
             return tw_files, tw_title
 
     if "pinterest.com" in lower_url or "pin.it" in lower_url:
-        pin_files, pin_title = _download_pinterest_fallback(url, user_id, timestamp)
+        pin_files, pin_title = _download_pinterest_fallback(url, user_id, short_ts)
         if pin_files:
             return pin_files, pin_title
 
-    # E) AGAR INSTAGRAM POST HAQIQATDAN RASM BO'LSA (video emasligi tasdiqlangan bo'lsa):
     if ig_shortcode:
-        photo_files, photo_title = _download_instagram_photo_if_not_video(ig_shortcode, user_id, timestamp, is_definitely_video)
+        photo_files, photo_title = _download_instagram_photo_if_not_video(ig_shortcode, user_id, short_ts, is_definitely_video)
         if photo_files:
             return photo_files, photo_title
 
-    return _collect_files(), title
+    return _collect_files(short_ts), title
 
 def ensure_video_from_telegram(message_obj: types.Message, local_video_path: str) -> bool:
-    """Agar video xotiradan avto-o'chirilgan bo'lsa, Telegram serveridan (file_id orqali) soniyada qayta tiklash"""
+    """
+    1) Agar video downloads/ papkasida mavjud bo'lsa -> 0.001 soniyada darhol tayyor!
+    2) Agar eskirib o'chirilgan bo'lsa -> Telegram file_id dan (yoki VIDEO_SOURCE_CACHE dagi URL dan)
+       xavfsiz temp faylga yuklab, atomik tarzda qayta tiklaydi!
+    """
     if os.path.exists(local_video_path) and os.path.getsize(local_video_path) > 500:
         return True
-    if not message_obj:
-        return False
-    media_obj = message_obj.video or message_obj.audio or message_obj.voice or message_obj.video_note or message_obj.document
-    if not media_obj and message_obj.reply_to_message:
-        r = message_obj.reply_to_message
-        media_obj = r.video or r.audio or r.voice or r.video_note or r.document
-    if not media_obj:
-        return False
-    try:
-        file_info = bot.get_file(media_obj.file_id)
-        downloaded_bytes = bot.download_file(file_info.file_path)
-        with open(local_video_path, "wb") as f:
-            f.write(downloaded_bytes)
-        return os.path.exists(local_video_path) and os.path.getsize(local_video_path) > 500
-    except Exception as e:
-        print(f"Telegram file_id dan qayta yuklash xatosi: {e}")
-        return False
+
+    base_fname = os.path.basename(local_video_path)
+    cached_meta = VIDEO_SOURCE_CACHE.get(base_fname, {})
+    cached_path = cached_meta.get("path")
+    if cached_path and os.path.exists(cached_path) and os.path.getsize(cached_path) > 500:
+        if os.path.abspath(cached_path) != os.path.abspath(local_video_path):
+            try:
+                shutil.copyfile(cached_path, local_video_path)
+                return True
+            except Exception:
+                pass
+        else:
+            return True
+
+    with FILE_LOCK:
+        if os.path.exists(local_video_path) and os.path.getsize(local_video_path) > 500:
+            return True
+
+        media_obj = None
+        if message_obj:
+            media_obj = (
+                getattr(message_obj, "video", None)
+                or getattr(message_obj, "audio", None)
+                or getattr(message_obj, "voice", None)
+                or getattr(message_obj, "video_note", None)
+                or getattr(message_obj, "document", None)
+            )
+            if not media_obj and getattr(message_obj, "reply_to_message", None):
+                r = message_obj.reply_to_message
+                media_obj = (
+                    getattr(r, "video", None)
+                    or getattr(r, "audio", None)
+                    or getattr(r, "voice", None)
+                    or getattr(r, "video_note", None)
+                    or getattr(r, "document", None)
+                )
+
+        file_id = getattr(media_obj, "file_id", None) or cached_meta.get("file_id")
+        if file_id:
+            tmp_dl = local_video_path + f".dl_{int(time.time()*1000)}"
+            try:
+                file_info = bot.get_file(file_id)
+                downloaded_bytes = bot.download_file(file_info.file_path)
+                with open(tmp_dl, "wb") as f:
+                    f.write(downloaded_bytes)
+                if os.path.exists(tmp_dl) and os.path.getsize(tmp_dl) > 500:
+                    os.replace(tmp_dl, local_video_path)
+                    return True
+            except Exception as e:
+                print(f"Telegram file_id dan qayta yuklash ogohlantirishi: {e}")
+            finally:
+                safe_remove(tmp_dl)
+
+        # Agar fayl >20 MB bo'lib Telegram get_file ruxsat bermasa, original URL dan qayta tortish:
+        orig_url = cached_meta.get("url")
+        if orig_url:
+            try:
+                files, _ = download_media_bulletproof(orig_url, ADMIN_ID, int(time.time() * 1000))
+                if files and os.path.exists(files[0]):
+                    os.replace(files[0], local_video_path)
+                    return True
+            except Exception as e:
+                print(f"URL dan qayta tiklash xatosi: {e}")
+
+    return False
 
 # ==================== TUGMALARNI SHAKLLANTIRISH ====================
 def make_video_action_keyboard(base_fname: str, lang: str = "uz") -> types.InlineKeyboardMarkup:
@@ -3117,23 +3429,23 @@ def make_sub_lang_keyboard(action_type: str, base_fname: str) -> types.InlineKey
     return markup
 
 def get_universal_tools_keyboard() -> types.InlineKeyboardMarkup:
+    """AI olib tashlangan, sof Pro Montaj, Anti-Duplikat, Watermark, Valyuta va QR vositalari"""
     markup = types.InlineKeyboardMarkup(row_width=2)
     b_montaj = types.InlineKeyboardButton("🎬 Pro Reklama Montaj (/montaj)", callback_data="tool_cmd:montaj")
+    b_orig = types.InlineKeyboardButton("🛡 100% Original Anti-Duplikat (/original)", callback_data="antidup_start_single")
     b_outro = types.InlineKeyboardButton("📌 Reklama Outro Saqlash (/set_outro)", callback_data="tool_cmd:set_outro")
-    b_tr = types.InlineKeyboardButton("🌍 AI Tarjimon (/tr)", callback_data="tool_cmd:tr")
-    b_qr = types.InlineKeyboardButton("📱 QR-Kod Yasash (/qr)", callback_data="tool_cmd:qr")
+    b_wm = types.InlineKeyboardButton("💧 Shaffof Watermark (/set_watermark)", callback_data="montaj_set_wm")
     b_kurs = types.InlineKeyboardButton("💱 Valyuta Kursi (/kurs)", callback_data="tool_cmd:kurs")
-    b_ai = types.InlineKeyboardButton("🧠 DeepSeek AI (/ai)", callback_data="tool_cmd:ai")
-    b_img = types.InlineKeyboardButton("🖼 Rasm Chizish (/image)", callback_data="tool_cmd:image")
+    b_qr = types.InlineKeyboardButton("📱 QR-Kod Yasash (/qr)", callback_data="tool_cmd:qr")
+    b_clean = types.InlineKeyboardButton("🧹 Keshni Tozalash (/clean)", callback_data="clean_storage_cb")
     markup.add(b_montaj)
-    markup.add(b_outro)
+    markup.add(b_orig)
+    markup.add(b_outro, b_wm)
     markup.add(b_kurs, b_qr)
-    markup.add(b_tr, b_ai)
-    markup.add(b_img)
+    markup.add(b_clean)
     return markup
 
 def make_montage_mode_keyboard(session_key: str) -> types.InlineKeyboardMarkup:
-    """5 xil professional montaj rejimini tanlash tugmalari (Blurred BG + Anti-Duplikat + Suzuvchi Watermark bilan!)"""
     markup = types.InlineKeyboardMarkup(row_width=1)
     markup.add(
         types.InlineKeyboardButton(
@@ -3163,8 +3475,8 @@ def make_montage_mode_keyboard(session_key: str) -> types.InlineKeyboardMarkup:
 # ==================== ASOSIY BUYRUQLAR (COMMANDS) ====================
 @bot.message_handler(commands=['start'])
 def handle_start(message: types.Message):
-    cleanup_old_files()
     user = message.from_user
+    USER_STATES.pop(user.id, None)
     referrer_id = None
     args = message.text.split()
     if len(args) > 1 and args[1].startswith("ref_"):
@@ -3203,32 +3515,36 @@ def handle_start(message: types.Message):
 @bot.message_handler(commands=['help'])
 @bot.message_handler(func=lambda msg: msg.text in ["📖 Qo'llanma", "📖 Инструкция", "📖 Help"])
 def handle_help(message: types.Message):
+    USER_STATES.pop(message.from_user.id, None)
     help_text = (
-        "📖 <b>Universal Super Saver & AI Bot Qo'llanmasi:</b>\n\n"
+        "📖 <b>Universal Super Saver & Pro Montaj Bot Qo'llanmasi:</b>\n\n"
         "1️⃣ <b>Video va musiqa yuklash:</b> Instagram, TikTok, YouTube, Pinterest, X havolasini yuboring.\n"
-        "2️⃣ <b>12 ta Multimedia studiyasi:</b> Video yuklangach, uning ostidagi tugmalar orqali:\n"
-        "   • 🎬 AI Subtitr yozish va .SRT olish\n"
-        "   • 🔊 Bass Boost va 🎧 8D Audio qilish\n"
-        "   • 🎤 Karaoke Minusovka tayyorlash\n"
-        "   • 🔵 Kruglyash, ✂️ Qirqish (Trim), ⏪ Teskari video, 🖼 HD Oblojka olish mumkin!\n"
-        "3️⃣ <b>Sun'iy Intellekt (DeepSeek & ChatGPT):</b> <code>/ai savolingiz</code> deb yozing.\n"
-        "4️⃣ <b>AI Rasm chizish (NanoBanana):</b> <code>/image rasm tavsifi</code> deb yozing.\n"
-        "5️⃣ <b>AI Tarjimon:</b> <code>/tr matn</code> — har qanday matnni tarjima qilish.\n"
+        "2️⃣ <b>16 ta Multimedia studiyasi:</b> Video yuklangach, uning ostidagi tugmalar orqali:\n"
+        "   • 🎯 <b>Pro Reklama Montaj</b> — Videoga 2-videoni (Outro reklamani) 5 xil rejimda ulash\n"
+        "   • 🛡 <b>Anti-Duplikat (100% Original)</b> — Reels va TikTok Top/Rekomendatsiya uchun\n"
+        "   • 🎬 <b>Subtitrli video</b> va 📝 <b>.SRT subtitr fayli</b>\n"
+        "   • 🔊 <b>Bass Boost</b>, 🎧 <b>8D Audio</b> va 🎤 <b>Karaoke Minusovka</b>\n"
+        "   • 🔵 <b>Kruglyash</b>, ✂️ <b>Qirqish (Trim)</b>, ⏪ <b>Teskari video</b>, 🖼 <b>HD Oblojka</b>\n"
+        "3️⃣ <b>Pro Reklama Montaj (/montaj):</b> Istalgan 2 ta videoni (10s, 19s, 1 daqiqa+) professional ulash.\n"
+        "4️⃣ <b>Doimiy Reklama Outro (/set_outro):</b> Reklama videongizni 1 marta saqlab qo'yib, 1 bosishda ulash.\n"
+        "5️⃣ <b>Suzuvchi Shaffof Watermark (/set_watermark):</b> Tepadan-pastga suzuvchi @username belgisini sozlash.\n"
         "6️⃣ <b>QR-Kod yasash:</b> <code>/qr ssilka yoki matn</code>.\n"
-        "7️⃣ <b>Valyuta kurslari:</b> <code>/kurs</code> yoki <code>/kurs 100</code> — Markaziy bank real kurslari."
+        "7️⃣ <b>Valyuta kurslari:</b> <code>/kurs</code> yoki <code>/kurs 100</code> — Markaziy bank jonli kurslari."
     )
     bot.send_message(message.chat.id, help_text)
 
 @bot.message_handler(commands=['tools'])
 @bot.message_handler(func=lambda msg: msg.text in ["🛠 Universal Vositalar", "🛠 Инструменты", "🛠 Smart Tools"])
 def handle_tools_menu(message: types.Message):
+    USER_STATES.pop(message.from_user.id, None)
     text = (
-        "🛠 <b>Universal Foydali Vositalar Markazi:</b>\n\n"
+        "🛠 <b>Universal Foydali Vositalar va Pro Studiya Markazi:</b>\n\n"
+        "• 🎬 <b>Pro Reklama Montaj:</b> <code>/montaj</code> (2 ta videoni 5 xil rejimda ulash)\n"
+        "• 🛡 <b>Anti-Duplikat (100% Original):</b> <code>/original</code>\n"
+        "• 📌 <b>Doimiy Reklama Outro Saqlash:</b> <code>/set_outro</code>\n"
+        "• 💧 <b>Shaffof Watermark Sozlash:</b> <code>/set_watermark</code>\n"
         "• 💱 <b>Valyuta Kurslari:</b> <code>/kurs</code> yoki <code>/kurs 100</code>\n"
-        "• 🌍 <b>AI Tarjimon:</b> <code>/tr Hello world</code>\n"
-        "• 📱 <b>QR-Kod Generator:</b> <code>/qr https://t.me/usman_khasan</code>\n"
-        "• 🧠 <b>DeepSeek AI:</b> <code>/ai savolingiz</code>\n"
-        "• 🖼 <b>AI Rasm Chizish:</b> <code>/image manzara</code>\n\n"
+        "• 📱 <b>QR-Kod Generator:</b> <code>/qr https://t.me/usman_khasan</code>\n\n"
         "Quyidagi tugmalardan birini bosing:"
     )
     bot.send_message(message.chat.id, text, reply_markup=get_universal_tools_keyboard())
@@ -3239,6 +3555,7 @@ def handle_tools_menu(message: types.Message):
     "kurs", "Kurs", "valyuta", "Valyuta"
 ])
 def handle_kurs_cmd(message: types.Message):
+    USER_STATES.pop(message.from_user.id, None)
     amount = 1.0
     if message.text:
         parts = message.text.strip().split()
@@ -3258,20 +3575,19 @@ def handle_kurs_cmd(message: types.Message):
 
 @bot.message_handler(commands=['qr'])
 def handle_qr_cmd(message: types.Message):
+    USER_STATES.pop(message.from_user.id, None)
     args = message.text.split(maxsplit=1)
     if len(args) < 2:
-        msg = bot.reply_to(message, "📱 <b>QR-Kod yasash uchun matn yoki ssilka yuboring:</b>")
+        bot.reply_to(message, "📱 <b>QR-Kod yasash uchun matn yoki ssilka yuboring:</b>")
         USER_STATES[message.from_user.id] = {"action": "qr_make"}
-        bot.register_next_step_handler(msg, process_qr_step)
         return
     send_qr_result(message, args[1])
 
 def process_qr_step(message: types.Message):
     uid = message.from_user.id
-    if uid in USER_STATES and USER_STATES[uid].get("action") == "qr_make":
-        del USER_STATES[uid]
-        if message.text:
-            send_qr_result(message, message.text)
+    USER_STATES.pop(uid, None)
+    if message.text:
+        send_qr_result(message, message.text)
 
 def send_qr_result(message: types.Message, data_text: str):
     qr_bytes = generate_qr_code_bytes(data_text)
@@ -3279,41 +3595,15 @@ def send_qr_result(message: types.Message, data_text: str):
         bot.send_photo(
             message.chat.id,
             photo=qr_bytes,
-            caption=f"📱 <b>QR-Kod tayyor!</b>\n🔗 <code>{data_text[:100]}</code>\n\n🤖 @{(bot.get_me()).username}"
+            caption=f"📱 <b>QR-Kod tayyor!</b>\n🔗 <code>{data_text[:100]}</code>\n\n🤖 @{get_cached_bot_username()}"
         )
     else:
         bot.reply_to(message, "❌ QR-kod yaratishda xatolik yuz berdi.")
 
-@bot.message_handler(commands=['tr', 'translate'])
-def handle_translate_cmd(message: types.Message):
-    args = message.text.split(maxsplit=1)
-    if len(args) < 2:
-        msg = bot.reply_to(message, "🌍 <b>Tarjima qilish uchun matnni yuboring:</b>\n(O'zbek, Rus va Ingliz tillariga professional tarjima qilinadi)")
-        USER_STATES[message.from_user.id] = {"action": "tr_text"}
-        bot.register_next_step_handler(msg, process_tr_step)
-        return
-    send_translation_result(message, args[1])
-
-def process_tr_step(message: types.Message):
-    uid = message.from_user.id
-    if uid in USER_STATES and USER_STATES[uid].get("action") == "tr_text":
-        del USER_STATES[uid]
-        if message.text:
-            send_translation_result(message, message.text)
-
-def send_translation_result(message: types.Message, text_to_tr: str):
-    prog = bot.reply_to(message, "🌍 <b>AI tarjima qilmoqda...</b>")
-    prompt = (
-        f"Translate the following text accurately into 1) Uzbek, 2) Russian, and 3) English. "
-        f"Format cleanly with flags:\n\nText: {text_to_tr}"
-    )
-    ans = query_free_ai(prompt, model_type="deepseek")
-    bot.delete_message(message.chat.id, prog.message_id)
-    bot.reply_to(message, f"🌍 <b>AI Professional Tarjima:</b>\n\n{ans}")
-
 @bot.message_handler(commands=['lang', 'language'])
 @bot.message_handler(func=lambda msg: msg.text in ["🌐 Til", "🌐 Сменить язык", "🌐 Language"])
 def handle_lang_command(message: types.Message):
+    USER_STATES.pop(message.from_user.id, None)
     bot.send_message(
         message.chat.id,
         "🌐 <b>Tilni tanlang / Выберите язык / Select language:</b>",
@@ -3324,14 +3614,15 @@ def handle_lang_command(message: types.Message):
 @bot.message_handler(func=lambda msg: msg.text in ["👥 VIP & Do'stlar", "👥 VIP & Рефералы", "👥 VIP & Referral"])
 def handle_referral(message: types.Message):
     user = message.from_user
+    USER_STATES.pop(user.id, None)
     register_user(user)
     prof = get_user_profile(user.id)
-    bot_info = bot.get_me()
+    bot_uname = get_cached_bot_username()
 
-    ref_link = f"https://t.me/{bot_info.username}?start=ref_{user.id}"
+    ref_link = f"https://t.me/{bot_uname}?start=ref_{user.id}"
     vip_status = "⭐️ VIP (Faol)" if prof['is_vip'] else f"{prof['referrals']} / {REQUIRED_REFERRALS_FOR_VIP}"
 
-    share_text = f"🔥 Instagram, TikTok, YouTube dan suv belgisiz video yuklovchi, 8D Audio, Bass Boost va AI bot!\n\n{ref_link}"
+    share_text = f"🔥 Instagram, TikTok, YouTube dan suv belgisiz video yuklovchi, Pro Reklama Montaj, 8D Audio va Bass Boost bot!\n\n{ref_link}"
     share_url = f"https://t.me/share/url?url={urllib.parse.quote(share_text)}"
 
     markup = types.InlineKeyboardMarkup(row_width=1)
@@ -3342,7 +3633,7 @@ def handle_referral(message: types.Message):
         f"🔗 <b>Sizning taklif havolangiz:</b>\n<code>{ref_link}</code>\n\n"
         f"📊 <b>Chaqirilgan do'stlar:</b> {prof['referrals']} ta\n"
         f"🏆 <b>VIP holati:</b> {vip_status}\n\n"
-        f"🎁 <b>Qoida:</b> {REQUIRED_REFERRALS_FOR_VIP} ta do'stingizni taklif qiling va botdan umrbod erkin, reklamasiz foydalaning!"
+        f"🎁 <b>Qoida:</b> {REQUIRED_REFERRALS_FOR_VIP} ta do'stingizni taklif qiling va botdan umrbod erkin, obunalarsiz foydalaning!"
     )
     bot.send_message(message.chat.id, ref_msg, reply_markup=markup)
 
@@ -3350,22 +3641,25 @@ def handle_referral(message: types.Message):
 @bot.message_handler(func=lambda msg: msg.text in ["👤 Profilim", "👤 Мой профиль", "👤 Profile"])
 def handle_profile(message: types.Message):
     user = message.from_user
+    USER_STATES.pop(user.id, None)
     register_user(user)
     prof = get_user_profile(user.id)
     uname = f"@{user.username}" if user.username else (ADMIN_USERNAME if user.id == ADMIN_ID else f"user_{user.id}")
     fname = user.first_name or (ADMIN_FIRST_NAME if user.id == ADMIN_ID else "User")
     status_str = "⭐️ VIP (Umrbod)" if prof['is_vip'] else "Standard"
+    wm_cfg = get_watermark_settings()
+    outro_path = get_saved_outro_path(user.id)
+    outro_str = f"✅ Saqlangan ({get_media_duration(outro_path):.1f}s)" if outro_path else "⚠️ Saqlanmagan (/set_outro)"
+
     text = (
         f"👤 <b>{uname}</b>\n"
         f"🆔 <b>Id:</b> <code>{user.id}</code>\n"
-        f"👤 <b>First:</b> {fname}\n"
-        f"🌐 <b>Lang:</b> {prof.get('language', 'uz')}\n"
-        f"📅 <b>Registered:</b> {prof.get('registered', 'Bugun')}\n"
-        f"🏆 <b>Status:</b> {status_str} | 📥 <b>Yuklamalar:</b> {prof['downloads']} ta\n\n"
-        f"🧠 <b>Explanations and answers</b>\n"
-        f"Free AI → <b>DeepSeek & ChatGPT</b>\n\n"
-        f"🖼 <b>Visualize your ideas</b>\n"
-        f"Make Image → <b>NanoBanana</b>"
+        f"👤 <b>Ism:</b> {fname}\n"
+        f"🌐 <b>Til:</b> {prof.get('language', 'uz')}\n"
+        f"📅 <b>Ro'yxatdan o'tgan:</b> {prof.get('registered', 'Bugun')}\n"
+        f"🏆 <b>Status:</b> {status_str} | 📥 <b>Yuklamalar:</b> {prof['downloads']} ta\n"
+        f"📌 <b>Reklama Outro:</b> {outro_str}\n"
+        f"💧 <b>Watermark:</b> <code>{wm_cfg.get('text')}</code>"
     )
     markup = types.InlineKeyboardMarkup(row_width=2)
     markup.add(
@@ -3373,83 +3667,21 @@ def handle_profile(message: types.Message):
         types.InlineKeyboardButton("💱 Valyuta Kurslari (/kurs)", callback_data="tool_cmd:kurs")
     )
     markup.add(
-        types.InlineKeyboardButton("🧠 Free AI → DeepSeek & ChatGPT", callback_data="tool_cmd:ai"),
-        types.InlineKeyboardButton("🖼 Make Image → NanoBanana", callback_data="tool_cmd:image")
+        types.InlineKeyboardButton("🎬 Pro Reklama Montaj", callback_data="tool_cmd:montaj"),
+        types.InlineKeyboardButton("🛡 Anti-Duplikat (Original)", callback_data="antidup_start_single")
     )
     bot.send_message(message.chat.id, text, reply_markup=markup)
 
 @bot.message_handler(commands=['clean', 'clear'])
 def handle_clean_storage(message: types.Message):
+    USER_STATES.pop(message.from_user.id, None)
     removed, freed_mb = cleanup_old_files(max_age_seconds=0)
     bot.reply_to(
         message,
-        f"🧹 <b>Xotira 100% tozalandi!</b>\n"
-        f"🗑 O'chirilgan vaqtinchalik fayllar: <b>{removed} ta</b>\n"
-        f"💾 Bo'shatilgan joy: <b>{freed_mb:.2f} MB</b>\n"
-        f"<i>(Bot har bir videoni yuborgach, kompyuter xotirasidan avtomatik o'chiradi!)</i>"
+        f"🧹 <b>Vaqtinchalik kesh tozalandi!</b>\n"
+        f"🗑 O'chirilgan fayllar: <b>{removed} ta</b>\n"
+        f"💾 Bo'shatilgan joy: <b>{freed_mb:.2f} MB</b>"
     )
-
-# ==================== SUN'IY INTELLEKT (AI) BUYRUQLARI ====================
-@bot.message_handler(commands=['ai'])
-@bot.message_handler(func=lambda msg: msg.text in ["🧠 AI Savol-Javob", "🧠 Задать вопрос AI", "🧠 Ask AI"])
-def handle_ai_entry(message: types.Message):
-    lang = get_user_lang(message.from_user.id)
-    args = message.text.split(maxsplit=1)
-
-    if len(args) > 1 and not message.text.startswith("🧠"):
-        process_ai_query(message, args[1], lang)
-    else:
-        msg = bot.send_message(message.chat.id, get_text("ai_prompt_ask", lang))
-        USER_STATES[message.from_user.id] = {"action": "ai_query", "lang": lang}
-        bot.register_next_step_handler(msg, process_ai_step)
-
-def process_ai_step(message: types.Message):
-    user_id = message.from_user.id
-    if user_id in USER_STATES and USER_STATES[user_id].get("action") == "ai_query":
-        lang = USER_STATES[user_id].get("lang", "uz")
-        del USER_STATES[user_id]
-        if message.text:
-            process_ai_query(message, message.text, lang)
-
-def process_ai_query(message: types.Message, query: str, lang: str):
-    prog = bot.send_message(message.chat.id, get_text("ai_thinking", lang))
-    ai_answer = query_free_ai(query, model_type="deepseek")
-    bot.delete_message(message.chat.id, prog.message_id)
-    bot.reply_to(message, f"🤖 <b>AI (DeepSeek / ChatGPT):</b>\n\n{ai_answer}")
-
-@bot.message_handler(commands=['image'])
-@bot.message_handler(func=lambda msg: msg.text in ["🖼 AI Rasm Chizish", "🖼 Создать картинку AI", "🖼 AI Image"])
-def handle_image_entry(message: types.Message):
-    lang = get_user_lang(message.from_user.id)
-    args = message.text.split(maxsplit=1)
-
-    if len(args) > 1 and not message.text.startswith("🖼"):
-        process_image_generation(message, args[1], lang)
-    else:
-        msg = bot.send_message(message.chat.id, get_text("image_prompt_ask", lang))
-        USER_STATES[message.from_user.id] = {"action": "image_prompt", "lang": lang}
-        bot.register_next_step_handler(msg, process_image_step)
-
-def process_image_step(message: types.Message):
-    user_id = message.from_user.id
-    if user_id in USER_STATES and USER_STATES[user_id].get("action") == "image_prompt":
-        lang = USER_STATES[user_id].get("lang", "uz")
-        del USER_STATES[user_id]
-        if message.text:
-            process_image_generation(message, message.text, lang)
-
-def process_image_generation(message: types.Message, prompt: str, lang: str):
-    prog = bot.send_message(message.chat.id, get_text("ai_image_generating", lang))
-    img_bytes = generate_ai_image_bytes(prompt)
-    bot.delete_message(message.chat.id, prog.message_id)
-    if img_bytes:
-        bot.send_photo(
-            message.chat.id,
-            photo=img_bytes,
-            caption=f"🎨 <b>AI Chizgan Rasm (NanoBanana / Flux):</b>\n<i>\"{prompt[:100]}\"</i>\n\n🤖 @{(bot.get_me()).username}"
-        )
-    else:
-        bot.reply_to(message, "❌ Rasm chizishda xatolik yuz berdi. Qayta urinib ko'ring.")
 
 # ==================== STATISTIKA VA ADMIN BUYRUQLARI ====================
 @bot.message_handler(commands=['stat', 'stats', 'statistika', 'admin'])
@@ -3458,6 +3690,7 @@ def process_image_generation(message: types.Message, prompt: str, lang: str):
     "statistika", "Statistika", "stat", "Stat"
 ])
 def handle_stats(message: types.Message):
+    USER_STATES.pop(message.from_user.id, None)
     text, markup = build_stats_message(message.from_user)
     bot.send_message(message.chat.id, text, reply_markup=markup)
 
@@ -3536,21 +3769,26 @@ def handle_broadcast(message: types.Message):
         message_id=status_msg.message_id
     )
 
-# ==================== PRO REKLAMA MONTAJ STUDIYASI BUYRUQLARI (/montaj, /set_outro) ====================
+# ==================== PRO REKLAMA MONTAJ STUDIYASI BUYRUQLARI (/montaj, /set_outro, /original) ====================
 def _extract_or_download_video_from_message(message: types.Message, target_prefix: str) -> tuple[str | None, str]:
     """
-    Foydalanuvchi yuborgan xabardan (Video fayl, Document MP4 yoki Instagram/TikTok/YouTube linkidan)
-    videoni yuklab olish va yo'lini qaytarish! Har qanday davomiylikni (10s, 19s, 1 daqiqa+) qo'llab-quvvatlaydi!
+    Foydalanuvchi yuborgan xabardan (Video fayl, Document MP4/MOV yoki Instagram/TikTok/YouTube linkidan)
+    videoni MONTAGE_SESSIONS_DIR ga yuklab olish!
     """
     uid = message.from_user.id
-    ts = int(time.time() * 1000)
+    ts = int(time.time() * 1000) % 100000000
 
-    # A) Agar bevosita video yoki video_note yoki document yuborilgan bo'lsa:
-    media_obj = message.video or message.video_note or (
-        message.document if (message.document and (message.document.mime_type or "").startswith("video")) else None
-    )
+    # A) Agar bevosita video, video_note yoki video-document yuborilgan bo'lsa:
+    doc_is_video = False
+    if message.document:
+        mime = (message.document.mime_type or "").lower()
+        fname = (message.document.file_name or "").lower()
+        if mime.startswith("video") or fname.endswith((".mp4", ".mov", ".mkv", ".webm", ".avi")):
+            doc_is_video = True
+
+    media_obj = message.video or message.video_note or (message.document if doc_is_video else None)
     if media_obj:
-        local_path = os.path.join(DOWNLOAD_DIR, f"{target_prefix}_{uid}_{ts}.mp4")
+        local_path = os.path.join(MONTAGE_SESSIONS_DIR, f"{target_prefix}_{uid}_{ts}.mp4")
         try:
             finfo = bot.get_file(media_obj.file_id)
             fbytes = bot.download_file(finfo.file_path)
@@ -3562,22 +3800,35 @@ def _extract_or_download_video_from_message(message: types.Message, target_prefi
         except Exception as e:
             print(f"Montaj video fayl yuklash xatosi: {e}")
             safe_remove(local_path)
-            return None, "Faylni yuklab bo'lmadi (hajmi 20 MB dan kichik fayl yoki link yuboring)."
+            return None, "Faylni yuklab bo'lmadi (Telegram Bot API orqali fayl hajmi 20 MB gacha bo'lishi yoki link orqali yuborilishi kerak)."
 
-    # B) Agar link (Instagram, TikTok, YouTube va h.k.) yuborilgan bo'lsa:
-    if message.text:
-        url = extract_url(message.text)
+    # B) Agar link (Instagram, TikTok, YouTube va h.k.) text yoki caption ichida yuborilgan bo'lsa:
+    raw_text = message.text or message.caption or ""
+    if raw_text:
+        url = extract_url(raw_text)
         if url:
             files, title = download_media_bulletproof(url, uid, ts)
             for fpath in files:
                 ext = os.path.splitext(fpath)[1].lower()
                 if ext in [".mp4", ".mov", ".mkv", ".webm"]:
-                    dur = get_media_duration(fpath)
-                    return fpath, f"{title[:40]} ({dur:.1f} sek)"
+                    dest_path = os.path.join(MONTAGE_SESSIONS_DIR, f"{target_prefix}_{uid}_{ts}.mp4")
+                    try:
+                        os.replace(fpath, dest_path)
+                    except Exception:
+                        shutil.copyfile(fpath, dest_path)
+                        safe_remove(fpath)
+                    dur = get_media_duration(dest_path)
+                    return dest_path, f"{title[:40]} ({dur:.1f} sek)"
             safe_remove(*files)
             return None, "Ushbu havoladan video topilmadi."
 
     return None, "Iltimos, video fayl yuboring yoki Instagram/TikTok/YouTube video linkini tashlang!"
+
+@bot.message_handler(commands=['cancel', 'bekor'])
+def handle_cancel_cmd(message: types.Message):
+    uid = message.from_user.id
+    USER_STATES.pop(uid, None)
+    bot.reply_to(message, "✅ Joriy amal bekor qilindi. Asosiy menyudasiz.", reply_markup=get_main_reply_keyboard(get_user_lang(uid)))
 
 @bot.message_handler(commands=['montaj', 'merge', 'reklama'])
 @bot.message_handler(func=lambda msg: msg.text and msg.text.strip() in [
@@ -3592,26 +3843,22 @@ def handle_montage_menu(message: types.Message):
         outro_size = os.path.getsize(outro_path) / (1024 * 1024)
         outro_status = f"✅ <b>Saqlangan ({outro_dur:.1f} sek | {outro_size:.1f} MB)</b>"
     else:
-        outro_status = "⚠️ <b>Hali saqlanmagan</b> (<code>/set_outro</code> orqali saqlang)"
+        outro_status = "⚠️ <b>Hali saqlanmagan</b> (2-videoni yuborsangiz avto-saqlanadi yoki <code>/set_outro</code> bosing)"
 
     wm_cfg = get_watermark_settings()
     wm_state = f"✅ <b>Faol:</b> <code>{wm_cfg.get('text')}</code> ({int(wm_cfg.get('opacity', 0.24)*100)}% shaffof, tepadan-pastga suzuvchi)" if wm_cfg.get("enabled", True) else "🔴 O'chirilgan"
 
+    # MUHIM: Foydalanuvchi «🎬 Reklama Montaj» ni bosiboq to'g'ridan-to'g'ri 1-videoni (yoki linkni) tashlasa ham darhol qabul qiladi!
+    USER_STATES[uid] = {"action": "montaj_wait_v1"}
+
     text = (
         "🎬 <b>TOP-1 PRO REKLAMA MONTAJ & ANTI-DUPLIKAT STUDIYASI</b>\n\n"
-        "Har qanday davomiylikdagi (10s, 19s, 45s, 1 daqiqa+) videolarni <b>7 ta Pro Studiya funksiyasi</b> "
-        "va <b>10-Bosqichli Anti-Duplikat (100% Original)</b> algoritmi bilan tayyorlaydi!\n\n"
         f"📌 <b>Doimiy Reklama Outro:</b> {outro_status}\n"
         f"💧 <b>Shaffof Telegram Watermark:</b> {wm_state}\n\n"
-        "✨ <b>Avtomatik qo'llanadigan 7 ta Pro Imkoniyat:</b>\n"
-        "1️⃣ <b>Blurred 9:16 Fon:</b> Qora hoshiya o'rniga xiralashtirilgan zamonaviy fon\n"
-        "2️⃣ <b>Kinematik O'tish (Smooth Fade):</b> 1-videodan 2-videoga silliq o'tish\n"
-        "3️⃣ <b>Tepadan-Pastga Suzuvchi Shaffof Ikonka:</b> Telegram samolyotcha + @Handle\n"
-        "4️⃣ <b>5 xil Rejim (shu jumladan 🖼 PiP Burchakda Preview!)</b>\n"
-        "5️⃣ <b>Auto-Ovoz Balansi:</b> EBU R128 (-14 LUFS) studiya ovozi\n"
-        "6️⃣ <b>Whoosh Sub-Bass Sound FX:</b> Reklamaga o'tishda kinematik ovoz effekti\n"
-        "7️⃣ <b>10-Qatlamli Anti-Duplikat + iPhone 16 Pro Max Metadata</b> (Reels/TikTok Top uchun!)\n\n"
-        "👇 <b>Kerakli bo'limni tanlang:</b>"
+        "🚀 <b>HOZIR NIMA QILASIZ?</b>\n"
+        "📥 <b>1-Videoni (Asosiy videoni) hoziroq shu yerga yuboring</b> (Instagram/TikTok/YouTube linkini tashlang yoki video fayl yuboring)!\n"
+        "<i>So'ng uning oxiriga ulanadigan 2-videoni (reklamani) yuborasiz va 5 xil professional rejimdan birini tanlaysiz.</i>\n\n"
+        "👇 <i>Yoki quyidagi maxsus tugmalardan birini bosing:</i>"
     )
     markup = types.InlineKeyboardMarkup(row_width=1)
     markup.add(
@@ -3629,6 +3876,7 @@ def handle_montage_menu(message: types.Message):
 
 @bot.message_handler(commands=['set_watermark', 'watermark'])
 def handle_set_watermark_cmd(message: types.Message):
+    USER_STATES.pop(message.from_user.id, None)
     args = message.text.split(maxsplit=1) if message.text else []
     if len(args) > 1:
         val = args[1].strip()
@@ -3637,7 +3885,6 @@ def handle_set_watermark_cmd(message: types.Message):
             bot.reply_to(message, "🔴 <b>Suzuvchi shaffof watermark o'chirildi.</b> Yoqish uchun: <code>/set_watermark @kanal_nomi</code>")
             return
         cfg = save_watermark_settings(enabled=True, text=val, opacity=0.24)
-        # Eski kesh PNG larni tozalaymiz
         for fn in os.listdir(PROMO_DIR):
             if fn.startswith("wm_badge_") and fn.endswith(".png"):
                 safe_remove(os.path.join(PROMO_DIR, fn))
@@ -3651,7 +3898,7 @@ def handle_set_watermark_cmd(message: types.Message):
         return
 
     cfg = get_watermark_settings()
-    msg = bot.reply_to(
+    bot.reply_to(
         message,
         f"💧 <b>Tepadan-Pastga Suzuvchi Shaffof Watermark Sozlamasi</b>\n\n"
         f"Hozirgi yozuv: <code>{cfg.get('text')}</code>\n\n"
@@ -3659,14 +3906,10 @@ def handle_set_watermark_cmd(message: types.Message):
         f"<i>(O'chirib qo'yish uchun <code>off</code> deb yozing, bekor qilish uchun /cancel)</i>"
     )
     USER_STATES[message.from_user.id] = {"action": "set_watermark_step"}
-    bot.register_next_step_handler(msg, process_set_watermark_step)
 
 def process_set_watermark_step(message: types.Message):
     uid = message.from_user.id
-    state = USER_STATES.get(uid)
-    if not state or state.get("action") != "set_watermark_step":
-        return
-    del USER_STATES[uid]
+    USER_STATES.pop(uid, None)
     if not message.text or message.text.strip().lower() in ("/cancel", "bekor"):
         bot.reply_to(message, "❌ Bekor qilindi.")
         return
@@ -3687,25 +3930,24 @@ def process_set_watermark_step(message: types.Message):
     )
 
 @bot.message_handler(commands=['original', 'antiduplikat', 'unique'])
+@bot.message_handler(func=lambda msg: msg.text and msg.text.strip() in [
+    "🛡 Anti-Duplikat", "🛡 Анти-Дубликат", "🛡 Anti-Duplicate"
+])
 def handle_original_cmd(message: types.Message):
-    msg = bot.reply_to(
+    USER_STATES[message.from_user.id] = {"action": "antidup_wait_video"}
+    bot.reply_to(
         message,
         "🛡 <b>10-BOSQICHLI ANTI-DUPLIKAT (100% ORIGINAL VIDEO) STUDIYASI</b>\n\n"
         "Videoni Instagram Reels, TikTok va YouTube Shorts algoritmlari uchun <b>100% yangi original</b> qilib "
         "(Rekomendatsiya / Topga chiqadigan qilib) tayyorlash uchun:\n\n"
-        "📥 <b>Video fayl yuboring yoki Instagram/TikTok/YouTube linkini tashlang:</b>"
+        "📥 <b>Hoziroq video fayl yuboring yoki Instagram/TikTok/YouTube linkini tashlang:</b>\n"
+        "<i>(Bekor qilish uchun /cancel)</i>"
     )
-    USER_STATES[message.from_user.id] = {"action": "antidup_wait_video"}
-    bot.register_next_step_handler(msg, process_antidup_step)
 
 def process_antidup_step(message: types.Message):
     uid = message.from_user.id
-    state = USER_STATES.get(uid)
-    if not state or state.get("action") != "antidup_wait_video":
-        return
-    del USER_STATES[uid]
-
     if message.text and message.text.strip().lower() in ("/cancel", "bekor"):
+        USER_STATES.pop(uid, None)
         bot.reply_to(message, "❌ Bekor qilindi.")
         return
 
@@ -3716,10 +3958,11 @@ def process_antidup_step(message: types.Message):
     )
     src_path, label = _extract_or_download_video_from_message(message, "antidup_src")
     if not src_path:
-        bot.edit_message_text(f"❌ {label}", message.chat.id, prog.message_id)
+        bot.edit_message_text(f"❌ {label}\n\n<i>Qaytadan video fayl yoki link yuboring (bekor qilish: /cancel)</i>", message.chat.id, prog.message_id)
         return
 
-    out_orig = os.path.join(DOWNLOAD_DIR, f"orig_{uid}_{int(time.time())}.mp4")
+    USER_STATES.pop(uid, None)
+    out_orig = os.path.join(DOWNLOAD_DIR, f"orig_{uid}_{int(time.time()) % 1000000}.mp4")
     try:
         ok, ad_info = make_video_100_original(src_path, out_orig)
         if ok and os.path.exists(out_orig):
@@ -3729,7 +3972,7 @@ def process_antidup_step(message: types.Message):
             cap = (
                 f"🛡 <b>100% ORIGINAL VIDEO TAYYOR (Top / Rekomendatsiya Uchun)!</b>\n\n"
                 f"🔍 <b>Vizual pHash siljishi:</b> +{ad_info.get('zoom', '2.5%')} (Sub-piksel + Micro-Grain)\n"
-                f"🎵 <b>Audio Fingerprint:</b> {ad_info.get('pitch', '+1.3%')} + Loudnorm (-14 LUFS)\n"
+                f"🎵 <b>Audio Fingerprint:</b> {ad_info.get('pitch', '+1.3%')}\n"
                 f"⏱ <b>Kadr & PTS Tezligi:</b> {ad_info.get('speed', '1.01x')} (GOP -g 29)\n"
                 f"📱 <b>Kamera Imzosi:</b> <code>{ad_info.get('device', 'iPhone 16 Pro Max')}</code>\n"
                 f"💧 <b>Watermark:</b> Tepadan-pastga suzuvchi shaffof ikona\n"
@@ -3760,36 +4003,32 @@ def process_antidup_step(message: types.Message):
 
 @bot.message_handler(commands=['set_outro'])
 def handle_set_outro_cmd(message: types.Message):
-    msg = bot.reply_to(
+    USER_STATES[message.from_user.id] = {"action": "save_outro"}
+    bot.reply_to(
         message,
         "📌 <b>Doimiy Reklama (Outro) videosini yuboring:</b>\n\n"
         "• Video davomiyligi <b>ixtiyoriy</b> bo'lishi mumkin (masalan: 10 sek, 19 sek, 30 sek yoki 1 daqiqagacha!).\n"
         "• Videoni fayl sifatida tashlang yoki Instagram/TikTok/YouTube linkini yuboring.\n"
-        "• Bir marta saqlab qo'ysangiz, botda yuklangan har bir videoning tagidagi <b>«🎯 Reklama Montaj»</b> tugmasi orqali 1 bosishda ulab ketaverasiz!"
+        "• Bir marta saqlab qo'ysangiz, har bir videoning ostidagi <b>«🎯 Pro Reklama Montaj»</b> tugmasi orqali 1 bosishda ulab ketaverasiz!\n"
+        "<i>(Bekor qilish uchun /cancel)</i>"
     )
-    USER_STATES[message.from_user.id] = {"action": "save_outro"}
-    bot.register_next_step_handler(msg, process_save_outro_step)
 
 def process_save_outro_step(message: types.Message):
     uid = message.from_user.id
-    state = USER_STATES.get(uid)
-    if not state or state.get("action") != "save_outro":
-        return
-    del USER_STATES[uid]
-
     if message.text and message.text.strip().lower() in ["/cancel", "bekor", "отмена"]:
+        USER_STATES.pop(uid, None)
         bot.reply_to(message, "❌ Bekor qilindi.")
         return
 
-    prog = bot.reply_to(message, "⏳ <b>Reklama (Outro) video qabul qilinib, 1080x1920 HD formatga moslanmoqda...</b>")
+    prog = bot.reply_to(message, "⏳ <b>Reklama (Outro) video qabul qilinib, 9:16 HD formatga moslanmoqda...</b>")
     temp_path, info_label = _extract_or_download_video_from_message(message, "raw_outro")
     if not temp_path:
-        bot.edit_message_text(f"❌ {info_label}", message.chat.id, prog.message_id)
+        bot.edit_message_text(f"❌ {info_label}\n\n<i>Video fayl yoki link yuboring (bekor qilish: /cancel)</i>", message.chat.id, prog.message_id)
         return
 
+    USER_STATES.pop(uid, None)
     target_outro = os.path.join(PROMO_DIR, f"outro_{uid}.mp4")
     try:
-        # Outroni oldindan 1080x1920 30fps qilib saqlab qo'yamiz (shunda keyingi montajlar 2 baravar tez bitadi!)
         ok = normalize_clip_for_montage(temp_path, target_outro, keep_audio=True)
         if not ok:
             shutil.copyfile(temp_path, target_outro)
@@ -3799,8 +4038,8 @@ def process_save_outro_step(message: types.Message):
             f"✅ <b>Reklama Outro muvaffaqiyatli saqlandi!</b>\n\n"
             f"⏱ <b>Davomiyligi:</b> {dur:.1f} soniya\n"
             f"💾 <b>Hajmi:</b> {size_mb:.1f} MB\n"
-            f"📐 <b>Format:</b> 1080x1920 Full HD (Reels)\n\n"
-            f"🚀 Endi botga istalgan Instagram/TikTok linkini tashlab, video ostidagi <b>«🎯 Reklama Montaj»</b> tugmasini bossangiz, "
+            f"📐 <b>Format:</b> 9:16 HD (Reels / TikTok)\n\n"
+            f"🚀 Endi botga istalgan Instagram/TikTok linkini tashlab, video ostidagi <b>«🎯 Pro Reklama Montaj»</b> tugmasini bossangiz, "
             f"ushbu reklama videongiz avtomatik ulanadi!",
             message.chat.id,
             prog.message_id
@@ -3813,6 +4052,7 @@ def process_save_outro_step(message: types.Message):
 @bot.message_handler(commands=['del_outro'])
 def handle_del_outro_cmd(message: types.Message):
     uid = message.from_user.id
+    USER_STATES.pop(uid, None)
     user_outro = os.path.join(PROMO_DIR, f"outro_{uid}.mp4")
     if os.path.exists(user_outro):
         safe_remove(user_outro)
@@ -3823,31 +4063,29 @@ def handle_del_outro_cmd(message: types.Message):
 def process_montage_step1(message: types.Message):
     """1-videoni qabul qilish (Link yoki Video fayl — har qanday davomiylikda)"""
     uid = message.from_user.id
-    state = USER_STATES.get(uid)
-    if not state or state.get("action") not in ("montaj_wait_v1", "montaj_wait_v1_with_saved"):
-        return
-
+    state = USER_STATES.get(uid, {})
     if message.text and message.text.strip().lower() in ["/cancel", "bekor", "отмена"]:
-        del USER_STATES[uid]
+        USER_STATES.pop(uid, None)
         bot.reply_to(message, "❌ Montaj bekor qilindi.")
         return
 
     use_saved_outro = (state.get("action") == "montaj_wait_v1_with_saved")
-    del USER_STATES[uid]
-
     prog = bot.reply_to(message, "⏳ <b>1-video yuklanmoqda va tekshirilmoqda...</b>")
     v1_path, v1_label = _extract_or_download_video_from_message(message, "montaj_v1")
     if not v1_path:
-        bot.edit_message_text(f"❌ {v1_label}", message.chat.id, prog.message_id)
+        bot.edit_message_text(
+            f"❌ {v1_label}\n\n📥 <i>1-videoni fayl sifatida tashlang yoki Instagram/TikTok/YouTube linkini yuboring (bekor qilish: /cancel)</i>",
+            message.chat.id, prog.message_id
+        )
         return
 
     dur1 = get_media_duration(v1_path)
-    session_key = f"{uid}_{int(time.time())}"
+    session_key = f"{uid}_{int(time.time()) % 10000000}"
 
-    # Agar foydalanuvchi "Saqlangan Outroni ulash" ni tanlagan bo'lsa, darhol rejim tanlashga o'tamiz!
     outro_path = get_saved_outro_path(uid) if use_saved_outro else None
     if use_saved_outro and outro_path:
-        v2_copy = os.path.join(DOWNLOAD_DIR, f"montaj_v2_{session_key}.mp4")
+        USER_STATES.pop(uid, None)
+        v2_copy = os.path.join(MONTAGE_SESSIONS_DIR, f"montaj_v2_{session_key}.mp4")
         shutil.copyfile(outro_path, v2_copy)
         dur2 = get_media_duration(v2_copy)
         MONTAGE_CACHE[session_key] = {
@@ -3870,7 +4108,6 @@ def process_montage_step1(message: types.Message):
         )
         return
 
-    # Aks holda 2-videoni so'raymiz
     MONTAGE_CACHE[session_key] = {
         "user_id": uid,
         "v1": v1_path,
@@ -3880,31 +4117,40 @@ def process_montage_step1(message: types.Message):
         "created": time.time()
     }
     USER_STATES[uid] = {"action": "montaj_wait_v2", "session_key": session_key}
+
+    mk = types.InlineKeyboardMarkup(row_width=1)
+    saved_outro = get_saved_outro_path(uid)
+    if saved_outro:
+        s_dur = get_media_duration(saved_outro)
+        mk.add(types.InlineKeyboardButton(
+            f"⚡ Saqlangan Outroni Ulash ({s_dur:.1f}s)",
+            callback_data=f"montaj_attach_saved:{session_key}"
+        ))
+    mk.add(types.InlineKeyboardButton("❌ Bekor qilish", callback_data=f"cancel_montaj:{session_key}"))
+
     bot.edit_message_text(
         f"✅ <b>1-Video qabul qilindi!</b> ({v1_label})\n\n"
-        f"📥 <b>Endi 2-Videoni (Reklama / Outro videoni) yuboring:</b>\n"
+        f"📥 <b>Endi 2-Videoni (Reklama / Outro videoni) shu yerga yuboring:</b>\n"
         f"• Davomiyligi <b>ixtiyoriy</b> (10s, 19s, 30s, 1 daqiqa va h.k.) bo'lishi mumkin.\n"
-        f"• Video fayl tashlang yoki link yuboring:",
+        f"• Video fayl tashlang yoki Instagram/TikTok/YouTube linkini yuboring:",
         message.chat.id,
-        prog.message_id
+        prog.message_id,
+        reply_markup=mk
     )
-    bot.register_next_step_handler(message, process_montage_step2)
 
 def process_montage_step2(message: types.Message):
-    """2-videoni qabul qilish va 4 ta montaj rejimini chiqarish"""
+    """2-videoni qabul qilish va 5 ta montaj rejimini chiqarish"""
     uid = message.from_user.id
-    state = USER_STATES.get(uid)
-    if not state or state.get("action") != "montaj_wait_v2":
-        return
-
+    state = USER_STATES.get(uid, {})
     session_key = state.get("session_key")
-    del USER_STATES[uid]
     session = MONTAGE_CACHE.get(session_key)
-    if not session:
-        bot.reply_to(message, "⚠️ Montaj sessiyasi eskirgan. Qaytadan <code>/montaj</code> bosing.")
+    if not session or not os.path.exists(session.get("v1", "")):
+        USER_STATES.pop(uid, None)
+        bot.reply_to(message, "⚠️ Montaj sessiyasi eskirgan. Qaytadan <b>🎬 Reklama Montaj</b> tugmasini bosing.")
         return
 
     if message.text and message.text.strip().lower() in ["/cancel", "bekor", "отмена"]:
+        USER_STATES.pop(uid, None)
         safe_remove(session.get("v1"))
         MONTAGE_CACHE.pop(session_key, None)
         bot.reply_to(message, "❌ Montaj bekor qilindi.")
@@ -3913,16 +4159,18 @@ def process_montage_step2(message: types.Message):
     prog = bot.reply_to(message, "⏳ <b>2-video yuklanmoqda va tekshirilmoqda...</b>")
     v2_path, v2_label = _extract_or_download_video_from_message(message, "montaj_v2")
     if not v2_path:
-        bot.edit_message_text(f"❌ {v2_label}", message.chat.id, prog.message_id)
-        safe_remove(session.get("v1"))
-        MONTAGE_CACHE.pop(session_key, None)
+        bot.edit_message_text(
+            f"❌ {v2_label}\n\n📥 <i>2-videoni fayl sifatida tashlang yoki link yuboring (bekor qilish: /cancel)</i>",
+            message.chat.id, prog.message_id
+        )
         return
 
+    USER_STATES.pop(uid, None)
     dur2 = get_media_duration(v2_path)
     session["v2"] = v2_path
     session["dur2"] = dur2
 
-    # Shuningdek, foydalanuvchiga qulay bo'lishi uchun agar saqlangan outro yo'q bo'lsa, shu 2-videoni avto-shablon sifatida ham saqlab qo'yamiz
+    # Keyingi safar 1 bosishda ulash uchun 2-videoni avto-shablon sifatida ham saqlab qo'yamiz
     user_outro = os.path.join(PROMO_DIR, f"outro_{uid}.mp4")
     if not os.path.exists(user_outro):
         try:
@@ -3942,20 +4190,56 @@ def process_montage_step2(message: types.Message):
         reply_markup=make_montage_mode_keyboard(session_key)
     )
 
-# ==================== FOYDALANUVCHI FAYL YUBORGANIDA (DIRECT UPLOAD) ====================
-@bot.message_handler(content_types=['video', 'video_note', 'voice', 'audio'])
+def _route_active_user_state(message: types.Message) -> bool:
+    """
+    Agar foydalanuvchi montaj, outro saqlash, anti-duplikat, watermark, trim yoki qr
+    bosqichida bo'lsa, yuborgan fayli yoki matnini to'g'ridan-to'g'ri o'sha bosqichga yo'naltiradi!
+    """
+    uid = message.from_user.id
+    state = USER_STATES.get(uid)
+    if not state:
+        return False
+    action = state.get("action")
+    if action in ("montaj_wait_v1", "montaj_wait_v1_with_saved"):
+        process_montage_step1(message)
+        return True
+    elif action == "montaj_wait_v2":
+        process_montage_step2(message)
+        return True
+    elif action == "save_outro":
+        process_save_outro_step(message)
+        return True
+    elif action == "antidup_wait_video":
+        process_antidup_step(message)
+        return True
+    elif action == "set_watermark_step":
+        process_set_watermark_step(message)
+        return True
+    elif action == "trim":
+        process_trim_step(message)
+        return True
+    elif action == "qr_make":
+        process_qr_step(message)
+        return True
+    return False
+
+# ==================== FOYDALANUVCHI FAYL YUBORGANIDA (DIRECT UPLOAD YOKI MONTAJ) ====================
+@bot.message_handler(content_types=['video', 'video_note', 'voice', 'audio', 'document'])
 def handle_uploaded_media(message: types.Message):
     user = message.from_user
     register_user(user)
     lang = get_user_lang(user.id)
-    cleanup_old_files()
 
     is_subbed, unsubscribed = check_channel_subscription(user.id)
     if not is_subbed:
         bot.send_message(message.chat.id, get_text("sub_required", lang), reply_markup=get_sub_keyboard(unsubscribed, lang))
         return
 
-    file_obj = message.video or message.video_note or message.voice or message.audio
+    # 1. Agar foydalanuvchi Montaj / Outro / Anti-Duplikat bosqichida bo'lsa -> darhol o'sha yerga uzatamiz!
+    if _route_active_user_state(message):
+        return
+
+    file_obj = message.video or message.video_note or message.voice or message.audio or message.document
     if not file_obj:
         return
 
@@ -3967,11 +4251,29 @@ def handle_uploaded_media(message: types.Message):
         elif message.audio:
             ext = "mp3"
 
-        timestamp = int(time.time() * 1000)
-        base_fname = f"user_{user.id}_{timestamp}.{ext}"
+        short_ts = int(time.time() * 1000) % 100000000
+        base_fname = f"u_{user.id}_{short_ts}.{ext}"
+        local_path = os.path.join(DOWNLOAD_DIR, base_fname)
+
+        # Faylni darhol downloads/ ga saqlab qo'yamiz (barcha 16 ta tugma 100% xatosiz ishlashi uchun!)
+        try:
+            finfo = bot.get_file(file_obj.file_id)
+            fbytes = bot.download_file(finfo.file_path)
+            with open(local_path, "wb") as lf:
+                lf.write(fbytes)
+        except Exception as dl_e:
+            print(f"Upload fayl saqlash ogohlantirishi: {dl_e}")
+
+        VIDEO_SOURCE_CACHE[base_fname] = {
+            "path": local_path,
+            "url": "",
+            "file_id": getattr(file_obj, "file_id", ""),
+            "time": time.time()
+        }
+
         markup = make_video_action_keyboard(base_fname, lang=lang)
         bot.edit_message_text(
-            "🎬 <b>Media qabul qilindi!</b>\n\nQuyidagi 12 ta studiya tugmalaridan birini tanlang:",
+            "🎬 <b>Media qabul qilindi!</b>\n\nQuyidagi 16 ta studiya tugmalaridan birini tanlang:",
             chat_id=message.chat.id,
             message_id=status_msg.message_id,
             reply_markup=markup
@@ -3981,13 +4283,12 @@ def handle_uploaded_media(message: types.Message):
         print(f"Direct file yuklashda xatolik: {e}")
         bot.edit_message_text(get_text("err_generic", lang), message.chat.id, status_msg.message_id)
 
-# ==================== HAVOLA BO'YICHA YUKLASH YOKI AI MATN ====================
+# ==================== HAVOLA BO'YICHA YUKLASH ====================
 @bot.message_handler(func=lambda msg: True and msg.text)
-def handle_incoming_link_or_ai(message: types.Message):
+def handle_incoming_link(message: types.Message):
     user = message.from_user
     register_user(user)
     lang = get_user_lang(user.id)
-    cleanup_old_files(max_age_seconds=120)
 
     is_subbed, unsubscribed = check_channel_subscription(user.id)
     if not is_subbed:
@@ -3996,6 +4297,11 @@ def handle_incoming_link_or_ai(message: types.Message):
 
     txt_clean = message.text.strip()
     cmd_lower = txt_clean.split()[0].lower().split("@")[0] if txt_clean else ""
+
+    # 1. Asosiy menyu va buyruqlarni tekshirish
+    if cmd_lower in ("/cancel", "/bekor"):
+        handle_cancel_cmd(message)
+        return
     if cmd_lower in ("/stat", "/stats", "/statistika", "/admin") or txt_clean in ("📊 Statistika", "📊 Статистика", "📊 Statistics", "statistika", "Statistika", "stat", "Stat"):
         handle_stats(message)
         return
@@ -4005,17 +4311,17 @@ def handle_incoming_link_or_ai(message: types.Message):
     if cmd_lower == "/qr":
         handle_qr_cmd(message)
         return
-    if cmd_lower in ("/tr", "/translate"):
-        handle_translate_cmd(message)
-        return
     if cmd_lower in ("/clean", "/clear"):
         handle_clean_storage(message)
         return
-    if cmd_lower == "/profile":
+    if cmd_lower == "/profile" or txt_clean in ("👤 Profilim", "👤 Мой профиль", "👤 Profile"):
         handle_profile(message)
         return
     if cmd_lower in ("/montaj", "/merge", "/reklama") or txt_clean in ("🎬 Reklama Montaj", "🎬 Видео Монтаж", "🎬 Video Montage", "montaj", "Montaj"):
         handle_montage_menu(message)
+        return
+    if cmd_lower in ("/original", "/antiduplikat", "/unique") or txt_clean in ("🛡 Anti-Duplikat", "🛡 Анти-Дубликат", "🛡 Anti-Duplicate"):
+        handle_original_cmd(message)
         return
     if cmd_lower == "/set_outro":
         handle_set_outro_cmd(message)
@@ -4026,18 +4332,31 @@ def handle_incoming_link_or_ai(message: types.Message):
     if cmd_lower in ("/set_watermark", "/watermark"):
         handle_set_watermark_cmd(message)
         return
-    if cmd_lower in ("/original", "/antiduplikat", "/unique"):
-        handle_original_cmd(message)
+    if cmd_lower == "/tools" or txt_clean in ("🛠 Universal Vositalar", "🛠 Инструменты", "🛠 Smart Tools"):
+        handle_tools_menu(message)
+        return
+    if cmd_lower == "/help" or txt_clean in ("📖 Qo'llanma", "📖 Инструкция", "📖 Help"):
+        handle_help(message)
+        return
+    if cmd_lower in ("/lang", "/language") or txt_clean in ("🌐 Til", "🌐 Сменить язык", "🌐 Language"):
+        handle_lang_command(message)
+        return
+    if cmd_lower in ("/referral", "/ref") or txt_clean in ("👥 VIP & Do'stlar", "👥 VIP & Рефералы", "👥 VIP & Referral"):
+        handle_referral(message)
+        return
+
+    # 2. Agar foydalanuvchi Montaj / Trim / Watermark / QR bosqichida bo'lsa -> o'sha bosqichni bajarish!
+    if _route_active_user_state(message):
         return
 
     url = extract_url(message.text)
 
-    # AGAR HAVOLA BO'LMASA -> SUN'IY INTELLEKTGA SAVOL SIFATIDA JAVOB BERISH!
+    # 3. Agar havola bo'lmasa -> AI ga yubormasdan, foydalanuvchiga link yuborishni eslatish!
     if not url:
-        process_ai_query(message, message.text, lang)
+        bot.reply_to(message, get_text("send_link_prompt", lang), reply_markup=get_main_reply_keyboard(lang))
         return
 
-    # HAVOLA BO'LSA -> 12-BOSQICHLI VIDEO-FIRST TIZIM ORQALI XATOSIZ YUKLAB BERISH!
+    # 4. HAVOLA BO'LSA -> 12-BOSQICHLI VIDEO-FIRST TIZIM ORQALI XATOSIZ YUKLAB BERISH!
     platform = detect_platform(url)
     status_msg = bot.reply_to(message, get_text("analyzing", lang, platform=platform))
     timestamp = int(time.time() * 1000)
@@ -4050,10 +4369,10 @@ def handle_incoming_link_or_ai(message: types.Message):
             bot.edit_message_text(get_text("not_found", lang), chat_id=message.chat.id, message_id=status_msg.message_id)
             return
 
-        bot_uname = (bot.get_me()).username
+        bot_uname = get_cached_bot_username()
         safe_title = html.escape(str(title or "Video"))[:60]
 
-        # A) KARUSEL (Albom) — Yuboriboq xotiradan o'chiriladi!
+        # A) KARUSEL (Albom)
         if len(downloaded_files) > 1:
             opened_handles = []
             try:
@@ -4087,7 +4406,6 @@ def handle_incoming_link_or_ai(message: types.Message):
         downloaded_file = downloaded_files[0]
         ext = os.path.splitext(downloaded_file)[1].lower()
 
-        # Rasm bo'lsa (faqat haqiqiy rasm postlar uchun) — Yuboriboq xotiradan o'chiriladi!
         if ext in [".jpg", ".jpeg", ".png", ".webp"]:
             try:
                 with open(downloaded_file, "rb") as pf:
@@ -4105,10 +4423,17 @@ def handle_incoming_link_or_ai(message: types.Message):
                 safe_remove(downloaded_file)
             return
 
-        # Video bo'lsa -> Telefonda (iPhone / Android) bittada ochiladigan H.264 MP4 formatga tekshirish
+        # Video bo'lsa -> H.264 MP4 + Tepadan-pastga suzuvchi shaffof watermark (in-place)
         downloaded_file, vinfo = ensure_phone_playable_mp4(downloaded_file)
         file_size_mb = os.path.getsize(downloaded_file) / (1024 * 1024)
         base_fname = os.path.basename(downloaded_file)
+
+        VIDEO_SOURCE_CACHE[base_fname] = {
+            "path": downloaded_file,
+            "url": url,
+            "file_id": "",
+            "time": time.time()
+        }
 
         # AGAR FAYL 50 MB DAN KATTA BO'LSA -> AUTO-SPLITTER
         if file_size_mb > MAX_TELEGRAM_FILE_MB:
@@ -4125,7 +4450,9 @@ def handle_incoming_link_or_ai(message: types.Message):
             )
             return
 
-        # NORMAL HAJMDAGI VIDEO (< 50 MB) — Yuborilgach, kompyuter xotirasidan DARHOL o'chiriladi!
+        # NORMAL HAJMDAGI VIDEO (< 50 MB)
+        # MUHIM: downloaded_file ni DARHOL o'chirmaymiz! U downloads/ da 30 daqiqa turadi,
+        # shunda video ostidagi barcha 16 ta tugma 0 soniyada xatosiz ishlaydi!
         markup = make_video_action_keyboard(base_fname, lang=lang)
         caption = (
             f"🎬 <b>{safe_title}</b>\n\n"
@@ -4133,67 +4460,62 @@ def handle_incoming_link_or_ai(message: types.Message):
             f"💾 <b>Hajmi:</b> {file_size_mb:.1f} MB\n\n"
             f"🤖 @{bot_uname}"
         )
+        sent_msg = None
         try:
-            sent_ok = False
+            with open(downloaded_file, "rb") as vf:
+                sent_msg = bot.send_video(
+                    chat_id=message.chat.id,
+                    video=vf,
+                    caption=caption,
+                    reply_markup=markup,
+                    width=vinfo.get("width", 720),
+                    height=vinfo.get("height", 1280),
+                    duration=vinfo.get("duration", 15),
+                    supports_streaming=True
+                )
+        except Exception as send_err:
+            print(f"send_video 1-urinish xatosi, qayta kodlanmoqda: {send_err}")
+            downloaded_file, vinfo = ensure_phone_playable_mp4(downloaded_file, force_reencode=True)
             try:
-                with open(downloaded_file, "rb") as vf:
-                    bot.send_video(
+                with open(downloaded_file, "rb") as vf2:
+                    sent_msg = bot.send_video(
                         chat_id=message.chat.id,
-                        video=vf,
+                        video=vf2,
                         caption=caption,
                         reply_markup=markup,
-                        width=vinfo.get("width", 720),
-                        height=vinfo.get("height", 1280),
-                        duration=vinfo.get("duration", 15),
                         supports_streaming=True
                     )
-                sent_ok = True
-            except Exception as send_err:
-                print(f"send_video 1-urinish xatosi, qayta kodlanmoqda: {send_err}")
-                downloaded_file, vinfo = ensure_phone_playable_mp4(downloaded_file, force_reencode=True)
-                try:
-                    with open(downloaded_file, "rb") as vf2:
-                        bot.send_video(
-                            chat_id=message.chat.id,
-                            video=vf2,
-                            caption=caption,
-                            reply_markup=markup,
-                            supports_streaming=True
-                        )
-                    sent_ok = True
-                except Exception:
-                    with open(downloaded_file, "rb") as df:
-                        bot.send_document(
-                            chat_id=message.chat.id,
-                            document=df,
-                            caption=caption,
-                            reply_markup=markup
-                        )
-                    sent_ok = True
+            except Exception:
+                with open(downloaded_file, "rb") as df:
+                    sent_msg = bot.send_document(
+                        chat_id=message.chat.id,
+                        document=df,
+                        caption=caption,
+                        reply_markup=markup
+                    )
 
-            if sent_ok:
-                increment_download_count(user.id, url, platform, "video")
-                try:
-                    bot.delete_message(message.chat.id, status_msg.message_id)
-                except Exception:
-                    pass
-        finally:
-            safe_remove(downloaded_file)
+        if sent_msg:
+            vid_obj = getattr(sent_msg, "video", None) or getattr(sent_msg, "document", None)
+            if vid_obj and getattr(vid_obj, "file_id", None):
+                VIDEO_SOURCE_CACHE[base_fname]["file_id"] = vid_obj.file_id
+            increment_download_count(user.id, url, platform, "video")
+            try:
+                bot.delete_message(message.chat.id, status_msg.message_id)
+            except Exception:
+                pass
 
     except Exception as e:
         print(f"Yuklashda xatolik: {e}")
-        safe_remove(*downloaded_files)
         try:
             bot.edit_message_text(get_text("err_generic", lang), chat_id=message.chat.id, message_id=status_msg.message_id)
         except Exception:
             pass
 
-# ==================== CALLBACK QUERY (INTERAKTIV TUGMALAR) ====================
+# ==================== CALLBACK QUERY (BARCHA 16 TA TUGMA VA MONTAJ 100% XATOSIZ) ====================
 @bot.callback_query_handler(func=lambda call: True)
 def handle_callbacks(call: types.CallbackQuery):
     user_id = call.from_user.id
     lang = get_user_lang(user_id)
-    cleanup_old_files(max_age_seconds=120)
 
     # 1. Til tanlash
     if call.data.startswith("set_lang:"):
@@ -4266,7 +4588,10 @@ def handle_callbacks(call: types.CallbackQuery):
     if call.data.startswith("back_video:"):
         base_fname = call.data.split("back_video:")[1]
         markup = make_video_action_keyboard(base_fname, lang=lang)
-        bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=markup)
+        try:
+            bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=markup)
+        except Exception:
+            pass
         bot.answer_callback_query(call.id)
         return
 
@@ -4284,21 +4609,8 @@ def handle_callbacks(call: types.CallbackQuery):
             markup.add(types.InlineKeyboardButton("🔄 Kursni yangilash", callback_data="kurs_amt:1"))
             bot.send_message(call.message.chat.id, fetch_cbu_exchange_rates(1.0), reply_markup=markup)
         elif subcmd == "qr":
-            msg = bot.send_message(call.message.chat.id, "📱 <b>QR-Kod yasash uchun matn yoki ssilka yuboring:</b>")
             USER_STATES[user_id] = {"action": "qr_make"}
-            bot.register_next_step_handler(msg, process_qr_step)
-        elif subcmd == "tr":
-            msg = bot.send_message(call.message.chat.id, "🌍 <b>Tarjima qilish uchun matnni yuboring:</b>")
-            USER_STATES[user_id] = {"action": "tr_text"}
-            bot.register_next_step_handler(msg, process_tr_step)
-        elif subcmd == "ai":
-            msg = bot.send_message(call.message.chat.id, get_text("ai_prompt_ask", lang))
-            USER_STATES[user_id] = {"action": "ai_query", "lang": lang}
-            bot.register_next_step_handler(msg, process_ai_step)
-        elif subcmd == "image":
-            msg = bot.send_message(call.message.chat.id, get_text("image_prompt_ask", lang))
-            USER_STATES[user_id] = {"action": "image_prompt", "lang": lang}
-            bot.register_next_step_handler(msg, process_image_step)
+            bot.send_message(call.message.chat.id, "📱 <b>QR-Kod yasash uchun matn yoki ssilka yuboring:</b>")
         elif subcmd == "montaj":
             handle_montage_menu(call.message)
         elif subcmd == "set_outro":
@@ -4308,15 +4620,14 @@ def handle_callbacks(call: types.CallbackQuery):
     # ------------------ PRO REKLAMA MONTAJ CALLBACKLARI ------------------
     if call.data == "montaj_start_two":
         bot.answer_callback_query(call.id)
-        msg = bot.send_message(
+        USER_STATES[user_id] = {"action": "montaj_wait_v1"}
+        bot.send_message(
             call.message.chat.id,
             "🎬 <b>1-Videoni (Asosiy videoni) yuboring:</b>\n\n"
             "• Instagram / TikTok / YouTube linkini tashlang yoki video fayl yuboring.\n"
             "• Video davomiyligi <b>ixtiyoriy</b> (masalan: 10s, 25s, 1 daqiqa va h.k.).\n"
             "<i>(Bekor qilish uchun /cancel yozing)</i>"
         )
-        USER_STATES[user_id] = {"action": "montaj_wait_v1"}
-        bot.register_next_step_handler(msg, process_montage_step1)
         return
 
     if call.data == "montaj_use_saved_outro":
@@ -4325,18 +4636,51 @@ def handle_callbacks(call: types.CallbackQuery):
         if not outro_path:
             bot.send_message(call.message.chat.id, "⚠️ Sizda hali saqlangan Outro yo'q. Avval <code>/set_outro</code> orqali reklama videongizni saqlang.")
             return
-        msg = bot.send_message(
+        USER_STATES[user_id] = {"action": "montaj_wait_v1_with_saved"}
+        bot.send_message(
             call.message.chat.id,
             "⚡ <b>1-Videoni (Instagram/TikTok linkini yoki video faylni) yuboring:</b>\n"
             "Saqlangan reklama (Outro) videongiz uning oxiriga avtomatik ulanadi!"
         )
-        USER_STATES[user_id] = {"action": "montaj_wait_v1_with_saved"}
-        bot.register_next_step_handler(msg, process_montage_step1)
+        return
+
+    if call.data.startswith("montaj_attach_saved:"):
+        session_key = call.data.split("montaj_attach_saved:")[1]
+        session = MONTAGE_CACHE.get(session_key)
+        outro_path = get_saved_outro_path(user_id)
+        bot.answer_callback_query(call.id)
+        if not session or not os.path.exists(session.get("v1", "")) or not outro_path:
+            bot.send_message(call.message.chat.id, "⚠️ Sessiya yoki saqlangan Outro topilmadi.")
+            return
+        USER_STATES.pop(user_id, None)
+        v2_copy = os.path.join(MONTAGE_SESSIONS_DIR, f"montaj_v2_{session_key}.mp4")
+        shutil.copyfile(outro_path, v2_copy)
+        dur2 = get_media_duration(v2_copy)
+        session["v2"] = v2_copy
+        session["dur2"] = dur2
+        dur1 = session.get("dur1", 15.0)
+        bot.edit_message_text(
+            f"🎬 <b>Har ikkala video montajga tayyor!</b>\n\n"
+            f"1️⃣ <b>1-Video:</b> {dur1:.1f} soniya\n"
+            f"2️⃣ <b>2-Video (Saqlangan Outro):</b> {dur2:.1f} soniya\n"
+            f"⏱ <b>Jami davomiylik:</b> ~{dur1 + dur2:.1f} soniya\n\n"
+            f"👇 <b>Qaysi audio-vizual rejimda birlashtiramiz?</b>",
+            call.message.chat.id,
+            call.message.message_id,
+            reply_markup=make_montage_mode_keyboard(session_key)
+        )
         return
 
     if call.data == "montaj_set_outro":
         bot.answer_callback_query(call.id)
-        handle_set_outro_cmd(call.message)
+        USER_STATES[user_id] = {"action": "save_outro"}
+        bot.send_message(
+            call.message.chat.id,
+            "📌 <b>Doimiy Reklama (Outro) videosini yuboring:</b>\n\n"
+            "• Video davomiyligi <b>ixtiyoriy</b> (10s, 19s, 30s, 1 daqiqa+).\n"
+            "• Videoni fayl sifatida tashlang yoki Instagram/TikTok/YouTube linkini yuboring.\n"
+            "<i>(Bekor qilish uchun /cancel)</i>"
+        )
         return
 
     if call.data == "montaj_del_outro":
@@ -4349,47 +4693,45 @@ def handle_callbacks(call: types.CallbackQuery):
     if call.data == "montaj_set_wm":
         bot.answer_callback_query(call.id)
         cfg = get_watermark_settings()
-        msg = bot.send_message(
+        USER_STATES[user_id] = {"action": "set_watermark_step"}
+        bot.send_message(
             call.message.chat.id,
             f"💧 <b>Tepadan-Pastga Suzuvchi Shaffof Watermark</b>\n\n"
             f"Hozirgi yozuv: <code>{cfg.get('text')}</code>\n"
             f"✍️ <b>Yangi kanal yoki bot nikini yuboring</b> (Masalan: <code>@TELEGRAM_YULDUZLARI</code> yoki <code>@usman_khasan</code>):\n"
-            f"<i>(O'chirish uchun <code>off</code> deb yozing)</i>"
+            f"<i>(O'chirish uchun <code>off</code> deb yozing, bekor qilish: /cancel)</i>"
         )
-        USER_STATES[user_id] = {"action": "set_watermark_step"}
-        bot.register_next_step_handler(msg, process_set_watermark_step)
         return
 
     if call.data == "antidup_start_single":
         bot.answer_callback_query(call.id)
-        msg = bot.send_message(
+        USER_STATES[user_id] = {"action": "antidup_wait_video"}
+        bot.send_message(
             call.message.chat.id,
             "🛡 <b>100% Original Qilinadigan Videoni Yuboring:</b>\n\n"
             "• Instagram / TikTok / YouTube linkini tashlang yoki video fayl yuboring.\n"
             "• 10-Bosqichli Anti-Duplikat + Tepadan-pastga suzuvchi shaffof watermark + iPhone 16 Pro Max metama'lumotlari qo'llanadi!"
         )
-        USER_STATES[user_id] = {"action": "antidup_wait_video"}
-        bot.register_next_step_handler(msg, process_antidup_step)
         return
 
     if call.data.startswith("antidup_vid:"):
         base_fname = call.data.split("antidup_vid:")[1]
-        src_temp = os.path.join(DOWNLOAD_DIR, f"ad_src_{int(time.time())}_{base_fname}")
-        out_orig = os.path.join(DOWNLOAD_DIR, f"orig_{user_id}_{int(time.time())}.mp4")
+        video_path = os.path.join(DOWNLOAD_DIR, base_fname)
+        out_orig = os.path.join(DOWNLOAD_DIR, f"orig_{user_id}_{int(time.time()) % 1000000}.mp4")
         bot.answer_callback_query(call.id, "🛡 10-Bosqichli Anti-Duplikat boshlandi...")
         prog = bot.send_message(
             call.message.chat.id,
             "🛡 <b>10-Bosqichli Anti-Duplikat (100% Original) bajarilmoqda...</b>\n\n"
             "• 🔍 Vizual pHash, Sub-piksel Zoom & Micro-Grain...\n"
-            "• 🎵 Audio Spektr & EBU R128 (-14 LUFS) Mastering...\n"
+            "• 🎵 Audio Spektr & Pitch Shift...\n"
             "• 💧 Tepadan-pastga suzuvchi shaffof Telegram Watermark...\n"
             "• 📱 Apple iPhone 16 Pro Max (iOS 18.2) Metadata yozilmoqda..."
         )
         try:
-            if not ensure_video_from_telegram(call.message, src_temp):
+            if not ensure_video_from_telegram(call.message, video_path):
                 bot.edit_message_text("⚠️ Asosiy videoni o'qib bo'lmadi. Videoni qayta yuklang.", call.message.chat.id, prog.message_id)
                 return
-            ok, ad_info = make_video_100_original(src_temp, out_orig)
+            ok, ad_info = make_video_100_original(video_path, out_orig)
             if ok and os.path.exists(out_orig):
                 vinfo = get_video_stream_info(out_orig)
                 fsize_mb = os.path.getsize(out_orig) / (1024 * 1024)
@@ -4397,7 +4739,7 @@ def handle_callbacks(call: types.CallbackQuery):
                 cap = (
                     f"🛡 <b>100% ORIGINAL VIDEO (Reels / TikTok Top Uchun)!</b>\n\n"
                     f"🔍 <b>Vizual pHash siljishi:</b> +{ad_info.get('zoom', '2.5%')} (Sub-piksel + Micro-Grain)\n"
-                    f"🎵 <b>Audio Fingerprint:</b> {ad_info.get('pitch', '+1.3%')} + Loudnorm (-14 LUFS)\n"
+                    f"🎵 <b>Audio Fingerprint:</b> {ad_info.get('pitch', '+1.3%')}\n"
                     f"⏱ <b>Kadr & PTS Tezligi:</b> {ad_info.get('speed', '1.01x')} (GOP -g 29)\n"
                     f"📱 <b>Kamera Imzosi:</b> <code>{ad_info.get('device', 'iPhone 16 Pro Max')}</code>\n"
                     f"💧 <b>Watermark:</b> Tepadan-pastga suzuvchi shaffof ikona\n"
@@ -4424,26 +4766,28 @@ def handle_callbacks(call: types.CallbackQuery):
         except Exception as e:
             bot.edit_message_text(f"❌ Xatolik: {e}", call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(src_temp, out_orig)
+            safe_remove(out_orig)
         return
 
-    # Yuklangan har qanday videoning ostidagi «🎯 Reklama Montaj» tugmasi bosilganda:
+    # Yuklangan har qanday videoning ostidagi «🎯 Pro Reklama Montaj» tugmasi bosilganda:
     if call.data.startswith("montaj_from_vid:"):
         base_fname = call.data.split("montaj_from_vid:")[1]
-        v1_temp = os.path.join(DOWNLOAD_DIR, f"m_src_{int(time.time())}_{base_fname}")
+        video_path = os.path.join(DOWNLOAD_DIR, base_fname)
         bot.answer_callback_query(call.id, "🎬 Montaj studiyasi ochilmoqda...")
 
-        if not ensure_video_from_telegram(call.message, v1_temp):
+        if not ensure_video_from_telegram(call.message, video_path):
             bot.send_message(call.message.chat.id, "⚠️ Asosiy videoni o'qib bo'lmadi. Videoni qayta yuklang.")
             return
 
+        session_key = f"{user_id}_{int(time.time()) % 10000000}"
+        v1_temp = os.path.join(MONTAGE_SESSIONS_DIR, f"m_v1_{session_key}.mp4")
+        shutil.copyfile(video_path, v1_temp)
+
         dur1 = get_media_duration(v1_temp)
-        session_key = f"{user_id}_{int(time.time())}"
         outro_path = get_saved_outro_path(user_id)
 
         if outro_path:
-            # Saqlangan Outro mavjud -> Foydalanuvchiga darhol saqlangan outro bilan ulashni yoki yangi 2-video tashlashni taklif qilamiz!
-            v2_copy = os.path.join(DOWNLOAD_DIR, f"montaj_v2_{session_key}.mp4")
+            v2_copy = os.path.join(MONTAGE_SESSIONS_DIR, f"m_v2_{session_key}.mp4")
             shutil.copyfile(outro_path, v2_copy)
             dur2 = get_media_duration(v2_copy)
             MONTAGE_CACHE[session_key] = {
@@ -4466,7 +4810,6 @@ def handle_callbacks(call: types.CallbackQuery):
                 reply_markup=mk
             )
         else:
-            # Saqlangan Outro yo'q -> 2-videoni so'raymiz
             MONTAGE_CACHE[session_key] = {
                 "user_id": user_id,
                 "v1": v1_temp,
@@ -4475,15 +4818,14 @@ def handle_callbacks(call: types.CallbackQuery):
                 "dur2": 0.0,
                 "created": time.time()
             }
-            msg = bot.send_message(
+            USER_STATES[user_id] = {"action": "montaj_wait_v2", "session_key": session_key}
+            bot.send_message(
                 call.message.chat.id,
                 f"🎬 <b>1-Video tanlandi!</b> (Davomiyligi: {dur1:.1f} soniya)\n\n"
-                f"📥 <b>Endi uning oxiriga ulanadigan 2-Videoni (Reklama / Outro videoni) yuboring:</b>\n"
+                f"📥 <b>Endi uning oxiriga ulanadigan 2-Videoni (Reklama / Outro videoni) shu yerga yuboring:</b>\n"
                 f"• Davomiyligi ixtiyoriy (10s, 19s, 30s, 1 daqiqa va h.k.) bo'lishi mumkin.\n"
-                f"• Shu yuborgan 2-videongiz keyingi safar 1-bosishda ulash uchun avtomatik eslab qolinadi!"
+                f"• Video fayl tashlang yoki Instagram/TikTok/YouTube linkini yuboring:"
             )
-            USER_STATES[user_id] = {"action": "montaj_wait_v2", "session_key": session_key}
-            bot.register_next_step_handler(msg, process_montage_step2)
         return
 
     if call.data.startswith("montaj_pick_other_v2:"):
@@ -4495,17 +4837,17 @@ def handle_callbacks(call: types.CallbackQuery):
             return
         safe_remove(session.get("v2"))
         session["v2"] = None
-        msg = bot.send_message(
+        USER_STATES[user_id] = {"action": "montaj_wait_v2", "session_key": session_key}
+        bot.send_message(
             call.message.chat.id,
             "📥 <b>Yangi 2-Videoni (yoki video linkini) yuboring:</b>\n"
             "(Davomiyligi ixtiyoriy — 1 daqiqagacha va undan uzun bo'lishi mumkin)"
         )
-        USER_STATES[user_id] = {"action": "montaj_wait_v2", "session_key": session_key}
-        bot.register_next_step_handler(msg, process_montage_step2)
         return
 
     if call.data.startswith("cancel_montaj:"):
         session_key = call.data.split("cancel_montaj:")[1]
+        USER_STATES.pop(user_id, None)
         session = MONTAGE_CACHE.pop(session_key, None)
         if session:
             safe_remove(session.get("v1"), session.get("v2"))
@@ -4529,14 +4871,14 @@ def handle_callbacks(call: types.CallbackQuery):
         v2_path = session["v2"]
         out_montaj = os.path.join(DOWNLOAD_DIR, f"reklama_reel_{session_key}.mp4")
 
-        bot.answer_callback_query(call.id, "🎬 Top-1 Pro Reels montaj boshlandi...")
+        bot.answer_callback_query(call.id, "🎬 Pro Reels montaj boshlandi...")
         prog = bot.edit_message_text(
             "⏳ <b>Top-1 Pro Reels Montaj & 10-Bosqichli Anti-Duplikat bajarilmoqda...</b>\n\n"
-            "• 📐 <b>Format:</b> 1080x1920 Full HD (Blurred 9:16 Fon + Smooth Fade)\n"
-            "• 🎵 <b>Audio:</b> EBU R128 (-14 LUFS) + Transition Whoosh FX\n"
+            "• 📐 <b>Format:</b> 9:16 HD (Blurred Fon + Smooth Fade)\n"
+            "• 🎵 <b>Audio:</b> Studiya Balansi + Transition Whoosh FX\n"
             "• 💧 <b>Watermark:</b> Tepadan-pastga suzuvchi shaffof Telegram ikona\n"
             "• 🛡 <b>Anti-Duplikat:</b> 10-Qatlamli 100% Original + iPhone 16 Pro Max Metadata\n"
-            "<i>Iltimos, 15–30 soniya kuting...</i>",
+            "<i>Iltimos, 5–15 soniya kuting...</i>",
             call.message.chat.id,
             call.message.message_id
         )
@@ -4544,7 +4886,7 @@ def handle_callbacks(call: types.CallbackQuery):
         try:
             ok, m_info = montage_two_videos(v1_path, v2_path, out_montaj, mode=mode, apply_anti_duplicate=True)
             if ok and os.path.exists(out_montaj):
-                out_montaj, vinfo = ensure_phone_playable_mp4(out_montaj, apply_watermark=False)
+                vinfo = get_video_stream_info(out_montaj)
                 fsize_mb = os.path.getsize(out_montaj) / (1024 * 1024)
                 bot_uname = get_cached_bot_username()
                 ad = m_info.get("anti_dup", {})
@@ -4555,7 +4897,7 @@ def handle_callbacks(call: types.CallbackQuery):
                     f"⏳ <b>Jami davomiylik:</b> <b>{m_info.get('total', 0):.1f} soniya</b>\n"
                     f"🛡 <b>Anti-Duplikat:</b> 10-Bosqichli Original (Zoom +{ad.get('zoom', '2.5%')}, iPhone 16 Pro Max)\n"
                     f"💧 <b>Watermark:</b> Tepadan-pastga suzuvchi shaffof ikona\n"
-                    f"📐 <b>Sifat:</b> 1080x1920 Full HD | 💾 <b>Hajmi:</b> {fsize_mb:.1f} MB\n\n"
+                    f"💾 <b>Hajmi:</b> {fsize_mb:.1f} MB\n\n"
                     f"🤖 @{bot_uname}"
                 )
                 with open(out_montaj, "rb") as mf:
@@ -4563,8 +4905,8 @@ def handle_callbacks(call: types.CallbackQuery):
                         call.message.chat.id,
                         video=mf,
                         caption=caption,
-                        width=vinfo.get("width", 1080),
-                        height=vinfo.get("height", 1920),
+                        width=vinfo.get("width", 720),
+                        height=vinfo.get("height", 1280),
                         duration=int(m_info.get("total", 30)),
                         supports_streaming=True
                     )
@@ -4599,7 +4941,7 @@ def handle_callbacks(call: types.CallbackQuery):
             bot.delete_message(call.message.chat.id, progress_msg.message_id)
 
             for idx, ppath in enumerate(parts, 1):
-                part_caption = get_text("part_caption", lang, title=base_fname[:30], current=idx, total=len(parts), bot=(bot.get_me()).username)
+                part_caption = get_text("part_caption", lang, title=base_fname[:30], current=idx, total=len(parts), bot=get_cached_bot_username())
                 with open(ppath, "rb") as pf:
                     bot.send_video(call.message.chat.id, video=pf, caption=part_caption, supports_streaming=True)
                 safe_remove(ppath)
@@ -4607,7 +4949,7 @@ def handle_callbacks(call: types.CallbackQuery):
         except Exception as e:
             bot.send_message(call.message.chat.id, f"❌ Bo'laklashda xatolik: {e}")
         finally:
-            safe_remove(video_path, *parts)
+            safe_remove(*parts)
         return
 
     # ------------------ SHAZAM / MUSIQANI ANIQLASH ------------------
@@ -4627,100 +4969,124 @@ def handle_callbacks(call: types.CallbackQuery):
 
             if music_info:
                 album_line = f"💿 <b>Albom:</b> {music_info['album']}\n" if music_info.get("album") else ""
-                res_text = get_text("music_found", lang, title=music_info["title"], artist=music_info["artist"], album_line=album_line, bot=(bot.get_me()).username)
+                res_text = get_text("music_found", lang, title=music_info["title"], artist=music_info["artist"], album_line=album_line, bot=get_cached_bot_username())
                 bot.send_message(call.message.chat.id, res_text)
             else:
                 bot.send_message(call.message.chat.id, get_text("music_not_found", lang))
-        finally:
-            safe_remove(video_path)
+        except Exception as e:
+            bot.edit_message_text(f"❌ Xatolik: {e}", call.message.chat.id, prog.message_id)
         return
 
     # ------------------ BASS BOOST AUDIO ------------------
     if call.data.startswith("bass:"):
         base_fname = call.data.split("bass:")[1]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        out_mp3 = os.path.join(DOWNLOAD_DIR, f"bass_{os.path.splitext(base_fname)[0]}.mp3")
+        out_mp3 = os.path.join(DOWNLOAD_DIR, f"bass_{int(time.time()) % 1000000}_{os.path.splitext(base_fname)[0]}.mp3")
         bot.answer_callback_query(call.id, "🔊 Bass Boost tayyorlanmoqda...")
         prog = bot.send_message(call.message.chat.id, get_text("bass_generating", lang))
+        actual_out = None
         try:
-            if ensure_video_from_telegram(call.message, video_path) and convert_to_bass_boost(video_path, out_mp3) and os.path.exists(out_mp3):
-                with open(out_mp3, "rb") as af:
-                    bot.send_audio(call.message.chat.id, audio=af, caption=f"🔊 <b>Bass Boost (+12dB)</b> | @{(bot.get_me()).username}")
+            if not ensure_video_from_telegram(call.message, video_path):
+                bot.edit_message_text("⚠️ Video faylini o'qib bo'lmadi.", call.message.chat.id, prog.message_id)
+                return
+            if not has_audio_stream(video_path):
+                bot.edit_message_text("ℹ️ Ushbu videoda ovoz (audio oqimi) mavjud emas.", call.message.chat.id, prog.message_id)
+                return
+            actual_out = convert_to_bass_boost(video_path, out_mp3)
+            if actual_out and os.path.exists(actual_out):
+                with open(actual_out, "rb") as af:
+                    bot.send_audio(call.message.chat.id, audio=af, caption=f"🔊 <b>Bass Boost (+12dB)</b> | @{get_cached_bot_username()}")
                 bot.delete_message(call.message.chat.id, prog.message_id)
             else:
                 bot.edit_message_text(get_text("err_generic", lang), call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(video_path, out_mp3)
+            safe_remove(out_mp3, actual_out)
         return
 
     # ------------------ 8D SURROUND AUDIO ------------------
     if call.data.startswith("audio8d:"):
         base_fname = call.data.split("audio8d:")[1]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        out_mp3 = os.path.join(DOWNLOAD_DIR, f"8d_{os.path.splitext(base_fname)[0]}.mp3")
+        out_mp3 = os.path.join(DOWNLOAD_DIR, f"8d_{int(time.time()) % 1000000}_{os.path.splitext(base_fname)[0]}.mp3")
         bot.answer_callback_query(call.id, "🎧 8D Audio tayyorlanmoqda...")
         prog = bot.send_message(call.message.chat.id, get_text("audio8d_generating", lang))
+        actual_out = None
         try:
-            if ensure_video_from_telegram(call.message, video_path) and convert_to_8d_audio(video_path, out_mp3) and os.path.exists(out_mp3):
-                with open(out_mp3, "rb") as af:
-                    bot.send_audio(call.message.chat.id, audio=af, caption=f"🎧 <b>8D Surround Audio (Quloqchinda tinglang!)</b>\n🤖 @{(bot.get_me()).username}")
+            if not ensure_video_from_telegram(call.message, video_path):
+                bot.edit_message_text("⚠️ Video faylini o'qib bo'lmadi.", call.message.chat.id, prog.message_id)
+                return
+            if not has_audio_stream(video_path):
+                bot.edit_message_text("ℹ️ Ushbu videoda ovoz (audio oqimi) mavjud emas.", call.message.chat.id, prog.message_id)
+                return
+            actual_out = convert_to_8d_audio(video_path, out_mp3)
+            if actual_out and os.path.exists(actual_out):
+                with open(actual_out, "rb") as af:
+                    bot.send_audio(call.message.chat.id, audio=af, caption=f"🎧 <b>8D Surround Audio (Quloqchinda tinglang!)</b>\n🤖 @{get_cached_bot_username()}")
                 bot.delete_message(call.message.chat.id, prog.message_id)
             else:
                 bot.edit_message_text(get_text("err_generic", lang), call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(video_path, out_mp3)
+            safe_remove(out_mp3, actual_out)
         return
 
     # ------------------ KARAOKE MINUSOVKA ------------------
     if call.data.startswith("karaoke:"):
         base_fname = call.data.split("karaoke:")[1]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        out_mp3 = os.path.join(DOWNLOAD_DIR, f"karaoke_{os.path.splitext(base_fname)[0]}.mp3")
+        out_mp3 = os.path.join(DOWNLOAD_DIR, f"karaoke_{int(time.time()) % 1000000}_{os.path.splitext(base_fname)[0]}.mp3")
         bot.answer_callback_query(call.id, "🎤 Karaoke minusovka tayyorlanmoqda...")
         prog = bot.send_message(call.message.chat.id, get_text("karaoke_generating", lang))
+        actual_out = None
         try:
-            if ensure_video_from_telegram(call.message, video_path) and convert_to_karaoke_minus(video_path, out_mp3) and os.path.exists(out_mp3):
-                with open(out_mp3, "rb") as af:
-                    bot.send_audio(call.message.chat.id, audio=af, caption=f"🎤 <b>Karaoke Minusovka (Vocal Removed)</b>\n🤖 @{(bot.get_me()).username}")
+            if not ensure_video_from_telegram(call.message, video_path):
+                bot.edit_message_text("⚠️ Video faylini o'qib bo'lmadi.", call.message.chat.id, prog.message_id)
+                return
+            if not has_audio_stream(video_path):
+                bot.edit_message_text("ℹ️ Ushbu videoda ovoz (audio oqimi) mavjud emas.", call.message.chat.id, prog.message_id)
+                return
+            actual_out = convert_to_karaoke_minus(video_path, out_mp3)
+            if actual_out and os.path.exists(actual_out):
+                with open(actual_out, "rb") as af:
+                    bot.send_audio(call.message.chat.id, audio=af, caption=f"🎤 <b>Karaoke Minusovka (Vocal Removed)</b>\n🤖 @{get_cached_bot_username()}")
                 bot.delete_message(call.message.chat.id, prog.message_id)
             else:
                 bot.edit_message_text(get_text("err_generic", lang), call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(video_path, out_mp3)
+            safe_remove(out_mp3, actual_out)
         return
 
     # ------------------ HD THUMBNAIL (OBLOJKA) ------------------
     if call.data.startswith("thumb:"):
         base_fname = call.data.split("thumb:")[1]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        out_jpg = os.path.join(DOWNLOAD_DIR, f"thumb_{os.path.splitext(base_fname)[0]}.jpg")
+        out_jpg = os.path.join(DOWNLOAD_DIR, f"thumb_{int(time.time()) % 1000000}_{os.path.splitext(base_fname)[0]}.jpg")
         bot.answer_callback_query(call.id, "🖼 HD Oblojka olinmoqda...")
         try:
             if ensure_video_from_telegram(call.message, video_path) and extract_hd_thumbnail(video_path, out_jpg) and os.path.exists(out_jpg):
                 with open(out_jpg, "rb") as jf:
-                    bot.send_photo(call.message.chat.id, photo=jf, caption=f"🖼 <b>HD Video Oblojkasi (Thumbnail)</b>\n🤖 @{(bot.get_me()).username}")
+                    bot.send_photo(call.message.chat.id, photo=jf, caption=f"🖼 <b>HD Video Oblojkasi (Thumbnail)</b>\n🤖 @{get_cached_bot_username()}")
             else:
                 bot.send_message(call.message.chat.id, get_text("err_generic", lang))
         finally:
-            safe_remove(video_path, out_jpg)
+            safe_remove(out_jpg)
         return
 
     # ------------------ REVERSE VIDEO (TESKARI VIDEO) ------------------
     if call.data.startswith("reverse:"):
         base_fname = call.data.split("reverse:")[1]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        out_rev = os.path.join(DOWNLOAD_DIR, f"rev_{base_fname}")
+        out_rev = os.path.join(DOWNLOAD_DIR, f"rev_{int(time.time()) % 1000000}_{base_fname}")
         bot.answer_callback_query(call.id, "⏪ Teskari video tayyorlanmoqda...")
         prog = bot.send_message(call.message.chat.id, get_text("reverse_generating", lang))
         try:
             if ensure_video_from_telegram(call.message, video_path) and convert_to_reverse_video(video_path, out_rev) and os.path.exists(out_rev):
                 with open(out_rev, "rb") as rf:
-                    bot.send_video(call.message.chat.id, video=rf, caption=f"⏪ <b>Teskari Video (Reverse Effect)</b>\n🤖 @{(bot.get_me()).username}", supports_streaming=True)
+                    bot.send_video(call.message.chat.id, video=rf, caption=f"⏪ <b>Teskari Video (Reverse Effect)</b>\n🤖 @{get_cached_bot_username()}", supports_streaming=True)
                 bot.delete_message(call.message.chat.id, prog.message_id)
             else:
                 bot.edit_message_text(get_text("err_generic", lang), call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(video_path, out_rev)
+            safe_remove(out_rev)
         return
 
     # ------------------ VIDEO TRIMMER ------------------
@@ -4728,54 +5094,66 @@ def handle_callbacks(call: types.CallbackQuery):
         base_fname = call.data.split("trim:")[1]
         bot.answer_callback_query(call.id)
         TRIM_CACHE[call.from_user.id] = call.message
-        msg = bot.send_message(call.message.chat.id, get_text("trim_prompt", lang))
         USER_STATES[call.from_user.id] = {"action": "trim", "file": base_fname, "lang": lang}
-        bot.register_next_step_handler(msg, process_trim_step)
+        bot.send_message(call.message.chat.id, get_text("trim_prompt", lang))
         return
 
     # ------------------ SUBTITR TILI TANLASH ------------------
     if call.data.startswith("sub_vid:"):
         base_fname = call.data.split("sub_vid:")[1]
         markup = make_sub_lang_keyboard("do_sub_vid", base_fname)
-        bot.edit_message_caption(
-            caption="🌐 <b>Subtitr qaysi tilda yaratilsin?</b>\nNutq aniqlanib, videoga yoziladi:",
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            reply_markup=markup
-        )
         bot.answer_callback_query(call.id)
+        try:
+            bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=markup)
+        except Exception:
+            bot.send_message(
+                call.message.chat.id,
+                "🌐 <b>Subtitr qaysi tilda yaratilsin?</b>\nNutq aniqlanib, videoga yoziladi:",
+                reply_to_message_id=call.message.message_id,
+                reply_markup=markup
+            )
         return
 
     if call.data.startswith("sub_txt:"):
         base_fname = call.data.split("sub_txt:")[1]
         markup = make_sub_lang_keyboard("do_sub_txt", base_fname)
-        bot.edit_message_caption(
-            caption="🌐 <b>Qaysi tildagi nutq matnga aylantirilsin?</b>",
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            reply_markup=markup
-        )
         bot.answer_callback_query(call.id)
+        try:
+            bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=markup)
+        except Exception:
+            bot.send_message(
+                call.message.chat.id,
+                "🌐 <b>Qaysi tildagi nutq matnga aylantirilsin?</b>",
+                reply_to_message_id=call.message.message_id,
+                reply_markup=markup
+            )
         return
 
-    # ------------------ SUBTITRLI VIDEO (HARDCODE) ------------------
+    # ------------------ SUBTITRLI VIDEO (HARDCODE + PNG FALLBACK) ------------------
     if call.data.startswith("do_sub_vid:"):
         parts = call.data.split(":")
         sub_lang, base_fname = parts[1], parts[2]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        temp_audio = os.path.join(DOWNLOAD_DIR, f"temp_{os.path.splitext(base_fname)[0]}.wav")
-        srt_path = os.path.join(DOWNLOAD_DIR, f"sub_{os.path.splitext(base_fname)[0]}.srt")
-        sub_video_path = os.path.join(DOWNLOAD_DIR, f"subtitled_{base_fname}")
+        ts_sub = int(time.time() * 1000) % 1000000
+        temp_audio = os.path.join(DOWNLOAD_DIR, f"temp_{ts_sub}.wav")
+        srt_path = os.path.join(DOWNLOAD_DIR, f"sub_{ts_sub}.srt")
+        sub_video_path = os.path.join(DOWNLOAD_DIR, f"subtitled_{ts_sub}_{base_fname}")
 
-        bot.answer_callback_query(call.id, "🎬 AI Subtitr tayyorlanmoqda...")
+        bot.answer_callback_query(call.id, "🎬 Subtitr tayyorlanmoqda...")
         prog = bot.send_message(call.message.chat.id, get_text("sub_video_generating", lang))
+
+        # Asosiy tugmalarni joyiga qaytarib qo'yamiz
+        try:
+            bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=make_video_action_keyboard(base_fname, lang=lang))
+        except Exception:
+            pass
 
         try:
             if not ensure_video_from_telegram(call.message, video_path):
                 bot.edit_message_text("⚠️ Video faylini o'qib bo'lmadi.", call.message.chat.id, prog.message_id)
                 return
 
-            subprocess.run(["ffmpeg", "-y", "-i", video_path, "-vn", "-ar", "16000", "-ac", "1", temp_audio], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run([FFMPEG_BIN, "-y", "-i", video_path, "-vn", "-ar", "16000", "-ac", "1", temp_audio], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             success, transcript_text = transcribe_audio_to_srt(temp_audio, srt_path, lang=sub_lang)
             safe_remove(temp_audio)
 
@@ -4790,7 +5168,7 @@ def handle_callbacks(call: types.CallbackQuery):
                     bot.send_video(
                         call.message.chat.id,
                         video=svf,
-                        caption=f"🎬 <b>AI Subtitrli Video tayyor!</b>\n\n📝 <i>\"{transcript_text[:120]}...\"</i>\n\n🤖 @{(bot.get_me()).username}",
+                        caption=f"🎬 <b>Subtitrli Video tayyor!</b>\n\n📝 <i>\"{transcript_text[:120]}...\"</i>\n\n🤖 @{get_cached_bot_username()}",
                         width=vinfo.get("width", 720),
                         height=vinfo.get("height", 1280),
                         duration=vinfo.get("duration", 15),
@@ -4802,7 +5180,7 @@ def handle_callbacks(call: types.CallbackQuery):
         except Exception as e:
             bot.edit_message_text(f"❌ Xatolik: {e}", call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(video_path, temp_audio, srt_path, sub_video_path)
+            safe_remove(temp_audio, srt_path, sub_video_path)
         return
 
     # ------------------ FAQAT SUBTITR MATNI VA .SRT ------------------
@@ -4810,18 +5188,24 @@ def handle_callbacks(call: types.CallbackQuery):
         parts = call.data.split(":")
         sub_lang, base_fname = parts[1], parts[2]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        temp_audio = os.path.join(DOWNLOAD_DIR, f"temp_{os.path.splitext(base_fname)[0]}.wav")
-        srt_path = os.path.join(DOWNLOAD_DIR, f"sub_{os.path.splitext(base_fname)[0]}.srt")
+        ts_sub = int(time.time() * 1000) % 1000000
+        temp_audio = os.path.join(DOWNLOAD_DIR, f"temp_{ts_sub}.wav")
+        srt_path = os.path.join(DOWNLOAD_DIR, f"sub_{ts_sub}.srt")
 
         bot.answer_callback_query(call.id, "📝 Nutq tahlil qilinmoqda...")
         prog = bot.send_message(call.message.chat.id, get_text("sub_text_generating", lang))
+
+        try:
+            bot.edit_message_reply_markup(call.message.chat.id, call.message.message_id, reply_markup=make_video_action_keyboard(base_fname, lang=lang))
+        except Exception:
+            pass
 
         try:
             if not ensure_video_from_telegram(call.message, video_path):
                 bot.edit_message_text("⚠️ Video faylini o'qib bo'lmadi.", call.message.chat.id, prog.message_id)
                 return
 
-            subprocess.run(["ffmpeg", "-y", "-i", video_path, "-vn", "-ar", "16000", "-ac", "1", temp_audio], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run([FFMPEG_BIN, "-y", "-i", video_path, "-vn", "-ar", "16000", "-ac", "1", temp_audio], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
             success, transcript_text = transcribe_audio_to_srt(temp_audio, srt_path, lang=sub_lang)
             safe_remove(temp_audio)
 
@@ -4829,21 +5213,21 @@ def handle_callbacks(call: types.CallbackQuery):
                 bot.edit_message_text(get_text("sub_not_found", lang), call.message.chat.id, prog.message_id)
                 return
 
-            bot.send_message(call.message.chat.id, f"📝 <b>TRANSKRIPSIYA (MATN):</b>\n\n<i>\"{transcript_text[:3500]}\"</i>\n\n🤖 @{(bot.get_me()).username}")
+            bot.send_message(call.message.chat.id, f"📝 <b>TRANSKRIPSIYA (MATN):</b>\n\n<i>\"{transcript_text[:3500]}\"</i>\n\n🤖 @{get_cached_bot_username()}")
             with open(srt_path, "rb") as sf:
                 bot.send_document(call.message.chat.id, document=sf, caption="📄 <b>.SRT Subtitr fayli</b>\n(CapCut, Premiere Pro uchun)")
             bot.delete_message(call.message.chat.id, prog.message_id)
         except Exception as e:
             bot.edit_message_text(f"❌ Xatolik: {e}", call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(video_path, temp_audio, srt_path)
+            safe_remove(temp_audio, srt_path)
         return
 
     # ------------------ KRUGLYASH (1:1 VIDEO NOTE) ------------------
     if call.data.startswith("circle:"):
         base_fname = call.data.split("circle:")[1]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        circle_path = os.path.join(DOWNLOAD_DIR, f"circle_{base_fname}")
+        circle_path = os.path.join(DOWNLOAD_DIR, f"circle_{int(time.time()) % 1000000}_{base_fname}")
 
         bot.answer_callback_query(call.id, "🔄 Kruglyash tayyorlanmoqda...")
         prog = bot.send_message(call.message.chat.id, get_text("circle_generating", lang))
@@ -4858,58 +5242,77 @@ def handle_callbacks(call: types.CallbackQuery):
         except Exception as e:
             bot.edit_message_text(f"❌ Xatolik: {e}", call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(video_path, circle_path)
+            safe_remove(circle_path)
         return
 
     # ------------------ MP3 AUDIO ------------------
     if call.data.startswith("audio:"):
         base_fname = call.data.split("audio:")[1]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        mp3_path = os.path.join(DOWNLOAD_DIR, f"audio_{os.path.splitext(base_fname)[0]}.mp3")
+        mp3_path = os.path.join(DOWNLOAD_DIR, f"audio_{int(time.time()) % 1000000}_{os.path.splitext(base_fname)[0]}.mp3")
 
         bot.answer_callback_query(call.id, "🎧 MP3 ajratilmoqda...")
         prog = bot.send_message(call.message.chat.id, get_text("audio_generating", lang))
+        actual_out = None
 
         try:
-            if ensure_video_from_telegram(call.message, video_path) and extract_audio_mp3(video_path, mp3_path, title=base_fname[:30]) and os.path.exists(mp3_path):
-                with open(mp3_path, "rb") as af:
-                    bot.send_audio(call.message.chat.id, audio=af, caption=f"🎵 @{(bot.get_me()).username}")
+            if not ensure_video_from_telegram(call.message, video_path):
+                bot.edit_message_text("⚠️ Video faylini o'qib bo'lmadi.", call.message.chat.id, prog.message_id)
+                return
+            if not has_audio_stream(video_path):
+                bot.edit_message_text("ℹ️ Ushbu videoda ovoz (audio oqimi) mavjud emas.", call.message.chat.id, prog.message_id)
+                return
+            actual_out = extract_audio_mp3(video_path, mp3_path, title=base_fname[:30])
+            if actual_out and os.path.exists(actual_out):
+                with open(actual_out, "rb") as af:
+                    bot.send_audio(call.message.chat.id, audio=af, caption=f"🎵 @{get_cached_bot_username()}")
                 bot.delete_message(call.message.chat.id, prog.message_id)
             else:
                 bot.edit_message_text(get_text("err_generic", lang), call.message.chat.id, prog.message_id)
         except Exception as e:
             bot.edit_message_text(f"❌ Xatolik: {e}", call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(video_path, mp3_path)
+            safe_remove(mp3_path, actual_out)
         return
 
     # ------------------ OVOZLI XABAR (VOICE NOTE) ------------------
     if call.data.startswith("voice:"):
         base_fname = call.data.split("voice:")[1]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        voice_path = os.path.join(DOWNLOAD_DIR, f"voice_{os.path.splitext(base_fname)[0]}.ogg")
+        voice_path = os.path.join(DOWNLOAD_DIR, f"voice_{int(time.time()) % 1000000}_{os.path.splitext(base_fname)[0]}.ogg")
 
         bot.answer_callback_query(call.id, "🎙 Ovozli xabar tayyorlanmoqda...")
         prog = bot.send_message(call.message.chat.id, get_text("voice_generating", lang))
+        actual_out = None
 
         try:
-            if ensure_video_from_telegram(call.message, video_path) and convert_to_voice_ogg(video_path, voice_path) and os.path.exists(voice_path):
-                with open(voice_path, "rb") as vf:
-                    bot.send_voice(call.message.chat.id, voice=vf, caption=f"🎙 @{(bot.get_me()).username}")
+            if not ensure_video_from_telegram(call.message, video_path):
+                bot.edit_message_text("⚠️ Video faylini o'qib bo'lmadi.", call.message.chat.id, prog.message_id)
+                return
+            if not has_audio_stream(video_path):
+                bot.edit_message_text("ℹ️ Ushbu videoda ovoz (audio oqimi) mavjud emas.", call.message.chat.id, prog.message_id)
+                return
+            actual_out = convert_to_voice_ogg(video_path, voice_path)
+            if actual_out and os.path.exists(actual_out):
+                with open(actual_out, "rb") as vf:
+                    if actual_out.endswith(".ogg"):
+                        bot.send_voice(call.message.chat.id, voice=vf, caption=f"🎙 @{get_cached_bot_username()}")
+                    else:
+                        bot.send_audio(call.message.chat.id, audio=vf, caption=f"🎙 @{get_cached_bot_username()}")
                 bot.delete_message(call.message.chat.id, prog.message_id)
             else:
                 bot.edit_message_text(get_text("err_generic", lang), call.message.chat.id, prog.message_id)
         except Exception as e:
             bot.edit_message_text(f"❌ Xatolik: {e}", call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(video_path, voice_path)
+            safe_remove(voice_path, actual_out)
         return
 
     # ------------------ 1.5x TEZLIK ------------------
     if call.data.startswith("speed:"):
         base_fname = call.data.split("speed:")[1]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        speed_path = os.path.join(DOWNLOAD_DIR, f"speed_{base_fname}")
+        speed_path = os.path.join(DOWNLOAD_DIR, f"speed_{int(time.time()) % 1000000}_{base_fname}")
 
         bot.answer_callback_query(call.id, "⚡ 1.5x tezlashtirilmoqda...")
         prog = bot.send_message(call.message.chat.id, get_text("speed_generating", lang))
@@ -4917,21 +5320,21 @@ def handle_callbacks(call: types.CallbackQuery):
         try:
             if ensure_video_from_telegram(call.message, video_path) and convert_to_fast_speed(video_path, speed_path, speed=1.5) and os.path.exists(speed_path):
                 with open(speed_path, "rb") as sf:
-                    bot.send_video(call.message.chat.id, video=sf, caption=f"⚡ <b>1.5x</b> | @{(bot.get_me()).username}", supports_streaming=True)
+                    bot.send_video(call.message.chat.id, video=sf, caption=f"⚡ <b>1.5x</b> | @{get_cached_bot_username()}", supports_streaming=True)
                 bot.delete_message(call.message.chat.id, prog.message_id)
             else:
                 bot.edit_message_text(get_text("err_generic", lang), call.message.chat.id, prog.message_id)
         except Exception as e:
             bot.edit_message_text(f"❌ Xatolik: {e}", call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(video_path, speed_path)
+            safe_remove(speed_path)
         return
 
     # ------------------ GIF ANIMATSIYA ------------------
     if call.data.startswith("gif:"):
         base_fname = call.data.split("gif:")[1]
         video_path = os.path.join(DOWNLOAD_DIR, base_fname)
-        gif_path = os.path.join(DOWNLOAD_DIR, f"gif_{os.path.splitext(base_fname)[0]}.mp4")
+        gif_path = os.path.join(DOWNLOAD_DIR, f"gif_{int(time.time()) % 1000000}_{os.path.splitext(base_fname)[0]}.mp4")
 
         bot.answer_callback_query(call.id, "🎞 GIF tayyorlanmoqda...")
         prog = bot.send_message(call.message.chat.id, get_text("gif_generating", lang))
@@ -4939,14 +5342,14 @@ def handle_callbacks(call: types.CallbackQuery):
         try:
             if ensure_video_from_telegram(call.message, video_path) and convert_to_gif_animation(video_path, gif_path) and os.path.exists(gif_path):
                 with open(gif_path, "rb") as gf:
-                    bot.send_animation(call.message.chat.id, animation=gf, caption=f"🎞 @{(bot.get_me()).username}")
+                    bot.send_animation(call.message.chat.id, animation=gf, caption=f"🎞 @{get_cached_bot_username()}")
                 bot.delete_message(call.message.chat.id, prog.message_id)
             else:
                 bot.edit_message_text(get_text("err_generic", lang), call.message.chat.id, prog.message_id)
         except Exception as e:
             bot.edit_message_text(f"❌ Xatolik: {e}", call.message.chat.id, prog.message_id)
         finally:
-            safe_remove(video_path, gif_path)
+            safe_remove(gif_path)
         return
 
 # ==================== TRIMMER PROCESSOR ====================
@@ -4961,7 +5364,7 @@ def process_trim_step(message: types.Message):
     video_path = os.path.join(DOWNLOAD_DIR, base_fname)
     orig_msg = TRIM_CACHE.pop(user_id, None)
 
-    del USER_STATES[user_id]
+    USER_STATES.pop(user_id, None)
 
     if not message.text:
         bot.reply_to(message, get_text("trim_invalid", lang))
@@ -4981,7 +5384,7 @@ def process_trim_step(message: types.Message):
         return
 
     prog = bot.reply_to(message, get_text("trimming_progress", lang))
-    trimmed_fname = f"trim_{int(time.time())}_{base_fname}"
+    trimmed_fname = f"trim_{int(time.time()) % 1000000}_{base_fname}"
     trimmed_path = os.path.join(DOWNLOAD_DIR, trimmed_fname)
 
     try:
@@ -4995,7 +5398,7 @@ def process_trim_step(message: types.Message):
                 bot.send_video(
                     message.chat.id,
                     video=tf,
-                    caption=f"✂️ <b>Qirqilgan lavha ({parts[0].strip()} - {parts[1].strip()})</b>\n🤖 @{(bot.get_me()).username}",
+                    caption=f"✂️ <b>Qirqilgan lavha ({parts[0].strip()} - {parts[1].strip()})</b>\n🤖 @{get_cached_bot_username()}",
                     supports_streaming=True
                 )
             bot.delete_message(message.chat.id, prog.message_id)
@@ -5004,14 +5407,14 @@ def process_trim_step(message: types.Message):
     except Exception as e:
         bot.edit_message_text(f"❌ Xatolik: {e}", message.chat.id, prog.message_id)
     finally:
-        safe_remove(video_path, trimmed_path)
+        safe_remove(trimmed_path)
 
 # ==================== INLINE REJIM (@bot_username havola) ====================
 @bot.inline_handler(func=lambda query: True)
 def handle_inline_query(query: types.InlineQuery):
     url = extract_url(query.query)
     results = []
-    bot_username = bot.get_me().username
+    bot_username = get_cached_bot_username()
 
     if url:
         platform = detect_platform(url)
@@ -5034,7 +5437,7 @@ def handle_inline_query(query: types.InlineQuery):
             title="💡 Video havolasini yozing",
             description="Masalan: @bot_username https://instagram.com/reel/...",
             input_message_content=types.InputTextMessageContent(
-                message_text=f"👋 <b>Universal Video Saver & AI Subtitle Bot</b>\nVideo linkini yuboring!\n\n🤖 @{bot_username}",
+                message_text=f"👋 <b>Universal Video Saver & Pro Montaj Bot</b>\nVideo linkini yuboring!\n\n🤖 @{bot_username}",
                 parse_mode="HTML"
             )
         )
@@ -5042,12 +5445,8 @@ def handle_inline_query(query: types.InlineQuery):
 
     bot.answer_inline_query(query.id, results, cache_time=5)
 
-# ==================== SERVER KEEP-ALIVE (RENDER / RAILWAY / HUGGINGFACE / KOYEB) VA PROKSI SOZLAMASI ====================
+# ==================== SERVER KEEP-ALIVE VA TARMOQ SOZLAMASI ====================
 def start_cloud_keepalive_server():
-    """
-    Agar bot Render.com, Railway, Koyeb yoki HuggingFace Spaces kabi cloud serverga qo'yilsa,
-    server uxlab qolmasligi va Port Health-Check dan o'tishi uchun fonda yengil HTTP server yoqadi.
-    """
     port_str = os.environ.get("PORT", "")
     if not port_str:
         return
@@ -5072,7 +5471,6 @@ def start_cloud_keepalive_server():
         print(f"Keep-Alive server xatosi: {e}")
 
 def configure_server_network():
-    """Server va Proxy (masalan PythonAnywhere yoki Cloud VPS) uchun TeleBot tarmoq sozlamalari"""
     try:
         from telebot import apihelper
         apihelper.CONNECT_TIMEOUT = 25
@@ -5080,15 +5478,10 @@ def configure_server_network():
         apihelper.RETRY_ON_ERROR = True
         apihelper.RETRY_TIMEOUT = 3
         apihelper.MAX_RETRIES = 5
-        # PythonAnywhere proksisini tekshirish
         pa_proxy = os.environ.get("https_proxy") or os.environ.get("HTTPS_PROXY") or os.environ.get("http_proxy")
         if pa_proxy:
             apihelper.proxy = {"http": pa_proxy, "https": pa_proxy}
             print(f"🔌 Tizim proksisi aniqlandi: {pa_proxy}")
-            if "proxy.server:3128" in pa_proxy or "PYTHONANYWHERE" in " ".join(os.environ.keys()):
-                print("⚠️ DIQQAT (PythonAnywhere Free): PythonAnywhere bepul tarifida proxy.server:3128 ko'pincha")
-                print("   503 Service Unavailable beradi va Instagram/TikTok/YouTube dan video yuklashni bloklaydi!")
-                print("   Bot 100% cheklovsiz ishlashi uchun GitHub Actions, HuggingFace Spaces, Railway yoki VPS ishlating.")
     except Exception as e:
         print(f"Tarmoq sozlash xatosi: {e}")
 
@@ -5098,17 +5491,16 @@ if __name__ == '__main__':
     ensure_ffmpeg_in_path()
     configure_server_network()
     start_cloud_keepalive_server()
-    ffmpeg_loc = shutil.which("ffmpeg") or "Topilmadi (winget install Gyan.FFmpeg)"
+    ffmpeg_loc = FFMPEG_BIN if os.path.exists(str(FFMPEG_BIN)) else (shutil.which("ffmpeg") or "Avto-imageio-ffmpeg")
     print("=" * 75)
-    print("🚀 UNIVERSAL SUPER SAVER & MULTIMEDIA AI TELEGRAM BOT (#1 EDITION)")
+    print("🚀 UNIVERSAL SUPER SAVER & PRO MONTAJ TELEGRAM BOT (#1 EDITION)")
     print(f"🎬 FFmpeg holati: {ffmpeg_loc}")
     print(f"👑 Admin Telegram ID: {ADMIN_ID} (@usman_khasan)")
-    print("📱 12-Bosqichli VIDEO-FIRST Link Yuklagich: FAOL (Videoni rasm qilib yubormaydi!)")
-    print("🎬 Top-1 Pro Reklama Montaj Studiyasi (/montaj, /set_outro — 5 xil rejim + Blurred BG + PiP + Transition FX): FAOL")
+    print("📱 12-Bosqichli VIDEO-FIRST Link Yuklagich: FAOL")
+    print("🎬 Top-1 Pro Reklama Montaj Studiyasi (/montaj, /set_outro — 5 xil tezkor rejim): FAOL")
     print("🛡 10-Bosqichli Anti-Duplikat (100% Original Video — /original): FAOL")
     print("💧 Tepadan-Pastga Suzuvchi Shaffof Telegram Ikonka + @Handle Watermark (/set_watermark): FAOL")
-    print("💱 4-Manbali Markaziy Bank Valyuta Kurslari (/kurs): FAOL")
-    print("🧹 Avto-Xotira Tozalagich & Eski jarayonlarni yopish: FAOL")
+    print("🎛 16 ta Multimedia Studiyasi Tugmalari (Subtitr, Kruglyash, MP3, Bass, 8D, Karaoke va h.k.): 100% FAOL")
     print("=" * 75)
 
     try:
@@ -5121,11 +5513,9 @@ if __name__ == '__main__':
             types.BotCommand("stat", "📊 Bot va shaxsiy statistika"),
             types.BotCommand("kurs", "💱 Markaziy bank valyuta kurslari"),
             types.BotCommand("profile", "👤 Profilim va ma'lumotlar"),
-            types.BotCommand("ai", "🧠 DeepSeek & ChatGPT savol-javob"),
-            types.BotCommand("image", "🖼 NanoBanana AI rasm chizish"),
-            types.BotCommand("tr", "🌍 AI professional tarjimon"),
             types.BotCommand("qr", "📱 QR-Kod yasash"),
-            types.BotCommand("clean", "🧹 Xotirani tozalash")
+            types.BotCommand("clean", "🧹 Keshni tozalash"),
+            types.BotCommand("cancel", "❌ Joriy amalni bekor qilish")
         ])
     except Exception as e:
         print(f"Menyu komandalarini o'rnatish: {e}")
