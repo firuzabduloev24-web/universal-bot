@@ -3723,14 +3723,19 @@ def upload_video_to_instagram_reels(video_path: str, caption: str = "") -> tuple
             if os.path.exists(thumb_jpg) and os.path.getsize(thumb_jpg) > 500:
                 extra_kwargs["thumbnail"] = Path(thumb_jpg)
 
-            # Cookie sessiya bo'lsa should_use_header_over_cookies ni False qilish va user_id ni belgilash
+            # Cookie sessiya bo'lsa should_use_header_over_cookies ni False qilish va authorization_data ni yangilash
             if hasattr(cl, "settings") and isinstance(cl.settings, dict):
                 auth_d = cl.settings.get("authorization_data") or {}
                 if not auth_d.get("authorization"):
                     cl.settings.setdefault("authorization_data", {})["should_use_header_over_cookies"] = False
                 ds_id = auth_d.get("ds_user_id") or ""
-                if ds_id and str(ds_id).isdigit():
-                    cl.user_id = str(ds_id)
+                if not ds_id and sid_val:
+                    ds_uid = sid_val.split(":")[0]
+                    if ds_uid.isdigit():
+                        cl.settings.setdefault("authorization_data", {})["ds_user_id"] = str(ds_uid)
+                elif ds_id and str(ds_id).isdigit():
+                    cl.settings.setdefault("authorization_data", {})["ds_user_id"] = str(ds_id)
+                # Eslatma: cl.user_id ga to'g'ridan-to'g'ri qiymat berilmaydi (chunki instagrapi da u faqat o'qish uchun @property hisoblanadi)
 
             try:
                 media = cl.clip_upload(Path(video_path), caption=caption, **extra_kwargs)
