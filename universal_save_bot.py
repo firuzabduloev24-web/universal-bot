@@ -50,6 +50,7 @@ import struct
 import random
 import shutil
 import sqlite3
+import hashlib
 import threading
 import subprocess
 import urllib.request
@@ -2440,12 +2441,12 @@ GAMBLING_ADULT_AD_BLACKLIST = [
     "tiktok dance", "viral dance", "trending dance", "dance video"
 ]
 
-# 🎯 FAQAT XALQQA MANFAATLI, FOYDALI VA ILMIY-MA'RIFIY MAVZULAR:
+# 🎯 FAQAT XALQQA MANFAATLI, 100% O'ZBEKCHA FOYDALI VA ILMIY-MA'RIFIY MAVZULAR:
 DEFAULT_TREND_QUERIES = [
-    "foydali maslahatlar", "qiziqarli faktlar", "ilm fan kashfiyot", "hayotiy saboqlar",
-    "biznes motivatsiya", "ajoyib ixtirolar", "texnologiya mo'jizalari", "psixologiya sirlari",
-    "hunarmandchilik", "duradgorlik sirlari", "tabiat mo'jizalari 4k", "koinot sirlari",
-    "foydali bilimlar", "sog'lom hayot maslahatlari", "tarixiy faktlar"
+    "foydali maslahatlar", "qiziqarli faktlar uzbek", "hayotiy saboqlar", "ibratli hikoyalar",
+    "foydali bilimlar uzb", "donolar fikri", "hunarmandchilik sirlari", "duradgorlik ustalari",
+    "psixologiya sirlari uzb", "sog'lom hayot maslahatlari", "tarixiy faktlar uzb",
+    "ajoyib kashfiyotlar", "aqlli layfxaklar uz", "foydali tavsiyalar", "ibratli videolar"
 ]
 
 GENERIC_META_TAGS = {
@@ -2454,13 +2455,75 @@ GENERIC_META_TAGS = {
 }
 
 HIGH_ENGAGEMENT_VIRAL_TOPICS = [
-    "foydali layfxaklar", "qiziqarli ilmiy faktlar", "amazing science experiments",
-    "satisfying craftsmanship", "woodworking master skills", "how it works engineering",
-    "useful lifehacks", "mindset motivation quotes", "restoration satisfying video",
-    "nature documentary 4k", "architecture marvels", "inventions that changed the world",
-    "psixologiya va aql idrok", "biznes va muvaffaqiyat sirlari", "hayvonot olami 4k",
-    "aqlli maslahatlar", "did you know facts shorts"
+    "foydali layfxaklar uzb", "qiziqarli ilmiy faktlar uzbek", "hayotiy saboqlar uzb",
+    "ibratli videolar uzbekcha", "foydali maslahatlar uz", "duradgorlik sirlari uzb",
+    "hunarmandchilik ustalari", "ajoyib kashfiyotlar uzb", "donolar hikmati uzb",
+    "psixologiya va aql idrok uz", "biznes va muvaffaqiyat saboqlari", "tabiat mo'jizalari uzb",
+    "aqlli maslahatlar hayot uchun", "foydali bilimlar uzb", "salomatlik sirlari uzbekcha",
+    "ibratli hikoyalar uzbek", "texnika va ixtirolar uzbekcha"
 ]
+
+# 🇺🇿 FAQAT O'ZBEK TILI VA XALQQA FOYDALI KONTENTNI KAFOLATLOVCHI SO'ZLAR:
+UZBEK_BENEFICIAL_KEYWORDS = {
+    "foydali", "maslahat", "maslahatlar", "tavsiya", "tavsiyalar", "saboq", "saboqlar",
+    "ibrat", "ibratli", "qiziqarli", "fakt", "faktlar", "hikoya", "hikoyalar", "hikmat", "hikmatlar",
+    "bilim", "bilimlar", "hayot", "hayotiy", "aql", "aqlli", "ilm", "ilmiy", "inson", "odam", "dunyo",
+    "ajoyib", "sirlari", "siri", "mo'jiza", "mojiza", "donolar", "muvaffaqiyat", "biznes", "psixologiya",
+    "salomatlik", "shifo", "retsept", "oshxona", "hunar", "hunarmandchilik", "ustachilik", "usta",
+    "duradgor", "duradgorlik", "texnika", "texnologiya", "ixtiro", "ixtirolar", "kashfiyot", "tarix",
+    "tarixiy", "rivoyat", "o'zbek", "ozbek", "uzb", "uzbek", "uzbekistan", "o'zbekiston", "toshkent",
+    "samarqand", "buxoro", "andijon", "fargona", "namangan", "layfxak", "layfxaklar", "qanday", "nima",
+    "uchun", "kerak", "qilish", "organish", "o'rganish", "eshiting", "koring", "ko'ring", "bilasizmi",
+    "bilib", "oling", "manfaatli", "halol", "yaxshi", "to'g'ri", "togri", "muhim", "biling", "yodda",
+    # Kirillcha o'zbek so'zlari:
+    "фойдали", "маслаҳат", "маслахат", "сабоқ", "сабок", "ибрат", "ибратли", "қизиқарли", "кизикарли",
+    "факт", "фактлар", "ҳикоя", "хикоя", "билим", "ҳаёт", "хаёт", "ақл", "илм", "илмий", "инсон",
+    "одам", "дунё", "ажойиб", "сирлари", "сири", "мўжиза", "донолар", "ҳикмат", "муваффақият",
+    "бизнес", "психология", "саломатлик", "шифо", "рецепт", "ҳунар", "уста", "дурадгор", "техника",
+    "технология", "ихтиро", "кашфиёт", "тарих", "ўзбек", "узбек", "узб", "ўзбекистон", "тошкент",
+    "лайфхак", "тавсия", "қандай", "нима", "учун", "керак", "ўрганиш", "эшитинг", "кўринг", "биласизми",
+    "манфаатли"
+}
+
+FOREIGN_NON_BENEFICIAL_PATTERNS = [
+    # Xorijiy inglizcha/ruscha bema'ni texnik, hovuz ehtiyot qismlari, o'yin, prank va likillash:
+    r"\b(?:replacement|pcb|circuit|wiring|hayward|unboxing|teardown|benchmark)\b",
+    r"\b(?:gameplay|walkthrough|fortnite|minecraft|roblox|gta|pubg|freefire)\b",
+    r"\b(?:prank|reaction|roast|drama|gossip|haul|makeup|grwm|outfit)\b",
+    r"\b(?:dance|twerk|bikini|sexy|model|flirt|dating|couple goals)\b",
+    r"\b(?:how to replace|how to repair|step by step guide|review)\b",
+    r"\b(?:девушки|красивые девушки|танцы|макияж|стрим|прикол|пранк)\b"
+]
+
+def is_uzbek_beneficial_content(text: str, author_str: str = "") -> tuple[bool, str]:
+    """
+    🇺🇿 KONTENT FAQAT O'ZBEK TILIDA VA XALQQA FOYDALI EKANLIGINI TEKSHIRUVCHI QAT'IY FILTR:
+    1) Xorijiy inglizcha texnik / hovuz ehtiyot qismlari (Hayward PCB va h.k.), o'yin, prank yoki
+       likillagan qizlar videosi bo'lsa darhol bloklaydi!
+    2) Sarlavha, muallif yoki heshteglarda kamida bitta aniq o'zbekcha ma'rifiy so'z yoki
+       o'zbek kanali belgisi (uz, uzb, uzbek) bo'lishini talab qiladi.
+    """
+    if not text:
+        return False, "Sarlavha bo'sh"
+    lower_t = text.lower()
+    full_str = f"{lower_t} {author_str.lower()}"
+
+    # 1. Xorijiy keraksiz / inglizcha bema'ni mavzularni rad etish
+    for pat in FOREIGN_NON_BENEFICIAL_PATTERNS:
+        if re.search(pat, full_str):
+            return False, f"Xorijiy / nomuvofiq kontent ({pat})"
+
+    # 2. O'zbekcha kanallar yoki teglar
+    if any(m in author_str.lower() for m in ("_uz", ".uz", "uzb", "uzbek", "toshkent", "samarqand")):
+        return True, "O'zbek muallifi"
+
+    # 3. O'zbekcha ma'rifiy / foydali so'zlar borligini tekshirish
+    words = set(re.findall(r"[a-z'ʻ`’а-яё]+", lower_t))
+    matched = words.intersection(UZBEK_BENEFICIAL_KEYWORDS)
+    if matched:
+        return True, f"O'zbekcha foydali so'zlar: {', '.join(list(matched)[:3])}"
+
+    return False, "O'zbekcha ma'rifiy belgilar topilmadi (chet tili yoki nomuvofiq)"
 
 DEFAULT_IG_CAPTION = (
     "💡 Xalqqa manfaatli va foydali bilimlar! Obuna bo'ling 👉 @{ig_user}\n\n"
@@ -2875,7 +2938,8 @@ IG_CHALLENGE_BRIDGE = {}  # user_id -> {"event": Event, "code": str, "result_eve
 
 def _deterministic_uuid(seed_str: str) -> str:
     import uuid as _uuid_mod
-    h = hashlib.sha256(seed_str.encode("utf-8")).hexdigest()[:32]
+    import hashlib as _hl
+    h = _hl.sha256(seed_str.encode("utf-8")).hexdigest()[:32]
     return str(_uuid_mod.UUID(h))
 
 def _build_deterministic_ig_client(username: str, profile_index: int = 0):
@@ -2888,6 +2952,7 @@ def _build_deterministic_ig_client(username: str, profile_index: int = 0):
     override_app_version=True orqali 'bloks_versioning_id' yetishmovchiligi xatosini 100% bartaraf etadi!
     """
     from instagrapi import Client
+    import hashlib as _hl
     clean_u = (username or "universal_savebot").strip().lower().lstrip("@")
     seed_prefix = f"uz_tashkent_ig_v4_{clean_u}_{profile_index}"
 
@@ -3897,6 +3962,15 @@ def discover_safe_trending_video_for_autopost() -> tuple[str | None, str, str, s
         if dur < 4.5 or dur > 68.0:
             safe_remove(cand_path)
             return False
+        # 1-QADAM: 🇺🇿 Faqat O'zbek tili va xalqqa manfaatli kontent filtri
+        is_uzb, uzb_reason = is_uzbek_beneficial_content(f"{cand_title} {author_str}", author_str)
+        if not is_uzb:
+            print(f"[Trend Radar] Nomzod o'zbekcha/foydali emas ({cand_sid}): {uzb_reason}")
+            _record_blocked_or_seen_candidate(cand_sid, cand_url, "NON_UZBEK")
+            seen_ids.add(cand_sid)
+            safe_remove(cand_path)
+            return False
+        # 2-QADAM: 🛡 3-Qatlamli Halol va Xavfsizlik filtri (Qimor, 18+, ochiq tana)
         is_safe, safety_reason = verify_video_content_is_halal_and_safe(cand_path, f"{cand_title} {author_str}")
         if not is_safe:
             print(f"[Trend Radar] Nomzod filtrdan qaytdi ({cand_sid}): {safety_reason}")
@@ -3961,8 +4035,8 @@ def discover_safe_trending_video_for_autopost() -> tuple[str | None, str, str, s
 
     # ==================== 2-MANBA: TikWM Foydali va Ilmiy Mavzular Qidiruvi ====================
     educational_hashtags = [
-        "lifehacks", "science", "qiziqarlifaktlar", "foydali", "woodworking",
-        "inventions", "technology", "diycrafts", "psychologyfacts", "satisfying"
+        "foydali", "ibratli", "qiziqarlifaktlar", "hayotiysaboq", "ilm", "hunar",
+        "donolardano'gitlar", "layfxaklaruz", "salomatlik", "psixologiya"
     ]
     random.shuffle(educational_hashtags)
     for tag in educational_hashtags[:5]:
@@ -4014,119 +4088,103 @@ def discover_safe_trending_video_for_autopost() -> tuple[str | None, str, str, s
         except Exception as e:
             print(f"Trend radar 2-Manba (#{tag}) ogohlantirishi: {e}")
 
-    # ==================== 3-MANBA: Reddit Viral Short Videos JSON API (v.redd.it Direct MP4 + Audio) ====================
-    viral_subreddits = [
-        "educationalgifs", "Damnthatsinteresting", "science", "EngineeringPorn",
-        "specializedtools", "satisfyingasfuck", "oddlysatisfying", "NatureIsFuckingLit",
-        "chemicalreactiongifs", "restoration", "BeAmazed"
-    ]
-    random.shuffle(viral_subreddits)
-    reddit_headers = {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.4 Safari/605.1.15",
-        "Accept": "application/json"
-    }
-    for sub in viral_subreddits[:4]:
-        for feed_url in [
-            f"https://www.reddit.com/r/{sub}/hot.json?limit=25",
-            f"https://old.reddit.com/r/{sub}/top.json?t=week&limit=25"
-        ]:
-            try:
-                rr = requests.get(feed_url, headers=reddit_headers, timeout=14, verify=False)
-                if rr.status_code != 200:
-                    continue
-                children = ((rr.json().get("data") or {}).get("children") or [])
-                for item in children:
-                    post = (item.get("data") or {})
-                    if post.get("over_18") or not post.get("is_video"):
+    # ==================== 3-MANBA: YouTube Shorts O'zbekcha Ma'rifiy Qidiruv ====================
+    for kw in combined_queries[:5]:
+        try:
+            search_q = f"ytsearch8:{kw} uzbek shorts"
+            ydl_search_opts = {
+                "quiet": True,
+                "no_warnings": True,
+                "extract_flat": True,
+                "skip_download": True,
+                "nocheckcertificate": True,
+                "extractor_args": {"youtube": {"player_client": ["android_vr", "tv_embedded", "ios", "mweb"]}},
+            }
+            with yt_dlp.YoutubeDL(ydl_search_opts) as ydl:
+                s_info = ydl.extract_info(search_q, download=False)
+                entries = (s_info or {}).get("entries") or []
+                for ent in entries:
+                    if not ent:
                         continue
-                    post_id = str(post.get("id") or "")
-                    sid = f"rd_{post_id}"
-                    if not post_id or sid in seen_ids:
+                    yt_id = str(ent.get("id") or "")
+                    dur = float(ent.get("duration") or 20)
+                    title = str(ent.get("title") or "").strip()
+                    sid = f"yt_{yt_id}"
+                    if not yt_id or sid in seen_ids or dur < 5 or dur > 65:
                         continue
-                    title = str(post.get("title") or "").strip()
+                    ok_uzb, _ = is_uzbek_beneficial_content(title, "uzbek")
+                    if not ok_uzb:
+                        seen_ids.add(sid)
+                        continue
                     ok_safe, _ = is_text_safe_from_gambling_adult_ads(title)
                     if not ok_safe:
                         seen_ids.add(sid)
                         continue
-                    rv = ((post.get("secure_media") or post.get("media") or {}).get("reddit_video") or {})
-                    fallback_url = str(rv.get("fallback_url") or "").split("?")[0]
-                    dur = float(rv.get("duration") or 0)
-                    if not fallback_url or dur < 5 or dur > 60:
+                    yt_url = f"https://www.youtube.com/shorts/{yt_id}"
+                    if yt_url in seen_urls:
                         continue
-                    permalink = f"https://www.reddit.com{post.get('permalink', '')}"
-                    cand_mp4 = os.path.join(DOWNLOAD_DIR, f"trend_rd_{post_id}_{int(time.time())%100000}.mp4")
-                    raw_v = cand_mp4 + "_v.mp4"
-                    raw_a = cand_mp4 + "_a.mp4"
-                    try:
-                        if _download_binary_stream(fallback_url, raw_v, referer="https://www.reddit.com/"):
-                            base_v = fallback_url.rsplit("/", 1)[0]
-                            aud_ok = False
-                            for aud_name in ("DASH_AUDIO_128.mp4", "DASH_audio.mp4", "DASH_AUDIO_64.mp4", "audio.mp4", "audio"):
-                                if _download_binary_stream(f"{base_v}/{aud_name}", raw_a, referer="https://www.reddit.com/"):
-                                    aud_ok = True
-                                    break
-                            if aud_ok and os.path.exists(raw_a):
-                                subprocess.run(
-                                    [FFMPEG_BIN, "-y", "-i", raw_v, "-i", raw_a, "-c:v", "copy", "-c:a", "aac", "-shortest", cand_mp4],
-                                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=30
-                                )
-                            if not os.path.exists(cand_mp4) or os.path.getsize(cand_mp4) < 5000:
-                                shutil.copyfile(raw_v, cand_mp4)
-                            if _try_verify_and_Finalize_mp4(cand_mp4, permalink, title or "Viral Video", sid, sub):
-                                print(f"[OK] Trend 3-Manba (Reddit r/{sub}) topildi: {sid}")
-                                return permalink, (title or "Viral Reels"), sid, cand_mp4
-                    finally:
-                        safe_remove(raw_v, raw_a)
-                    safe_remove(cand_mp4)
-                break
-            except Exception as e:
-                print(f"Trend radar 3-Manba (Reddit r/{sub}) ogohlantirishi: {e}")
-
-    # ==================== 4-MANBA: Dailymotion Official Public Short-Video API ====================
-    for kw in combined_queries[:4]:
-        try:
-            dm_api = (
-                f"https://api.dailymotion.com/videos?fields=id,title,duration,url,owner.screenname"
-                f"&search={urllib.parse.quote(kw)}&shorter_than=1&sort=visited&limit=15&family_filter=true"
-            )
-            dr = requests.get(dm_api, headers=headers, timeout=14, verify=False)
-            if dr.status_code == 200:
-                vlist = (dr.json().get("list") or [])
-                for dv in vlist:
-                    dm_id = str(dv.get("id") or "")
-                    dur = float(dv.get("duration") or 0)
-                    title = str(dv.get("title") or "").strip()
-                    owner = str(dv.get("owner.screenname") or "")
-                    dm_url = str(dv.get("url") or f"https://www.dailymotion.com/video/{dm_id}")
-                    sid = f"dm_{dm_id}"
-                    if not dm_id or sid in seen_ids or dur < 6 or dur > 60:
-                        continue
-                    ok_safe, _ = is_text_safe_from_gambling_adult_ads(f"{title} {owner}")
-                    if not ok_safe:
-                        seen_ids.add(sid)
-                        continue
-                    cand_mp4 = os.path.join(DOWNLOAD_DIR, f"trend_dm_{dm_id}_{int(time.time())%100000}.mp4")
-                    ydl_opts = {
-                        "outtmpl": cand_mp4,
-                        "format": "best[ext=mp4]/best",
-                        "quiet": True,
-                        "no_warnings": True,
-                        "nocheckcertificate": True,
-                        "socket_timeout": 20,
-                    }
-                    if FFMPEG_DIR:
-                        ydl_opts["ffmpeg_location"] = FFMPEG_DIR
-                    try:
-                        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                            ydl.extract_info(dm_url, download=True)
-                    except Exception:
-                        pass
-                    if _try_verify_and_Finalize_mp4(cand_mp4, dm_url, title or f"Trend #{kw}", sid, owner):
-                        print(f"[OK] Trend 4-Manba (Dailymotion API) topildi: {sid}")
-                        return dm_url, (title or f"Trend #{kw}"), sid, cand_mp4
-                    safe_remove(cand_mp4)
+                    yt_files, yt_dl_title = _download_youtube_multi_engine(yt_url, ADMIN_ID, int(time.time()*1000) % 100000000)
+                    if yt_files and os.path.exists(yt_files[0]):
+                        cand_mp4 = yt_files[0]
+                        if _try_verify_and_Finalize_mp4(cand_mp4, yt_url, title or yt_dl_title, sid, "uzbek"):
+                            print(f"[OK] Trend 3-Manba (YouTube Shorts O'zbekcha) topildi: {sid}")
+                            return yt_url, (title or yt_dl_title or "O'zbekcha Shorts"), sid, cand_mp4
+                        safe_remove(*yt_files)
         except Exception as e:
-            print(f"Trend radar 4-Manba (Dailymotion) ogohlantirishi: {e}")
+            print(f"Trend radar 3-Manba (YouTube Shorts O'zbek) ogohlantirishi: {e}")
+
+    # ==================== 4-MANBA: TikWM Maxsus O'zbek Foydali Videolar Qidiruvi ====================
+    for kw in ["foydali maslahatlar uz", "ibratli video", "qiziqarli faktlar uzbek", "hayotiy saboqlar uzb", "donolar hikmati"]:
+        try:
+            _wait_tikwm_rate_limit(1.25)
+            resp = requests.post(
+                "https://www.tikwm.com/api/feed/search",
+                data={"keywords": kw, "count": 18, "cursor": 0, "HD": 1},
+                headers=headers, timeout=16, verify=False
+            )
+            if resp.status_code == 200:
+                videos = (resp.json().get("data") or {}).get("videos") or []
+                if isinstance(videos, list):
+                    for v in videos[:8]:
+                        vid_id = str(v.get("video_id") or "")
+                        dur = float(v.get("duration") or 0)
+                        title = str(v.get("title") or "").strip()
+                        author_nick = str((v.get("author") or {}).get("unique_id") or "")
+                        sid = f"tk_{vid_id}"
+                        if not vid_id or sid in seen_ids or dur < 5 or dur > 65:
+                            continue
+                        ok_uzb, _ = is_uzbek_beneficial_content(f"{title} {author_nick}", author_nick)
+                        if not ok_uzb:
+                            seen_ids.add(sid)
+                            continue
+                        ok_safe, _ = is_text_safe_from_gambling_adult_ads(f"{title} {author_nick}")
+                        if not ok_safe:
+                            seen_ids.add(sid)
+                            continue
+                        tk_page_url = f"https://www.tiktok.com/@{author_nick or 'user'}/video/{vid_id}"
+                        if tk_page_url in seen_urls:
+                            continue
+
+                        stream_candidates = []
+                        for k_stream in ("play", "hdplay", "wmplay"):
+                            s_u = v.get(k_stream)
+                            if s_u and isinstance(s_u, str):
+                                if s_u.startswith("/"):
+                                    s_u = "https://www.tikwm.com" + s_u
+                                stream_candidates.append(s_u)
+
+                        cand_mp4 = os.path.join(DOWNLOAD_DIR, f"trend_uz_{vid_id}_{int(time.time())%100000}.mp4")
+                        dl_ok = False
+                        for s_u in stream_candidates:
+                            if _download_binary_stream(s_u, cand_mp4, referer="https://www.tikwm.com/"):
+                                dl_ok = True
+                                break
+                        if dl_ok and _try_verify_and_Finalize_mp4(cand_mp4, tk_page_url, title or f"Foydali {kw}", sid, author_nick):
+                            print(f"[OK] Trend 4-Manba (TikWM O'zbek Foydali) topildi: {sid}")
+                            return tk_page_url, (title or f"Foydali Video #{kw}"), sid, cand_mp4
+                        safe_remove(cand_mp4)
+        except Exception as e:
+            print(f"Trend radar 4-Manba (TikWM O'zbek) ogohlantirishi: {e}")
 
     # ==================== 5-MANBA: YouTube Shorts Multi-Engine Search (android_vr / tv_embedded / Invidious) ====================
     for kw in combined_queries[:3]:
