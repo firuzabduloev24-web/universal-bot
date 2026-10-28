@@ -229,15 +229,18 @@ def _resolve_secret(env_key: str, b64_fallback: str, default_val: str = "") -> s
     return default_val
 
 # GitHubda ochiq ko'rinmasligi uchun Base64 zaxira va Environment Variables:
-BOT_TOKEN = _resolve_secret("BOT_TOKEN", "ODYzMTgyMTI0OTpBQUVZX0RmMW8zWmtqR2RSQjFHb0g2MFgxc0V5cS1ON05xMA==")
-_admin_raw = _resolve_secret("ADMIN_ID", "MTAyMTA4OTM2Nw==")
-try:
-    ADMIN_ID = int(_admin_raw)
-except Exception:
-    ADMIN_ID = 0
+# ==================== ASOSIY KALITLAR VA SOZLAMALAR ====================
+DEFAULT_BOT_TOKEN = "8631821249:AAEY_Df1o3ZkjGdRB1GoH60X1sEyq-N7Nq0"
+BOT_TOKEN = os.environ.get("BOT_TOKEN", DEFAULT_BOT_TOKEN).strip()
 
-ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "@usman_khasan")
-ADMIN_FIRST_NAME = os.environ.get("ADMIN_FIRST_NAME", "khasanov")
+DEFAULT_ADMIN_ID = 1021089367
+try:
+    ADMIN_ID = int(os.environ.get("ADMIN_ID", DEFAULT_ADMIN_ID))
+except Exception:
+    ADMIN_ID = DEFAULT_ADMIN_ID
+
+ADMIN_USERNAME = "@usman_khasan"
+ADMIN_FIRST_NAME = "khasanov"
 
 TOKEN_FILE = "bot_token.txt"
 if BOT_TOKEN and not os.path.exists(TOKEN_FILE):
@@ -247,9 +250,17 @@ if BOT_TOKEN and not os.path.exists(TOKEN_FILE):
     except Exception:
         pass
 
+# 50 MB Telegram limitini 2000 MB (2 GB) gacha kengaytirish imkoniyati:
+# Agar VPS da lokal Telegram Bot API server ishlatilsa, LOCAL_BOT_API_SERVER ga URL beriladi (masalan: "http://127.0.0.1:8081")
+LOCAL_BOT_API_SERVER = os.environ.get("LOCAL_BOT_API_SERVER", "").strip()
+if LOCAL_BOT_API_SERVER:
+    telebot.apihelper.API_URL = f"{LOCAL_BOT_API_SERVER.rstrip('/')}/bot{{0}}/{{1}}"
+    MAX_TELEGRAM_FILE_MB = 1950.0  # 2 GB limit!
+else:
+    MAX_TELEGRAM_FILE_MB = 49.5
+
 SPONSOR_CHANNELS = []
 REQUIRED_REFERRALS_FOR_VIP = 3
-MAX_TELEGRAM_FILE_MB = 49.5
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GOOGLE_SPEECH_KEY = _resolve_secret("GOOGLE_SPEECH_KEY", "QUl6YVN5Qk90aTRtTS02eDlXRG5aSWpJZXlFVTIxT3BCWHFXQmd3")
 
@@ -597,8 +608,72 @@ def init_db():
             created_at TIMESTAMP
         )
     """)
+
+    # ⚡ 1-SONIYADA YUBORISH UCHUN DOIMIY FILE_ID KESHI
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS media_cache (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            url_hash TEXT UNIQUE,
+            canonical_url TEXT,
+            file_id TEXT,
+            file_type TEXT DEFAULT 'video',
+            caption TEXT,
+            width INTEGER DEFAULT 720,
+            height INTEGER DEFAULT 1280,
+            duration INTEGER DEFAULT 15,
+            platform TEXT DEFAULT 'Web',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
     conn.commit()
     conn.close()
+
+def get_cached_media(url: str) -> dict | None:
+    """Havola (URL) bo'yicha Telegram serveridagi tayyor file_id ni olish (< 1 soniyada yuborish uchun)"""
+    if not url:
+        return None
+    try:
+        norm_url = url.strip().lower()
+        url_hash = hashlib.sha256(norm_url.encode('utf-8')).hexdigest()
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT file_id, file_type, caption, width, height, duration, platform 
+            FROM media_cache WHERE url_hash = ?
+        """, (url_hash,))
+        row = cursor.fetchone()
+        conn.close()
+        if row and row[0]:
+            return {
+                "file_id": row[0],
+                "file_type": row[1] or "video",
+                "caption": row[2] or "",
+                "width": row[3] or 720,
+                "height": row[4] or 1280,
+                "duration": row[5] or 15,
+                "platform": row[6] or "Web"
+            }
+    except Exception as e:
+        print(f"Cache o'qishda xatolik: {e}")
+    return None
+
+def save_cached_media(canonical_url: str, file_id: str, file_type: str = "video", caption: str = "", width: int = 720, height: int = 1280, duration: int = 15, platform: str = "Web"):
+    """Yuklangan mediani bazada keshlab qo'yish (keyingi barcha so'rovlar 1 soniyada jo'natilishi uchun)"""
+    if not canonical_url or not file_id:
+        return
+    try:
+        norm_url = canonical_url.strip().lower()
+        url_hash = hashlib.sha256(norm_url.encode('utf-8')).hexdigest()
+        conn = sqlite3.connect(DB_PATH)
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT OR REPLACE INTO media_cache (url_hash, canonical_url, file_id, file_type, caption, width, height, duration, platform, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        """, (url_hash, canonical_url, file_id, file_type, caption, width, height, duration, platform))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Cache saqlashda xatolik: {e}")
 
 try:
     init_db()
@@ -5858,7 +5933,7 @@ def _download_pinterest_fallback(url: str, user_id: int, timestamp: int) -> tupl
         print(f"Pinterest fallback xatosi: {e}")
     return [], ""
 
-def ensure_phone_playable_mp4(input_path: str, force_reencode: bool = False, apply_watermark: bool = True) -> tuple[str, dict]:
+def ensure_phone_playable_mp4(input_path: str, force_reencode: bool = False, apply_watermark: bool = False) -> tuple[str, dict]:
     """
     Telefonda (iPhone va Android) bittada ochiladigan H.264 (yuv420p) + faststart MP4 ga keltirish
     HAMDA har bitta videoga tepadan-pastga suzib yuruvchi ko'rinar-ko'rinmas (prazrachniy)
@@ -7421,6 +7496,44 @@ def handle_incoming_link(message: types.Message):
         bot.reply_to(message, get_text("send_link_prompt", lang), reply_markup=get_main_reply_keyboard(lang))
         return
 
+    # ⚡ 1-SONIYALI KESH TEKSHIRUVI (INSTANT ULTRA-FAST RETRIEVAL)
+    canonical_url = clean_and_resolve_url(url)
+    cached_item = get_cached_media(canonical_url) or get_cached_media(url)
+    if cached_item:
+        bot_uname = get_cached_bot_username()
+        short_ts = int(time.time() * 1000) % 100000000
+        base_fname = f"cached_{user.id}_{short_ts}.mp4"
+        VIDEO_SOURCE_CACHE[base_fname] = {
+            "path": "",
+            "url": canonical_url,
+            "file_id": cached_item["file_id"],
+            "time": time.time()
+        }
+        markup = make_video_action_keyboard(base_fname, lang=lang)
+        plat_name = cached_item.get('platform', 'Web')
+        caption_text = cached_item.get('caption')
+        if not caption_text:
+            caption_text = f'🎬 <b>Video</b>\n\n🌐 <b>Platforma:</b> {plat_name}\n⚡ <b>Tezkor uzatish:</b> 0.5s\n\n🤖 @{bot_uname}'
+        cache_caption = caption_text
+        try:
+            if cached_item.get("file_type") == "photo":
+                bot.send_photo(message.chat.id, cached_item["file_id"], caption=cache_caption)
+            else:
+                bot.send_video(
+                    chat_id=message.chat.id,
+                    video=cached_item["file_id"],
+                    caption=cache_caption,
+                    reply_markup=markup,
+                    width=cached_item.get("width", 720),
+                    height=cached_item.get("height", 1280),
+                    duration=cached_item.get("duration", 15),
+                    supports_streaming=True
+                )
+            increment_download_count(user.id, url, cached_item.get("platform", "Web"), cached_item.get("file_type", "video"))
+            return
+        except Exception as cache_err:
+            print(f"Keshdan jo'natish xatosi (qaytadan yuklanadi): {cache_err}")
+
     # 4. HAVOLA BO'LSA -> 12-BOSQICHLI VIDEO-FIRST TIZIM ORQALI XATOSIZ YUKLAB BERISH!
     platform = detect_platform(url)
     status_msg = bot.reply_to(message, get_text("analyzing", lang, platform=platform))
@@ -7563,6 +7676,26 @@ def handle_incoming_link(message: types.Message):
             vid_obj = getattr(sent_msg, "video", None) or getattr(sent_msg, "document", None)
             if vid_obj and getattr(vid_obj, "file_id", None):
                 VIDEO_SOURCE_CACHE[base_fname]["file_id"] = vid_obj.file_id
+                save_cached_media(
+                    canonical_url=canonical_url,
+                    file_id=vid_obj.file_id,
+                    file_type="video" if getattr(sent_msg, "video", None) else "document",
+                    caption=caption,
+                    width=vinfo.get("width", 720),
+                    height=vinfo.get("height", 1280),
+                    duration=vinfo.get("duration", 15),
+                    platform=platform
+                )
+                save_cached_media(
+                    canonical_url=url,
+                    file_id=vid_obj.file_id,
+                    file_type="video" if getattr(sent_msg, "video", None) else "document",
+                    caption=caption,
+                    width=vinfo.get("width", 720),
+                    height=vinfo.get("height", 1280),
+                    duration=vinfo.get("duration", 15),
+                    platform=platform
+                )
             increment_download_count(user.id, url, platform, "video")
             try:
                 bot.delete_message(message.chat.id, status_msg.message_id)
